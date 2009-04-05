@@ -1,0 +1,25 @@
+<h2>Результаты</h2>
+
+<p><b>Категории</b>:<% for category in @categories %>
+<%= link_to category.name, category %>, 
+<% end %></p>
+
+<p><b>Ключевые слова</b>:<% for keyword in @keywords %>
+<%= link_to keyword.name, keyword %>, 
+<% end %></p>
+
+<% for company in @companies %>
+  <tr>
+    <td><%=h company.name %></td>
+    <td><%=h company.address %></td>
+    <td><%=h company.site %></td>
+    <td><%=h company.description %></td>
+    <td><%=h company.working_time %></td>
+    <td><%=h company.phones %></td>
+  </tr>
+<% end %>
+</table>
+
+
+<p>[pagination]</p>
+
