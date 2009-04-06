@@ -2,15 +2,8 @@
 <br />
 <br />
 
-<table width="100%">
+<ul>
 <% for category in @categories %>
-  <tr>
-    <td style="padding-left:<%=15*category.ancestors_count%>px"><strong><%= link_to category.name, category %></strong> (<%= category.companies_count %>) <br />
-	<%=h category.description %>
-	</td>
-    <td><%= link_to 'Изменить', edit_category_path(category) %> |
-<%= link_to 'Удалить', category, :confirm => 'Удалить категорию?', :method => :delete %></td>
-  </tr>
+	<%= render_category_with_all_childs(category, true, true) %>
 <% end %>
-</table>
-
+</ul>
