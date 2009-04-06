@@ -1,0 +1,53 @@
+<p>
+  <b>Category:</b>
+  <%=h @company.category.name %>
+</p>
+
+<p>
+  <b>Name:</b>
+  <%=h @company.name %>
+</p>
+
+<p>
+  <b>Full name:</b>
+  <%=h @company.full_name %>
+</p>
+
+<p>
+  <b>Inn:</b>
+  <%=h @company.inn %>
+</p>
+
+<p>
+  <b>Address:</b>
+  <%=h @company.address %>
+</p>
+
+<p>
+  <b>Site:</b>
+  <%=h @company.site %>
+</p>
+
+<p>
+  <b>Director:</b>
+  <%=h @company.director %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%=h @company.description %>
+</p>
+
+<p>
+  <b>Working time:</b>
+  <%=h @company.working_time %>
+</p>
+
+<p>
+  <b>Sources:</b>
+  <%=h @company.sources %>
+</p>
+
+
+<%= link_to 'Edit', edit_company_path(@company) %> |
+<%= link_to 'Back', companies_path %>

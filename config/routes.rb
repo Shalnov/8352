@@ -1,5 +1,14 @@
 ActionController::Routing::Routes.draw do |map|
 
+  map.namespace :admin do |admin|
+    map.resources :users
+    map.resources :companies
+    map.resources :categories
+    map.resources :tags
+
+    admin.connect '/', :controller => 'companies', :action => 'index'
+  end
+
   map.root :controller => "home"
 
   map.logout    '/logout',    :controller => 'sessions',  :action => 'destroy'

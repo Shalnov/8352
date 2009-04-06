@@ -20,7 +20,15 @@ class User < ActiveRecord::Base
 
   before_create :make_activation_code 
 
-  attr_accessible :login, :email, :name, :password, :password_confirmation
+  attr_accessible :login, :email, :name, :password, :password_confirmation, :role_ids
+
+  has_and_belongs_to_many :roles
+  
+  def has_role?(role_in_question)
+    @_list ||= self.roles.collect(&:name)
+    return true if @_list.include?("admin")
+    (@_list.include?(role_in_question.to_s) )
+  end
 
   def activate!
     @activated = true
@@ -51,9 +59,9 @@ class User < ActiveRecord::Base
     write_attribute :email, (value ? value.downcase : nil)
   end
 
-  protected
-    
-    def make_activation_code
-        self.activation_code = self.class.make_token
-    end
+protected
+  def make_activation_code
+      self.activation_code = self.class.make_token
+  end
+
 end

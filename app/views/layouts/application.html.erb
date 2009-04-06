@@ -10,11 +10,10 @@
   </head>
   <body>
 
-
-
 <div id="header"><h1>8352.info</h1>
 <p>Все телефоны Чувашии.</p>
     <p style="color: green"><%= flash[:notice] %></p>
+    <p style="color: red"><%= flash[:error] %></p>
 </div>
 
 
@@ -45,6 +44,12 @@
 
 
 <div id="rightbar">
+	<% if logged_in? %>
+	<%= render :partial => "sessions/destroy" %>
+	<% else %>
+	<%= render :partial => "sessions/form" %>
+	<% end %>
+	<hr />
 <form id="sendsms">
 <input id="sms_phone" name="phone" size="15"/>
 <input id="sms_btn" type="submit" value="Отправить sms"/>

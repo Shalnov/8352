@@ -1,0 +1,26 @@
+<h1>Пользователи</h1>
+
+<table>
+  <tr>
+    <th>логин</th>
+    <th>e-mail</th>
+    <th>роли</th>
+    <th></th>
+  </tr>
+
+<% for user in @users %>
+  <tr>
+    <td><%=h user.login %></td>
+    <td><%=h user.email %></td>
+    <td>
+			<% user.roles.each do |role|
+				%>
+				<%= h role.name %>
+				<%
+			end %>
+		</td>
+    <td><%= link_to 'Изменить', :action => :edit, :id => user %> | <%= link_to 'Удалить', { :action => :destroy, :id => user}, :confirm => 'Удалить пользователя?' %></td>
+  </tr>
+<% end %>
+</table>
+
