@@ -13,11 +13,11 @@
 		<table border="0" cellspacing="5" cellpadding="5" width="100%">
 			<tr>
 				<% role_admin_area("admin") do %>
-					<td><%= link_to 'Пользователи', :controller => :users %></td>
+					<td><%= link_to 'Пользователи', users_path %></td>
 				<% end %>
-				<td><%= link_to 'Компании', :controller => :companies %></td>
-				<td><%= link_to 'Категории', :controller => :categories %></td>
-				<td><%= link_to 'Тэги', :controller => :tags %></td>
+				<td><%= link_to 'Компании', companies_path %></td>
+				<td><%= link_to 'Категории', categories_path %></td>
+				<td><%= link_to 'Тэги', tags_path %></td>
 			</tr>
 		</table>
 

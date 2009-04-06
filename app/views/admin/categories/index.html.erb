@@ -1,0 +1,12 @@
+<h1>Категории</h1>
+
+<ul>
+<% for category in @categories %>
+	<%= render_category_with_all_childs(category, true, true) %>
+<% end %>
+</ul>
+
+<br />
+<br />
+
+<%= link_to 'Добавить категорию', new_category_path %>
