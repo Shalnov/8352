@@ -4,9 +4,27 @@ class Category < ActiveRecord::Base
   has_many :companies
 
   def self.all_for_select(except=nil)
-    conditions = except.nil? ? [] : ['id <> ?', except]
-    categories = self.find(:all, :conditions => conditions).collect { |cat| ["#{'-'*cat.ancestors_count} #{cat.name}", cat.id] }
-    categories << ["-", nil]
+    categories = [["-", nil]]
+    (except.nil? ? sorted : sorted.select{|sorted| sorted.id != except.id }).each do |category|
+        categories << ["#{'-'*category.ancestors_count} #{category.name}", category.id]
+    end
+    categories
   end
   
+  def self.sorted
+    categories = []
+    self.roots.each do |root|
+      add_childs(categories, root)
+    end
+    categories
+  end
+  
+  def self.add_childs(categories_array, category)
+    categories_array << category
+    if category.children.size > 0
+      category.children.each do |child|
+        add_childs(categories_array, child)
+      end
+    end
+  end
 end
