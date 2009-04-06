@@ -4,6 +4,11 @@
   <%= f.error_messages %>
 
   <p>
+    <%= f.label :parent_id %><br />
+		<%= f.select :parent_id, Category.all_for_select %>
+  </p>
+
+  <p>
     <%= f.label :name %><br />
     <%= f.text_field :name %>
   </p>

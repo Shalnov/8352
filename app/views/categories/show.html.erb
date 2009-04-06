@@ -1,4 +1,9 @@
 <p>
+  <b>Parent:</b>
+  <%=h @category.parent.name if @category.parent %>
+</p>
+
+<p>
   <b>Name:</b>
   <%=h @category.name %>
 </p>
@@ -8,6 +13,11 @@
   <%=h @category.description %>
 </p>
 
+<% if @category.children.size > 0 %>
+<ul>
+	<%= render_category_with_all_childs(@category) %>
+</ul>
+<% end %>
 
 <%= link_to 'Edit', edit_category_path(@category) %> |
 <%= link_to 'Back', categories_path %>

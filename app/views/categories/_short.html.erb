@@ -1,17 +1,15 @@
-
+<% Category.roots.each do |category| %>
 <ul>
-<li>Здоровье:
-<ul>
-<li>Баня</li>
-<li>Сауна</li>
+	<li><%= link_to category.name, category_path(category) %>:
+		<% if category.children.size > 0 %>
+		<ul>
+			<% category.children.each do |child| %>
+			<li><%= link_to child.name, category_path(child) %></li>
+			<% end %>
+		</ul>
+		<% end %>
+	</li>
 </ul>
-</li>
-<li>Авто:
-<ul>
-<li>Запчасти</li>
-<li>Ремонт</li>
-</ul>
-</li>
-</ul>
+<% end %>
 
 <%= link_to "Все категории..", categories_path %>
