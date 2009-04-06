@@ -3,6 +3,7 @@ class CompaniesController < ApplicationController
   # GET /companies.xml
   def index
     @companies = Company.find(:all)
+    @companies = Company.find_all_by_category_id(params[:category_id]) if params[:category_id]
 
     respond_to do |format|
       format.html # index.html.erb
