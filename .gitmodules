@@ -4,8 +4,8 @@
 [submodule "vendor/plugins/shoulda"]
 	path = vendor/plugins/shoulda
 	url = git://github.com/thoughtbot/shoulda.git
-[submodule "vendor/plugins/restful-authentication"]
-	path = vendor/plugins/restful-authentication
+[submodule "vendor/plugins/restful_authentication"]
+	path = vendor/plugins/restful_authentication
 	url = git://github.com/technoweenie/restful-authentication.git
 [submodule "vendor/plugins/role_requirement"]
 	path = vendor/plugins/role_requirement
