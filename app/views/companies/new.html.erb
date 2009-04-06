@@ -2,7 +2,7 @@
 
 <% form_for(@company) do |f| %>
   <%= f.error_messages %>
-
+	<%= f.hidden_field :category_id, { :value => params[:category_id] } %>
   <p>
     <%= f.label :name %><br />
     <%= f.text_field :name %>

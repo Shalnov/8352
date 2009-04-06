@@ -10,7 +10,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :users
   map.resource  :session
   map.resources :companies
-  map.resources :categories
+  map.resources :categories, :has_many => [:companies]
 
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'

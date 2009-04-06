@@ -1,5 +1,5 @@
 class Company < ActiveRecord::Base
-  belongs_to :category
+  belongs_to :category, :counter_cache => true
 
   has_many :phones, :dependent => :destroy
   has_many :emails, :dependent => :destroy
