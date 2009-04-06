@@ -1,24 +1,16 @@
-<h1>Listing categories</h1>
+<%= link_to 'Добавить категорию', new_category_path %>
+<br />
+<br />
 
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Description</th>
-    <th>Parent</th>
-  </tr>
-
+<table width="100%">
 <% for category in @categories %>
   <tr>
-    <td><%=h category.name %></td>
-    <td><%=h category.description %></td>
-		<td><%=h category.parent.name if category.parent %></td>
-    <td><%= link_to 'Show', category %></td>
-    <td><%= link_to 'Edit', edit_category_path(category) %></td>
-    <td><%= link_to 'Destroy', category, :confirm => 'Are you sure?', :method => :delete %></td>
+    <td style="padding-left:<%=15*category.ancestors_count%>px"><strong><%= link_to category.name, category %></strong> (<%= category.companies_count %>) <br />
+	<%=h category.description %>
+	</td>
+    <td><%= link_to 'Изменить', edit_category_path(category) %> |
+<%= link_to 'Удалить', category, :confirm => 'Удалить категорию?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>
 
-<br />
-
-<%= link_to 'New category', new_category_path %>
