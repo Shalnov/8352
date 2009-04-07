@@ -29,7 +29,8 @@ class Admin::CompaniesController < ApplicationController
   # GET /companies/new.xml
   def new
     @company = Company.new
-
+#    3.times { @company.phones.build }
+    
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @company }
@@ -62,11 +63,10 @@ class Admin::CompaniesController < ApplicationController
   # PUT /companies/1.xml
   def update
     @company = Company.find(params[:id])
-
     respond_to do |format|
       if @company.update_attributes(params[:company])
         flash[:notice] = 'Company was successfully updated.'
-        format.html { redirect_to(@company) }
+        format.html { redirect_to edit_company_url(@company) }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }

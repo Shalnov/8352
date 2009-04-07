@@ -6,4 +6,9 @@ class Company < ActiveRecord::Base
   has_many :tags,   :as => :taggable, :dependent => :destroy
 
   validates_presence_of :name, :full_name
+  
+  accepts_nested_attributes_for :phones, :allow_destroy => true,
+                                :reject_if => proc { |phone| phone['number'].blank? }
+  accepts_nested_attributes_for :emails, :allow_destroy => true
+  
 end
