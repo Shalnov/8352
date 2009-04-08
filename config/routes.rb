@@ -18,7 +18,7 @@ ActionController::Routing::Routes.draw do |map|
   map.register  '/register',  :controller => 'users',     :action => 'create'
   map.signup    '/signup',    :controller => 'users',     :action => 'new'
 
-  map.resources :users
+  map.resources :users,       :collection => { :activate => :get }
   map.resource  :session
   map.resources :companies
   map.resources :categories, :has_many => [:companies]

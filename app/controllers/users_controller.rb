@@ -27,7 +27,7 @@ class UsersController < ApplicationController
     when (!params[:activation_code].blank?) && user && !user.active?
       user.activate!
       flash[:notice] = "Регистрация завершена, пожалуйста, залогиньтесь."
-      redirect_to '/login'
+      redirect_to login_url
     when params[:activation_code].blank?
       flash[:error] = "Учетная запись не активирована, пожалуйста, откройте ссылку из письма."
       redirect_back_or_default('/')
