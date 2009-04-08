@@ -11,9 +11,9 @@ class UsersController < ApplicationController
     if success && @user.errors.empty?
       
       @user.activate! if ENV["RAILS_ENV"] == "development"
-      
-      redirect_back_or_default('/')
+
       flash[:notice] = "Спасибо за регистрацию. Письмо с кодом активации отправлено вам на почту."
+      redirect_back_or_default('/')
     else
       flash[:error]  = "Ошибка создания учетной записи."
       render :action => 'new'

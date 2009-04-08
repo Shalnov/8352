@@ -1,6 +1,6 @@
 class CreatePhones < ActiveRecord::Migration
   def self.up
-    create_table :phones, :id => false do |t|
+    create_table :phones do |t|
       t.references  :company
       t.integer     :number,        :null => false, :precision => 11
       t.string      :person,        :length => 150

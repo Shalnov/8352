@@ -1,4 +1,5 @@
 class Admin::UsersController < ApplicationController
+  before_filter :admin_filter
   
   layout 'admin'
   
@@ -28,7 +29,7 @@ class Admin::UsersController < ApplicationController
     respond_to do |format|
       if @user.update_attributes(params[:user])
         flash[:notice] = 'User was successfully updated.'
-        format.html { redirect_to edit_user_url(@user) }
+        format.html { redirect_to edit_admin_user_url(@user) }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
@@ -44,8 +45,12 @@ class Admin::UsersController < ApplicationController
     @user.destroy
 
     respond_to do |format|
-      format.html { redirect_to users_url }
+      format.html { redirect_to admin_users_url }
       format.xml  { head :ok }
     end
+  end
+  
+  def admin_filter
+    access_denied if !has_role?("admin")
   end
 end

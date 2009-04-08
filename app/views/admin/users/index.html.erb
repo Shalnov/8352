@@ -19,7 +19,7 @@
 				<%
 			end %>
 		</td>
-    <td><%= link_to 'Изменить', edit_user_path(user) %> | <%= link_to 'Удалить', user, :confirm => 'Удалить пользователя?', :method => :delete %></td>
+    <td><%= link_to 'Изменить', edit_admin_user_path(user) %> | <%= link_to 'Удалить', admin_user_path(user), :confirm => 'Удалить пользователя?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>

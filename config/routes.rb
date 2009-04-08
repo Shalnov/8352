@@ -1,17 +1,17 @@
 ActionController::Routing::Routes.draw do |map|
 
+  map.root :controller => "home"
+
   map.namespace :admin do |admin|
-    map.with_options :path_prefix => '/admin' do |admin_path|
-      admin_path.resources :users,      :controller => 'admin/users'
-      admin_path.resources :companies,  :controller => 'admin/companies'
-      admin_path.resources :categories, :controller => 'admin/categories'
-      admin_path.resources :tags,       :controller => 'admin/tags'
-    end
+#    map.with_options :path_prefix => '/admin' do |admin_path|
+      admin.resources :users,      :controller => 'users'
+      admin.resources :companies,  :controller => 'companies'
+      admin.resources :categories, :controller => 'categories'
+      admin.resources :tags,       :controller => 'tags'
+#    end
 
     admin.connect '/', :controller => 'companies', :action => 'index'
   end
-
-  map.root :controller => "home"
 
   map.logout    '/logout',    :controller => 'sessions',  :action => 'destroy'
   map.login     '/login',     :controller => 'sessions',  :action => 'new'

@@ -16,11 +16,11 @@
 		<table border="0" cellspacing="5" cellpadding="5" width="100%">
 			<tr>
 				<% role_admin_area("admin") do %>
-					<td><%= link_to 'Пользователи', users_path %></td>
+					<td><%= link_to 'Пользователи', admin_users_path %></td>
 				<% end %>
-				<td><%= link_to 'Компании', companies_path %></td>
-				<td><%= link_to 'Категории', categories_path %></td>
-				<td><%= link_to 'Тэги', tags_path %></td>
+				<td><%= link_to 'Компании', admin_companies_path %></td>
+				<td><%= link_to 'Категории', admin_categories_path %></td>
+				<td><%= link_to 'Тэги', admin_tags_path %></td>
 			</tr>
 		</table>
 

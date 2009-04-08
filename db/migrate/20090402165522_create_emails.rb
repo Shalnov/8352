@@ -1,6 +1,6 @@
 class CreateEmails < ActiveRecord::Migration
   def self.up
-    create_table :emails, :id => false do |t|
+    create_table :emails do |t|
       t.references  :company
       t.string      :email,         :null => false
       t.string      :person,        :length => 150
