@@ -50,8 +50,6 @@ class UsersControllerTest < ActionController::TestCase
     end
   end
   
-
-  
   def test_should_sign_up_user_with_activation_code
     create_user
     assigns(:user).reload

@@ -2,6 +2,9 @@ class Category < ActiveRecord::Base
   acts_as_category
   
   has_many :companies
+  
+  validates_presence_of :name
+  validates_presence_of :description
 
   def self.all_for_select(except=nil)
     categories = [["-", nil]]
