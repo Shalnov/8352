@@ -9,6 +9,7 @@ class Admin::UsersControllerTest < ActionController::TestCase
     context "get index" do
       context "logged as admin" do
         setup do
+          Factory.create(:user)
           login_as admin_user
           get :index
         end
@@ -60,6 +61,16 @@ class Admin::UsersControllerTest < ActionController::TestCase
           should_assign_to :user
           should_respond_with :redirect
           should_redirect_to("edit user page") { edit_admin_user_url(@user) }
+        end
+        
+        context "on DELETE to :destroy" do
+          setup do
+            @new_user = Factory.create(:user)
+            delete :destroy, :id => @new_user.id
+          end
+          should_assign_to :user
+          should_respond_with :redirect
+          should_redirect_to("users page") { admin_users_url }
         end
       end
     end

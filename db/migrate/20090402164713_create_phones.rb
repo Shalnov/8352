@@ -7,7 +7,7 @@ class CreatePhones < ActiveRecord::Migration
       t.string      :department,    :length => 300
       t.string      :working_time,  :length => 200
       t.string      :description,   :length => 1024
-      t.boolean     :short_code,    :null => false
+      t.boolean     :short_code,    :null => false, :default => false
 
       t.references
     end

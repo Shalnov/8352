@@ -50,7 +50,7 @@ class Admin::CompaniesController < ApplicationController
     respond_to do |format|
       if @company.save
         flash[:notice] = 'Company was successfully created.'
-        format.html { redirect_to admin_company_url(@company) }
+        format.html { redirect_to edit_admin_company_url(@company) }
         format.xml  { render :xml => @company, :status => :created, :location => @company }
       else
         format.html { render :action => "new" }
@@ -82,7 +82,7 @@ class Admin::CompaniesController < ApplicationController
     @company.destroy
 
     respond_to do |format|
-      format.html { redirect_to(companies_url) }
+      format.html { redirect_to(admin_companies_url) }
       format.xml  { head :ok }
     end
   end
