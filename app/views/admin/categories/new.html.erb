@@ -1,24 +1,11 @@
-<h1>New category</h1>
+<h1>Добавить категорию</h1>
 
-<% form_for(@category) do |f| %>
+<% form_for([:admin, @category]) do |f| %>
   <%= f.error_messages %>
 
-  <p>
-    <%= f.label :parent_id %><br />
-		<%= f.select :parent_id, Category.all_for_select %>
-  </p>
+  <%= render :partial => "form", :locals => { :f => f } %>
 
   <p>
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </p>
-  <p>
-    <%= f.label :description %><br />
-    <%= f.text_area :description %>
-  </p>
-  <p>
-    <%= f.submit "Create" %>
+    <%= f.submit "Создать" %>
   </p>
 <% end %>
-
-<%= link_to 'Back', categories_path %>

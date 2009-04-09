@@ -1,0 +1,13 @@
+<p>
+  <%= f.label :parent_id, 'Родительская категория' %><br />
+  <%= f.select :parent_id, Category.all_for_select %>
+</p>
+
+<p>
+  <%= f.label :name, 'Название' %><br />
+  <%= f.text_field :name %>
+</p>
+<p>
+  <%= f.label :description, 'Описание' %><br />
+  <%= f.text_area :description %>
+</p>
