@@ -13,7 +13,7 @@ class CreateCompanies < ActiveRecord::Migration
       t.string      :working_time,  :length => 200
       t.string      :sources,       :length => 1024
       
-      t.references
+      t.timestamps
     end
     add_index :companies, :category_id
   end

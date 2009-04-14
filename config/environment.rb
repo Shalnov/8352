@@ -82,3 +82,4 @@ end
 require 'configatron'
 configatron.site_url    = 'mysite.ru'
 configatron.admin_email = 'admin@mysite.ru'
+configatron.companies_per_page = 10

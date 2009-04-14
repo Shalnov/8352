@@ -1,0 +1,6 @@
+<p>
+  <b>Тэг:</b>
+  <%=h @tag.name %>
+</p>
+
+<%= render :partial => "companies/list", :locals => { :companies => @companies }%>

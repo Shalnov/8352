@@ -9,7 +9,7 @@ class CreatePhones < ActiveRecord::Migration
       t.string      :description,   :length => 1024
       t.boolean     :short_code,    :null => false, :default => false
 
-      t.references
+      t.timestamps
     end
 
     add_index :phones, :company_id

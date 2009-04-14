@@ -5,8 +5,7 @@ class Admin::CompaniesController < ApplicationController
   # GET /companies
   # GET /companies.xml
   def index
-    @companies = Company.find(:all)
-    @companies = Company.find_all_by_category_id(params[:category_id]) if params[:category_id]
+    @companies = Company.find(:all, :conditions => { :pending => true })
 
     respond_to do |format|
       format.html # index.html.erb
@@ -17,7 +16,7 @@ class Admin::CompaniesController < ApplicationController
   # GET /companies/1
   # GET /companies/1.xml
   def show
-    @company = Company.find(params[:id])
+    @company = Company.find(params[:id], :conditions => { :pending => true })
 
     respond_to do |format|
       format.html # show.html.erb
@@ -29,7 +28,8 @@ class Admin::CompaniesController < ApplicationController
   # GET /companies/new.xml
   def new
     @company = Company.new
-#    3.times { @company.phones.build }
+    @company.phones.build
+    @company.emails.build
     
     respond_to do |format|
       format.html # new.html.erb
@@ -39,13 +39,14 @@ class Admin::CompaniesController < ApplicationController
 
   # GET /companies/1/edit
   def edit
-    @company = Company.find(params[:id])
+    @company = Company.find_by_id(params[:id], :conditions => { :pending => true })
   end
 
   # POST /companies
   # POST /companies.xml
   def create
     @company = Company.new(params[:company])
+    @company.pending = false
 
     respond_to do |format|
       if @company.save
@@ -62,7 +63,7 @@ class Admin::CompaniesController < ApplicationController
   # PUT /companies/1
   # PUT /companies/1.xml
   def update
-    @company = Company.find(params[:id])
+    @company = Company.find_by_id(params[:id], :conditions => { :pending => true })
     respond_to do |format|
       if @company.update_attributes(params[:company])
         flash[:notice] = 'Company was successfully updated.'
@@ -78,7 +79,7 @@ class Admin::CompaniesController < ApplicationController
   # DELETE /companies/1
   # DELETE /companies/1.xml
   def destroy
-    @company = Company.find(params[:id])
+    @company = Company.find_by_id(params[:id], :conditions => { :pending => true })
     @company.destroy
 
     respond_to do |format|

@@ -1,14 +1,6 @@
-<% nested_attributes_for f, :phones, :emails -%>
+<% nested_attributes_for f, :phones -%>
+<% nested_attributes_for f, :emails -%>
 
-<p>
-  <%= f.label :pending, 'На модерации' %><br />
-	<%= f.check_box :pending %>
-</p>
-
-<p>
-  <%= f.label :category_id, 'Категория' %><br />
-	<%= f.select :category_id, Category.all_for_select %>
-</p>
 <p>
   <%= f.label :name, 'Название' %><br />
   <%= f.text_field :name %>

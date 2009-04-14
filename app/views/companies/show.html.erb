@@ -1,53 +1,76 @@
 <p>
-  <b>Category:</b>
-  <%=h @company.category.name %>
+  <b>Категория:</b>
+  <%= link_to @company.category.name, category_url(@company.category) %>
 </p>
 
 <p>
-  <b>Name:</b>
+  <b>Название:</b>
   <%=h @company.name %>
 </p>
 
 <p>
-  <b>Full name:</b>
+  <b>Полное название:</b>
   <%=h @company.full_name %>
 </p>
 
 <p>
-  <b>Inn:</b>
+  <b>ИНН:</b>
   <%=h @company.inn %>
 </p>
 
 <p>
-  <b>Address:</b>
+  <b>Адрес:</b>
   <%=h @company.address %>
 </p>
 
 <p>
-  <b>Site:</b>
+  <b>Сайт:</b>
   <%=h @company.site %>
 </p>
 
 <p>
-  <b>Director:</b>
+  <b>Директор:</b>
   <%=h @company.director %>
 </p>
 
 <p>
-  <b>Description:</b>
+  <b>Описание:</b>
   <%=h @company.description %>
 </p>
 
 <p>
-  <b>Working time:</b>
+  <b>Рабочее время:</b>
   <%=h @company.working_time %>
 </p>
 
 <p>
-  <b>Sources:</b>
+  <b>Источники:</b>
   <%=h @company.sources %>
 </p>
 
+<% if @company.phones.size > 0 %>
+<p>
+  <b>Телефоны:</b>
+	<% @company.phones.each do |phone| %>
+		<%= render :partial => "common/phone", :locals => { :phone => phone }%>
+	<% end %>
+</p>
+<% end %>
 
-<%= link_to 'Edit', edit_company_path(@company) %> |
-<%= link_to 'Back', companies_path %>
+<% if @company.emails.size > 0 %>
+<p>
+  <b>E-mail:</b>
+	<% @company.emails.each do |email| %>
+		<%= render :partial => "common/email", :locals => { :email => email }%>
+	<% end %>
+</p>
+<% end %>
+
+<% if @company.tag_list.size > 0 %>
+<p>
+  <b>Тэги:</b>
+	<% @company.tag_list.each do |tag| %>
+		<%= link_to tag, { :controller => :tags, :action => :show, :id => tag } %> 
+	<% end %>
+</p>
+<% end %>

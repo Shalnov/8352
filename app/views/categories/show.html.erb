@@ -1,24 +1,20 @@
-<p>
-  <b>Parent:</b>
-  <%=h @category.parent.name if @category.parent %>
-</p>
+<%= link_to 'Добавить компанию', new_category_company_path(@category) %>
 
 <p>
-  <b>Name:</b>
+  <b>Категория:</b>
   <%=h @category.name %>
 </p>
 
 <p>
-  <b>Description:</b>
+  <b>Описание:</b>
   <%=h @category.description %>
 </p>
 
 <% if @category.children.size > 0 %>
 <ul>
-	<%= render_category_with_all_childs(@category) %>
+	<%= render_categories_front_end(@category) %>
 </ul>
 <% end %>
 
-<%= link_to 'Edit', edit_category_path(@category) %> |
-<%= link_to 'Back', categories_path %> |
-<%= link_to 'Добавить компанию', new_category_company_path(@category) %>
+<%= render :partial => "companies/list", :locals => { :companies => @companies }%>
+

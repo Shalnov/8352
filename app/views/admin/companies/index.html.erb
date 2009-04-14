@@ -2,21 +2,25 @@
 
 <table>
   <tr>
+    <th>На модераци</th>
     <th>Краткое название</th>
     <th>Название</th>
     <th>ИНН</th>
     <th>Адрес</th>
     <th>Сайт</th>
+    <th>Последнее изменение</th>
     <th></th>
   </tr>
 
 <% for company in @companies %>
   <tr>
+    <td><%= yes_no(company.pending) %></td>
     <td><%=h company.name %></td>
     <td><%=h company.full_name %></td>
     <td><%=h company.inn %></td>
     <td><%=h company.address %></td>
     <td><%= link_to company.site, company.site, :popup => true %></td>
+    <td><%=h company.updated_at %></td>
     <td><%= link_to 'Изменить', edit_admin_company_path(company) %> | <%= link_to 'Удалить', admin_company_path(company), :confirm => 'Удалить компанию?', :method => :delete %></td>
   </tr>
 <% end %>

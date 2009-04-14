@@ -2,7 +2,7 @@
 
 <ul>
 <% for category in @categories %>
-	<%= render_category_with_all_childs(category, true, true) %>
+	<%= render_category_with_all_childs(category, lambda { |category| h category.name }, true, true) %>
 <% end %>
 </ul>
 

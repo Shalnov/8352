@@ -1,6 +1,6 @@
 <h1>Редактирование компании</h1>
 
-<% form_for(@company) do |f| %>
+<% form_for([:admin, @company]) do |f| %>
   <%= f.error_messages %>
 
 	<%= render :partial => "form", :locals => { :f => f }%>

@@ -1,0 +1,9 @@
+<% if companies.size > 0 %>
+	<p>
+	  <b>Компании:</b><br />
+		<% companies.each do |company| %>
+			<%= link_to company.name, category_company_url(company.category, company) %> <br />
+		<% end %>
+	</p>
+	<%= will_paginate companies %>
+<% end %>

@@ -1,9 +1,5 @@
-<%= link_to 'Добавить категорию', new_category_path %>
-<br />
-<br />
-
 <ul>
 <% for category in @categories %>
-	<%= render_category_with_all_childs(category, true, true) %>
+	<%= render_categories_front_end(category, false, true) %>
 <% end %>
 </ul>
