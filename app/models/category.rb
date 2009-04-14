@@ -30,4 +30,12 @@ class Category < ActiveRecord::Base
       end
     end
   end
+  
+  def self.search(text)
+    unless text.blank?
+      find(:all, :conditions => ["name like ? or description like ?", "%#{text}%", "%#{text}%"])
+    else
+      []
+    end
+  end
 end

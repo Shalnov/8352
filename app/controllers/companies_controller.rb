@@ -55,17 +55,6 @@ class CompaniesController < ApplicationController
     end
   end
   
-  # GET /companies/1
-  # GET /companies/1.xml
-  def show
-    @company = Company.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @company }
-    end
-  end
-
   # GET /companies/1/edit
   def edit
     @company = Company.find(params[:id])
@@ -75,7 +64,7 @@ class CompaniesController < ApplicationController
   # PUT /companies/1.xml
   def update
     @company = Company.find(params[:id])
-    params[:pending] = true
+    params[:company][:pending] = true
     respond_to do |format|
       if @company.update_attributes(params[:company])
         flash[:notice] = 'Компания была изменена и будет доступна после одобрения изменений админстратором.'
@@ -87,5 +76,11 @@ class CompaniesController < ApplicationController
       end
     end
   end
-    
+  
+  def search
+    @tags = Tag.search(params[:search])
+    @categories = Category.search(params[:search])
+    @companies = Company.search(params[:search])
+    render :layout => false
+  end  
 end

@@ -67,5 +67,13 @@ class Tag < ActiveRecord::Base
         :group      => group_by
       }.update(options)
     end
+    
+    def search(text)
+      unless text.blank?
+        find(:all, :conditions => ["name like ?", "%#{text}%"])
+      else
+        []
+      end
+    end
   end
 end

@@ -13,45 +13,37 @@ class Company < ActiveRecord::Base
   accepts_nested_attributes_for :phones, :allow_destroy => true,
                                 :reject_if => proc { |phone| phone['number'].blank? }
   accepts_nested_attributes_for :emails, :allow_destroy => true
+
+  class << self
+    def find_with_scope( *args )
+      options = args.extract_options!
+      if options.has_key?(:conditions)
+        if options[:conditions].is_a?(String)
+          pending_state = options[:conditions].include?('pending')
+        elsif options[:conditions].is_a?(Hash)
+          pending_state = options[:conditions].delete(:pending)
+        end
+      else
+        pending_state = options.delete( :pending )
+      end
+      unless pending_state
+        with_scope( :find => { :conditions => [ 'pending = false' ] } ) do
+          find_without_scope( *args << options )
+        end
+      else
+        find_without_scope( *args << options )
+      end
+    end
   
-  class << self 
-
-    def find_with_scope( *args ) 
-      options = args.extract_options! 
-      with_editing = options.delete( :pending ) 
-
-      unless with_editing 
-        with_scope( :find => { :conditions => [ '"companies".pending = 0' ] } ) do 
-          find_without_scope( *args << options ) 
-        end 
-      else 
-        find_without_scope( *args << options ) 
-      end 
-    end 
-
-    alias_method_chain :find, :scope 
+    alias_method_chain :find, :scope
   end
-  # class << self
-  #   def find_with_scope( *args )
-  #     options = args.extract_options!
-  #     if options.has_key?(:conditions)
-  #       if options[:conditions].is_a?(String)
-  #         pending_state = options[:conditions].include?('pending')
-  #       elsif options[:conditions].is_a?(Hash)
-  #         pending_state = options[:conditions].delete(:pending)
-  #       end
-  #     else
-  #       pending_state = options.delete( :pending )
-  #     end
-  #     unless pending_state
-  #       with_scope( :find => { :conditions => [ 'pending = 0' ] } ) do
-  #         find_without_scope( *args << options )
-  #       end
-  #     else
-  #       find_without_scope( *args << options )
-  #     end
-  #   end
-  # 
-  #   alias_method_chain :find, :scope
-  # end
+  
+  def self.search(text)
+    unless text.blank?
+      find(:all, :conditions => ["name like ? or full_name like ? or description like ? ", "%#{text}%", "%#{text}%", "%#{text}%"])
+    else
+      []
+    end
+  end
+  
 end

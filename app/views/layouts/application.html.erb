@@ -33,15 +33,10 @@
 
 <div id="main">
 
-<div id="search">
-<form>
-Номер телефона или слово: <input name="query" value=""/>
-<input type="submit" value="Искать"/>
-</form>
-<hr/>
-</div>
+<%=render :partial => "common/search"%>
 
 <div id="body">
+	<div id="search_results"></div>
 
     <%= yield  %>
 <!--текст, результаты поиска и прочее-->

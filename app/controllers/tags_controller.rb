@@ -3,7 +3,7 @@ class TagsController < ApplicationController
   # GET /tags
   # GET /tags.xml
   def index
-    @tags = Company.tag_counts
+    @tags = Company.tag_counts(:conditions => {:pending => false})
 
     respond_to do |format|
       format.html # index.html.erb

@@ -1,7 +1,4 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :tags
-
-
   map.root :controller => "home"
 
   map.namespace :admin do |admin|
@@ -22,8 +19,9 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :users,       :collection => { :activate => :get }
   map.resource  :session
-  map.resources :companies
-  map.resources :categories, :has_many => [:companies]
+  map.resources :companies,   :collection => { :search => :post }
+  map.resources :categories,  :has_many => [:companies]
+  map.resources :tags,        :has_many => [:companies]
 
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'
