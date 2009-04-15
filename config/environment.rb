@@ -77,9 +77,10 @@ Rails::Initializer.run do |config|
   config.gem 'webrat', :lib => "webrat", :source => "http://gems.github.com"
   config.gem "thoughtbot-factory_girl", :lib => "factory_girl", :source => "http://gems.github.com"
   config.gem 'redgreen', :version=>"1.2.2"
+  config.gem 'ya2yaml', :version=>"0.26"
 end
 
 require 'configatron'
-configatron.site_url    = 'mysite.ru'
-configatron.admin_email = 'admin@mysite.ru'
+configatron.site_url    = '8352.info'
+configatron.admin_email = 'admin@orionet.ru'
 configatron.companies_per_page = 10

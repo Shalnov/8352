@@ -10,3 +10,4 @@ log/*.log
 log/*.pid
 tmp/**/*
 nbproject
+*~
