@@ -45,7 +45,7 @@ Defaults to development database. Set RAILS_ENV to override.'
           file.write data.inject({}) { |hash, record|
             hash["#{table_name}_#{i.succ!}"] = record
             hash
-          }.to_yaml
+          }.ya2yaml
         end
       end
     end
