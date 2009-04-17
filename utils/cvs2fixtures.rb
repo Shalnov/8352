@@ -21,14 +21,15 @@ CSV::Reader.parse(File.open(ARGV[0], 'rb')) do |row|
   unless cat.nil?
 #    category.save unless old_cat.nil?
     old_cat=cat
-    category=Category.create(:name=>cat)
+    category=Category.new(:name=>cat,:description=>cat)
+    raise 'cant create category' unless category.save
  #   p category
   end
-  company=Company.create(:name=>name,:full_name=>name,
+  company=category.companies.create(:name=>name,:full_name=>name,
                       :address=>address,:site=>site,
-                      :description=>comment,
-                                    :category_id=>category.id)
+                      :description=>comment)
   
+  raise 'cant create company' unless company.save
   if tels!=nil
     p=/(\d+)\s*(\((.+)\))?/
     filials = tels.split(",")
@@ -39,21 +40,31 @@ CSV::Reader.parse(File.open(ARGV[0], 'rb')) do |row|
       number=refs[1]
       dep=refs[3]
       number=f.sub(/\s+$/,'')
-#      p refs
-      phone=Phone.create(:number=>number,:department=>dep,
-                         :company_id=>company.id)
-      p phone
-#      phone.save
+        #      p refs
+        if number=~/^8/
+          if number.length==11
+            number=number.sub(/^8/,'7')
+          else
+            number="7#{number}"
+          end
+        else
+          number="78352#{number}"
+        end
+      number=number.to_i
+      unless number==78352
+        phone=company.phones.new(:number=>number,:department=>dep)
+        unless phone.save
+          p phone.errors
+          raise 'cant create phone'
+        end
+      end
     end
   end
   if email!=nil
-    e=Email.create(:email=>email,
-                    :company_id=>company.id)
+    e=company.emails.new(:email=>email) #,:person=>'',:department=>''
+    raise 'cant create email' unless e.save
+    
   end
-#  company
-#  company.save
 
-#  p category
-  
-#  break if !row[0].is_null && row[0].data == 'stop'
+
 end
