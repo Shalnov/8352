@@ -3,7 +3,8 @@ module ApplicationHelper
   
   def render_category_with_all_childs(category, category_func, admin=false, description=false)
     res = "<li>"
-    res += category_func.call(category)
+    res += category_func.call(category) 
+    res += " (#{category.companies_count})"
     res += " " + link_to('Изменить', edit_admin_category_path(category)) if admin
     res += " | " + link_to('Удалить', admin_category_path(category), :confirm => 'Удалить категорию?', :method => :delete) if admin
     res += "<br />" + h(category.description) if description

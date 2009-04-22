@@ -2,12 +2,10 @@ ActionController::Routing::Routes.draw do |map|
   map.root :controller => "home"
 
   map.namespace :admin do |admin|
-#    map.with_options :path_prefix => '/admin' do |admin_path|
-      admin.resources :users,      :controller => 'users'
-      admin.resources :companies,  :controller => 'companies'
-      admin.resources :categories, :controller => 'categories'
-      admin.resources :tags,       :controller => 'tags'
-#    end
+    map.resources :users
+    map.resources :companies
+    map.resources :categories
+    map.resources :tags
 
     admin.connect '/', :controller => 'companies', :action => 'index'
   end

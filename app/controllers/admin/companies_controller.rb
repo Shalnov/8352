@@ -2,89 +2,48 @@ class Admin::CompaniesController < ApplicationController
   
   layout 'admin'
   
-  # GET /companies
-  # GET /companies.xml
-  def index
-    @companies = Company.find(:all, :conditions => { :pending => true })
+  active_scaffold :companies do |config|
+    show.link.label     = 'Показать'
+    update.link.label   = 'Изменить'
+    delete.link.label   = 'Удалить'
+    create.link.label   = 'Создать'
+    search.link.label   = 'Поиск'
+          
+    config.label = "Компании"
+    config.columns[:category].label     = 'категория'
+    config.columns[:pending].label      = 'на модерации'
+    config.columns[:name].label         = 'название'
+    config.columns[:full_name].label    = 'полное название'
+    config.columns[:inn].label          = 'ИНН'
+    config.columns[:address].label      = 'адрес'
+    config.columns[:site].label         = 'сайт'
+    config.columns[:phones].label       = 'телефоны'
+    config.columns[:emails].label       = 'e-mail'
+    config.columns[:director].label     = 'руководитель'
+    config.columns[:description].label  = 'описание'
+    config.columns[:working_time].label = 'рабочее время'
+    config.columns[:sources].label      = 'источники'
+    config.columns[:updated_at].label   = 'изменена'
 
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @companies }
-    end
-  end
-
-  # GET /companies/1
-  # GET /companies/1.xml
-  def show
-    @company = Company.find(params[:id], :conditions => { :pending => true })
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @company }
-    end
-  end
-
-  # GET /companies/new
-  # GET /companies/new.xml
-  def new
-    @company = Company.new
-    @company.phones.build
-    @company.emails.build
+    config.columns = [:category, :pending, :name, :full_name, :inn, :address, :site, :phones, :emails, :director, :description, :working_time, :sources, :updated_at]
+    config.list.columns.exclude :director, :description, :working_time, :sources
     
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @company }
-    end
+    config.list.sorting = { :updated_at => :desc }
   end
 
-  # GET /companies/1/edit
-  def edit
-    @company = Company.find_by_id(params[:id], :conditions => { :pending => true })
+  def conditions_for_collection
+    ["pending = 't' or pending = 'f'"]
   end
 
-  # POST /companies
-  # POST /companies.xml
-  def create
-    @company = Company.new(params[:company])
-    @company.pending = false
-
-    respond_to do |format|
-      if @company.save
-        flash[:notice] = 'Company was successfully created.'
-        format.html { redirect_to edit_admin_company_url(@company) }
-        format.xml  { render :xml => @company, :status => :created, :location => @company }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @company.errors, :status => :unprocessable_entity }
-      end
-    end
+  def before_create_save(record)
+    record.pending = false
   end
-
-  # PUT /companies/1
-  # PUT /companies/1.xml
-  def update
-    @company = Company.find_by_id(params[:id], :conditions => { :pending => true })
-    respond_to do |format|
-      if @company.update_attributes(params[:company])
-        flash[:notice] = 'Company was successfully updated.'
-        format.html { redirect_to edit_admin_company_url(@company) }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @company.errors, :status => :unprocessable_entity }
-      end
-    end
+  
+  def find_if_allowed(id, action, klass = nil)
+    klass ||= active_scaffold_config.model
+    record = klass.find_by_id(id, :conditions => { :pending => true })
+    raise ActiveScaffold::RecordNotAllowed unless record.authorized_for?(:action => action.to_sym)
+    return record
   end
-
-  # DELETE /companies/1
-  # DELETE /companies/1.xml
-  def destroy
-    @company = Company.find_by_id(params[:id], :conditions => { :pending => true })
-    @company.destroy
-
-    respond_to do |format|
-      format.html { redirect_to(admin_companies_url) }
-      format.xml  { head :ok }
-    end
-  end
+  
 end

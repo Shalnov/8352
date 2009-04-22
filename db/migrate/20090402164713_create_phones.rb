@@ -14,6 +14,8 @@ class CreatePhones < ActiveRecord::Migration
 
     add_index :phones, :company_id
     add_index :phones, :number, :unique => true
+    
+    execute %{alter table phones alter column number type numeric(11);}
   end
 
   def self.down

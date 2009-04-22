@@ -1,10 +1,14 @@
 # SQLite version 3.x
 #   gem install sqlite3-ruby (not necessary on OS X Leopard)
 development:
-  adapter: sqlite3
-  database: db/development.sqlite3
-  pool: 5
-  timeout: 5000
+  adapter: postgresql
+  database: d8352_dev
+  username: anton
+  password: 
+  host: 127.0.0.1
+# d8352_dev
+# u8352
+# password
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
