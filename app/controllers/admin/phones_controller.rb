@@ -20,5 +20,4 @@ class Admin::PhonesController < ApplicationController
     config.columns = [:number, :person, :department, :working_time, :description, :short_code]
     config.list.columns.exclude :person, :department, :working_time, :description, :short_code
   end
-
 end

@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
   include AuthenticatedSystem
   include RoleRequirementSystem
 
+  ActiveScaffold::DataStructures::Column.show_blank_record = false
+  
   filter_parameter_logging :password 
   
   before_filter :admin_protection_filter
@@ -34,4 +36,5 @@ class ApplicationController < ActionController::Base
       block.call
     end
   end
+  
 end

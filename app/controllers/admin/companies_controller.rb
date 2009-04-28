@@ -11,6 +11,7 @@ class Admin::CompaniesController < ApplicationController
           
     config.label = "Компании"
     config.columns[:category].label     = 'категория'
+    config.columns[:category].actions_for_association_links = []
     config.columns[:pending].label      = 'на модерации'
     config.columns[:name].label         = 'название'
     config.columns[:full_name].label    = 'полное название'
@@ -25,8 +26,9 @@ class Admin::CompaniesController < ApplicationController
     config.columns[:sources].label      = 'источники'
     config.columns[:updated_at].label   = 'изменена'
 
-    config.columns = [:category, :pending, :name, :full_name, :inn, :address, :site, :phones, :emails, :director, :description, :working_time, :sources, :updated_at]
+    config.columns = [:category, :pending, :name, :full_name, :inn, :address, :site, :director, :description, :working_time, :sources, :updated_at, :phones, :emails]
     config.list.columns.exclude :director, :description, :working_time, :sources
+    config.update.columns.exclude :category, :updated_at
     
     config.list.sorting = { :updated_at => :desc }
   end
