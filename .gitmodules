@@ -16,3 +16,6 @@
 [submodule "vendor/plugins/active_scaffold"]
 	path = vendor/plugins/active_scaffold
 	url = git://github.com/activescaffold/active_scaffold.git
+[submodule "vendor/plugins/thinking-sphinx"]
+	path = vendor/plugins/thinking-sphinx
+	url = git://github.com/freelancing-god/thinking-sphinx.git

@@ -1,5 +1,17 @@
 class Company < ActiveRecord::Base
   acts_as_taggable
+
+  define_index do
+    indexes :name, :sortable => true
+    indexes full_name, :sortable => true
+    indexes description
+    indexes address
+    indexes category.name, :as => :category
+    indexes [
+      phones.number, phones.person
+    ], :as => :phone
+    indexes emails.email, :as => :emails
+  end
   
   belongs_to :category, :counter_cache => true
 
@@ -38,12 +50,12 @@ class Company < ActiveRecord::Base
     alias_method_chain :find, :scope
   end
   
-  def self.search(text)
-    unless text.blank?
-      find(:all, :conditions => ["name like ? or full_name like ? or description like ? ", "%#{text}%", "%#{text}%", "%#{text}%"])
-    else
-      []
-    end
-  end
-  
+  # def self.search(text)
+  #   unless text.blank?
+  #     find(:all, :conditions => ["name like ? or full_name like ? or description like ? ", "%#{text}%", "%#{text}%", "%#{text}%"])
+  #   else
+  #     []
+  #   end
+  # end
+
 end

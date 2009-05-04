@@ -4,7 +4,12 @@ class Category < ActiveRecord::Base
   has_many :companies
   
   validates_presence_of :name
-
+  
+  define_index do
+    indexes :name
+    indexes description
+  end
+  
   def self.all_for_select(except=nil)
     categories = [["-", nil]]
     (except.nil? ? sorted : sorted.select{|sorted| sorted.id != except.id }).each do |category|
@@ -30,12 +35,12 @@ class Category < ActiveRecord::Base
     end
   end
   
-  def self.search(text)
-    unless text.blank?
-      find(:all, :conditions => ["name like ? or description like ?", "%#{text}%", "%#{text}%"])
-    else
-      []
-    end
-  end
+  # def self.search(text)
+  #   unless text.blank?
+  #     find(:all, :conditions => ["name like ? or description like ?", "%#{text}%", "%#{text}%"])
+  #   else
+  #     []
+  #   end
+  # end
 
 end

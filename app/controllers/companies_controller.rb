@@ -80,7 +80,7 @@ class CompaniesController < ApplicationController
   def search
     @tags = Tag.search(params[:search])
     @categories = Category.search(params[:search])
-    @companies = Company.search(params[:search])
+    @companies = Company.search(params[:search], :match_mode => :any)
     render :layout => false
   end  
 end
