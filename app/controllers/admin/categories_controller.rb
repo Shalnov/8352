@@ -19,8 +19,7 @@ class Admin::CategoriesController < ApplicationController
     config.columns = [:name, :description, :position, :parent, :companies, :companies_count]
     
     config.columns[:parent].actions_for_association_links = []
-    config.columns[:parent].collapsed = true
-#    config.columns[:parent].show_blank_record = false
+    # config.columns[:parent].collapsed = true
 
     config.list.columns.exclude :companies
     config.create.columns.exclude :companies, :companies_count
