@@ -17,7 +17,12 @@ class Admin::PhonesController < ApplicationController
     config.columns[:description].label    = 'описание'
     config.columns[:short_code].label     = '3-значный код'
 
-    config.columns = [:number, :person, :department, :working_time, :description, :short_code]
-    config.list.columns.exclude :person, :department, :working_time, :description, :short_code
+    config.columns = [:number, :person, :department, :working_time, :description]
+    config.list.columns.exclude :person, :department, :working_time, :description
   end
+  
+  def before_create_save(record)
+    record.short_code = false
+  end
+  
 end

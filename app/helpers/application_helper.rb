@@ -30,4 +30,14 @@ module ApplicationHelper
   def yes_no(var)
     var == true ? "да" : "нет"
   end
+  
+  def h_phone(phone)
+    if phone.number < 79*10**9
+      str = phone.number.to_s
+      h "7 (#{str[1..4]}) #{str[5..6]}-#{str[7..8]}-#{str[9..10]}"
+    else
+      str = phone.number.to_s
+      h "7 (#{str[1..3]}) #{str[4..6]}-#{str[7..8]}-#{str[9..10]}"
+    end
+  end
 end

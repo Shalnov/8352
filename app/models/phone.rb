@@ -8,4 +8,5 @@ class Phone < ActiveRecord::Base
   def to_s
     number
   end
+  
 end

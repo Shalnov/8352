@@ -8,6 +8,9 @@ class Category < ActiveRecord::Base
   define_index do
     indexes :name
     indexes description
+
+    set_property :enable_star => 1
+    set_property :min_infix_len => 1
   end
   
   def self.all_for_select(except=nil)
@@ -35,12 +38,4 @@ class Category < ActiveRecord::Base
     end
   end
   
-  # def self.search(text)
-  #   unless text.blank?
-  #     find(:all, :conditions => ["name like ? or description like ?", "%#{text}%", "%#{text}%"])
-  #   else
-  #     []
-  #   end
-  # end
-
 end

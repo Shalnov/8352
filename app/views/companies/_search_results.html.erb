@@ -22,7 +22,12 @@
     <td><%=h company.site %></td>
     <td><%=h company.description %></td>
     <td><%=h company.working_time %></td>
-    <td><%=h company.phones %></td>
+
+    <td>
+				<% company.phones.each do |phone| %>
+					<%= h_phone phone %><br />
+				<% end %>
+		</td>
   </tr>
 <% end %>
 </table>

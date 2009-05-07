@@ -11,6 +11,10 @@ class Company < ActiveRecord::Base
       phones.number, phones.person
     ], :as => :phone
     indexes emails.email, :as => :emails
+
+    # необходимо для поиска '*ксары*' => Чебоксары
+    set_property :enable_star => 1
+    set_property :min_infix_len => 1
   end
   
   belongs_to :category, :counter_cache => true
@@ -50,12 +54,4 @@ class Company < ActiveRecord::Base
     alias_method_chain :find, :scope
   end
   
-  # def self.search(text)
-  #   unless text.blank?
-  #     find(:all, :conditions => ["name like ? or full_name like ? or description like ? ", "%#{text}%", "%#{text}%", "%#{text}%"])
-  #   else
-  #     []
-  #   end
-  # end
-
 end
