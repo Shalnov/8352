@@ -1,6 +1,8 @@
 class Company < ActiveRecord::Base
   acts_as_taggable
 
+  serialize :dump, Hash
+  
   define_index do
     indexes :name, :sortable => true
     indexes full_name, :sortable => true
@@ -54,4 +56,13 @@ class Company < ActiveRecord::Base
     alias_method_chain :find, :scope
   end
   
+  def dump_attributes
+    self.dump ||= {}
+    self.dump[Time.now.strftime('%Y%m%d%H%M%S')] = 
+                { :company => Marshal.dump(self),
+                  :phones => Marshal.dump(self.phones),
+                  :emails => Marshal.dump(self.emails),
+                  :tags => Marshal.dump(self.tags) }
+    self.write_attribute(:dump, self.dump)
+  end
 end

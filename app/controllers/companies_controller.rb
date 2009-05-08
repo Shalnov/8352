@@ -64,6 +64,7 @@ class CompaniesController < ApplicationController
   # PUT /companies/1.xml
   def update
     @company = Company.find(params[:id])
+    @company.dump_attributes
     params[:company][:pending] = true
     respond_to do |format|
       if @company.update_attributes(params[:company])
