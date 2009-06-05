@@ -107,6 +107,10 @@ float: left;
 
 #search { padding: 10px }
 
+#search_title {color: gray; font-size: 75%}
+#search_tips {color: gray; font-size: 75%}
+#search_tips > span {border-bottom: dashed 1px gray}
+
 #body { 
 padding: 10px;
 font-size: 12px; }
@@ -118,3 +122,5 @@ form#sendsms input { font-size: 9px; }
 .css2 { font-size: 1.2em; }
 .css3 { font-size: 1.4em; }
 .css4 { font-size: 1.6em; }
+
+

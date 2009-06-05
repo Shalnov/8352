@@ -22,10 +22,13 @@
 
 
 <div id="leftbar">
- 	<%= render(:partial => 'categories/short') %>
+Список организаций:	<br />
+<a href="">По названиям</a>	<br />
+<a href="">По адресам</a>	<br />
+<a href="">По деятельности</a>
 	<br />
 	<br />
- 	<%= link_to 'Тэги', tags_url %>
+
 	<br />
 	<br />
 </div>
@@ -53,12 +56,10 @@
 	<%= render :partial => "sessions/form" %>
 	<% end %>
 	<hr />
-<form id="sendsms">
-<input id="sms_phone" name="phone" size="15"/>
-<input id="sms_btn" type="submit" value="Отправить sms"/>
-</form>
 
-<p>реклама, тэги и лента новостей</p>
+<a href="">отправить SMS</a>
+<p>тэги тэги тэги</p>
+ 	<%= link_to 'Тэги', tags_url %>
 </div>
 
 
