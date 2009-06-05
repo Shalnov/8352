@@ -3,6 +3,7 @@
 git clone
 git submodule init
 git submodule update
+rake gems:install
 rake db:create
 rake db:fill_roles
 ./script/server
