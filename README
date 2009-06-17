@@ -1,13 +1,16 @@
-Информационный справочник
-
 git clone
 git submodule init
 git submodule update
 rake gems:install
 rake db:create
-rake db:fill_roles
+rake db:migrate
+
+rake db:p8352:add_default_roles  # add default roles: "admin", "editor", "reviewer"
+rake db:p8352:add_default_users  # add default user "admin" with attributes:
+				 #   email="username@some-domain-name.com",
+				 #   password="admin123"
+				 #   role="admin"
+rake db:p8352:add_sources	 # add sources from libs/grabber/*
+
 ./script/server
 
-# зарегистрировать пользователя admin
-
-rake db:make_admin_by_login login=admin
