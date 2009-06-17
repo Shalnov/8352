@@ -9,6 +9,6 @@ CSV::Reader.parse(File.open(ARGV[0], 'rb')) do |row|
   (prefix,old,new)=row
   next if prefix=='префикс'
 #  p prefix+old, prefix+new
-  TelefonRename.create(:old=>prefix+old,:new=>prefix+new, 
+  TelefonRename.create(:oldphone=>prefix+old,:newphone=>prefix+new, 
                        :rename_date=>'2009-04-01')
 end

@@ -1,3 +1,3 @@
 class Admin::ApplicationController < ApplicationController
-  layout 'admin'
+#  layout 'admin'
 end

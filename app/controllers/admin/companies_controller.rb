@@ -1,4 +1,11 @@
+# -*- coding: utf-8 -*-
 class Admin::CompaniesController < Admin::ApplicationController
+    layout 'streamlined'
+  acts_as_streamlined
+
+end
+
+class Admin::CompaniesController2 < Admin::ApplicationController
   
   active_scaffold :companies do |config|
     show.link.label     = 'Показать'

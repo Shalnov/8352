@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 module ApplicationHelper
   include ActsAsTaggable::TagsHelper
   
@@ -31,7 +32,11 @@ module ApplicationHelper
     var == true ? "да" : "нет"
   end
   
+  
   def h_phone(phone)
+    
+    # Может сделать вывод также в городском формате?
+    
     if phone.number < 79*10**9
       str = phone.number.to_s
       h "7 (#{str[1..4]}) #{str[5..6]}-#{str[7..8]}-#{str[9..10]}"
@@ -53,5 +58,33 @@ module ApplicationHelper
     end
     messages
   end
+  
+  def normalize_phone(phone)
+    
+    @current_prefix="78352"
+    
+    if phone.size==11
+      phone[0]="7"
+    elsif phone.size==10
+      phone="7"+phone
+    elsif phone.size==6
+      phone=@current_prefix+phone
+    else
+      raise 
+    end
+    
+    renames=TelefoneRename.
+      find_by_sql("select  newphone || substr(?,length(oldphone),12) as newnumber from telefon_renames where substr(?,1,length(oldphone))=oldphone",
+                  phone,phone)
+    phone = renames[0].newnumber if renames.size>0
 
+    federals=TelefoneFederal.
+      find_by_sql("select  federal || substr(?,length(city),12) as federal from telefon_federals where substr(?,1,length(city))=city",
+                  phone,phone)
+    phone = federals[0].federal if federals.size>0
+    
+    phone
+  end
+
+  
 end

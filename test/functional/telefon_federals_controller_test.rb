@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'application_helper'
 
 class TelefonFederalsControllerTest < ActionController::TestCase
   test "should get index" do

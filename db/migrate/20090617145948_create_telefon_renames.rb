@@ -2,14 +2,14 @@
 class CreateTelefonRenames < ActiveRecord::Migration
   def self.up
     create_table :telefon_renames do |t|
-      t.string :old
-      t.string :new
+      t.string :oldphone
+      t.string :newphone
       t.date   :rename_date # Дата переименования. 
       t.timestamps
     end
     
-    add_index :telefon_renames, :old, :unique=>true
-    add_index :telefon_renames, :new, :unique=>true
+    add_index :telefon_renames, :oldphone, :unique=>true
+    add_index :telefon_renames, :newphone, :unique=>true
   end
 
   def self.down

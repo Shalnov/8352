@@ -22,3 +22,6 @@
 [submodule "vendor/plugins/render_component"]
 	path = vendor/plugins/render_component
 	url = git://github.com/lackac/render_component.git
+[submodule "vendor/plugins/streamlined"]
+	path = vendor/plugins/streamlined
+	url = git://github.com/relevance/streamlined.git

@@ -1,7 +1,4 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :telefon_renames
-
-  map.resources :telefon_federals
 
   
   map.root :controller => "home"
@@ -11,6 +8,9 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :companies
     admin.resources :categories
     admin.resources :tags
+    
+    admin.resources :telefon_renames
+    admin.resources :telefon_federals
 
     admin.resources :sources, :member => { :run => :get } do |source|
       source.resources :links
@@ -18,7 +18,6 @@ ActionController::Routing::Routes.draw do |map|
     end
     admin.resources :jobs
     admin.resources :storages
-
 
 
     admin.connect '/', :controller => 'companies', :action => 'index'
