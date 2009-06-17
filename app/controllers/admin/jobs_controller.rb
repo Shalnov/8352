@@ -1,5 +1,5 @@
 class Admin::JobsController < Admin::ApplicationController
-
+  layout 'admin'
   require_role :admin
   
   def index
