@@ -8,8 +8,22 @@ module Admin::ApplicationHelper
      ["Пользователи", { :controller=> 'users'}],
      ["Категории", { :controller=> 'categories'}],
      ["Тэги", { :controller=> 'tags'}],
-     ["Joba", { :controller=> 'jobs'}],
+     ["Jobs", { :controller=> 'jobs'}],
      ["Storages", { :controller=> 'storages'}],
     ]
   end
+  
+    
+  def streamlined_branding
+    link_to "8352.info/admin", "/admin/"
+  end
+
+  def streamlined_footer
+    ""
+  end
+  
+ def streamlined_side_menus
+    [ ["List All Coffee", {:controller => "coffees", :action => "list"}] ]
+  end
+
 end
