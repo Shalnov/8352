@@ -1,4 +1,8 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :telefon_renames
+
+  map.resources :telefon_federals
+
   
   map.root :controller => "home"
 
