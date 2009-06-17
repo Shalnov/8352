@@ -5,7 +5,7 @@ namespace :db do
       r = Role.find_by_name 'admin'
       if r
         u = User.create :login => 'admin',
-                        :email => 'atlancer@gmail.com',
+                        :email => 'username@some-domain-name.com',
                         :password => 'admin123',
                         :password_confirmation => 'admin123'
         u.activate!
