@@ -1,7 +1,5 @@
-class Admin::TagsController < ApplicationController
+class Admin::TagsController < Admin::ApplicationController
 
-  layout 'admin'
-  
   active_scaffold :tags do |config|
     show.link.label     = 'Показать'
     update.link.label   = 'Изменить'

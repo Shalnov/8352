@@ -1,6 +1,4 @@
-class Admin::CompaniesController < ApplicationController
-  
-  layout 'admin'
+class Admin::CompaniesController < Admin::ApplicationController
   
   active_scaffold :companies do |config|
     show.link.label     = 'Показать'

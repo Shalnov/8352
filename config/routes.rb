@@ -1,11 +1,21 @@
 ActionController::Routing::Routes.draw do |map|
+  
   map.root :controller => "home"
 
   map.namespace :admin do |admin|
-    map.resources :users
-    map.resources :companies
-    map.resources :categories
-    map.resources :tags
+    admin.resources :users
+    admin.resources :companies
+    admin.resources :categories
+    admin.resources :tags
+
+    admin.resources :sources, :member => { :run => :get } do |source|
+      source.resources :links
+      source.resources :results, :collection => { :export => :get, :move => :post }
+    end
+    admin.resources :jobs
+    admin.resources :storages
+
+
 
     admin.connect '/', :controller => 'companies', :action => 'index'
   end

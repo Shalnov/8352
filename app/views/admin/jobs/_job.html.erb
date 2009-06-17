@@ -1,0 +1,47 @@
+<td>
+  <%= job.worker_class %>
+</td>
+<td>
+  <%= job.state %>
+  <% if job.state == 'running' %>
+    , progress: <%= job.progress %>
+  <% end %>
+  <% if ['running', 'pending'].include?(job.state) %>
+    <img src="../images/ajax-loader3.gif">
+  <% end %>
+</td>
+<td>
+  <%= job.started_at %><br>
+  <%= time_ago_in_words_with_customization(job.started_at) %>
+</td>
+<td>
+  <%= job.created_at %><br>
+  <%= time_ago_in_words_with_customization(job.created_at) %>
+</td>
+<td>
+  <%= job.updated_at %><br>
+  <%= time_ago_in_words_with_customization(job.updated_at) %>
+</td>
+<script type="text/javascript">
+  //<![CDATA[
+    job_state_<%= dom_id(job) %> = "<%= job.state %>";
+
+
+ $(document).ready(function(){
+              if (window.screen.width <= 800) {
+              }
+              if (window.screen.width > 800  && window.screen.width <= 1024) {
+              }
+              if (window.screen.width > 1024 && window.screen.width <= 1280) {
+              }
+              if (window.screen.width > 1280 && window.screen.width <= 1440) {
+              }
+              if (window.screen.width > 1440 && window.screen.width <= 1680) {
+              }
+              if (window.screen.width > 1680) {
+              }
+      });     
+
+
+  //]]>
+</script>

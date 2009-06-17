@@ -26,6 +26,8 @@ class Company < ActiveRecord::Base
   has_many :taggings, :as => :taggable, :dependent => :destroy
   has_many :tags,     :through => :taggings
 
+  has_many :results
+
   validates_presence_of :name, :full_name
   
   accepts_nested_attributes_for :phones, :allow_destroy => true,

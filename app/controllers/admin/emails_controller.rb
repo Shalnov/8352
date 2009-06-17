@@ -1,6 +1,4 @@
-class Admin::EmailsController < ApplicationController
-  
-  layout 'admin'
+class Admin::EmailsController < Admin::ApplicationController
   
   active_scaffold :emails do |config|
     show.link.label     = 'Показать'

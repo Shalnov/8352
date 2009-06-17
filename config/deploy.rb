@@ -1,15 +1,84 @@
-set :application, "set your application name here"
-set :repository,  "set your repository location here"
+#############################################################
+#       Application
+#############################################################
 
-# If you aren't deploying to /u/apps/#{application} on the target
-# servers (which is the default), you can specify the actual location
-# via the :deploy_to variable:
-# set :deploy_to, "/var/www/#{application}"
+set :application, "8352"
+set :deploy_to, "/home/visions/public_html/#{application}"
 
-# If you aren't using Subversion to manage your source code, specify
-# your SCM below:
-# set :scm, :subversion
+#############################################################
+#       Settings
+#############################################################
 
-role :app, "your app-server here"
-role :web, "your web-server here"
-role :db,  "your db-server here", :primary => true
+default_run_options[:pty] = false
+ssh_options[:forward_agent] = true
+set :use_sudo, false
+set :scm_verbose, true
+set :rails_env, "development"
+#set :rails_env, "production"
+
+#############################################################
+#       Servers
+#############################################################
+
+set :user, "visions"
+set :domain, "8352.visionscradle.com"
+server domain, :app, :web
+role :db, domain, :primary => true
+
+#############################################################
+#       Git
+#############################################################
+
+set :scm, :git
+set :branch, "master"
+set :repository, "git@democore.net:8352.git"
+set :deploy_via, :remote_cache
+
+#############################################################
+#	Passenger
+#############################################################
+
+namespace :deploy do
+  desc "Create the apache config file"
+  task :after_update_code do
+  
+    apache_config = <<-EOF
+    <VirtualHost 72.52.205.197:80>
+      ServerName #{domain}
+      DocumentRoot #{deploy_to}/current/public
+      RailsEnv #{rails_env}
+    </VirtualHost>
+      
+    EOF
+    
+    put apache_config, "#{shared_path}/apache.conf"
+    
+  end
+
+  # Restart passenger on deploy
+#  desc "Restarting mod_rails with restart.txt"
+#  task :restart, :roles => :app, :except => { :no_release => true } do
+#    run "touch #{current_path}/tmp/restart.txt"
+#  end
+  
+#  [:start, :stop].each do |t|
+#    desc "#{t} task is a no-op with mod_rails"
+#    task t, :roles => :app do ; end
+#  end
+  
+  desc "Run this after every successful deployment"
+  task :after_default do
+    restart_background_fu
+  end
+
+end
+
+desc "Restart BackgroundFu daemon"
+task :restart_background_fu do
+  run "RAILS_ENV=#{rails_env} ruby #{current_path}/script/daemons stop"
+  run "RAILS_ENV=#{rails_env} ruby #{current_path}/script/daemons start"
+end
+
+
+#after "deploy:setup", "localize:copy_database_config"
+

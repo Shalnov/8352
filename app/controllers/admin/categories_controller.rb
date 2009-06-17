@@ -1,6 +1,4 @@
-class Admin::CategoriesController < ApplicationController
-  
-  layout 'admin'
+class Admin::CategoriesController < Admin::ApplicationController
   
   active_scaffold :categories do |config|
     show.link.label     = 'Показать'

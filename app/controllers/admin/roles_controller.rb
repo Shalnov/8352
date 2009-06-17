@@ -1,8 +1,7 @@
-class Admin::RolesController < ApplicationController
+class Admin::RolesController < Admin::ApplicationController
+  
   before_filter :admin_filter
   
-  layout 'admin'
-
   active_scaffold :roles do |config|
     config.columns = [:name, :users]
   end

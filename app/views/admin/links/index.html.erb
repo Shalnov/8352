@@ -1,0 +1,29 @@
+<%= title "Listing links", :h2 %>
+
+<script type="text/javascript">
+  $(document).ready(function()  {
+    $("#treetable").treeTable({
+      childPrefix: 'child_of_'
+    });
+  });
+</script>
+
+<table id="treetable" >
+  <thead>
+    <tr>
+      <th>Url</th>
+      <th>Links count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @links.each do |link| %>
+      <tr <%= "id='#{dom_id(link)}'" %> <%= "class='child_of_#{dom_id(link.parent)}'" unless link.parent.nil? %>>
+        <td><%= link_to link.name, link.url %></td>
+        <td><%= link.links_count %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+

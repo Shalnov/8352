@@ -1,7 +1,6 @@
-class Admin::UsersController < ApplicationController
-  before_filter :admin_filter
+class Admin::UsersController < Admin::ApplicationController
   
-  layout 'admin'
+  before_filter :admin_filter
 
   active_scaffold :users do |config|
     show.link.label     = 'Показать'

@@ -40,4 +40,18 @@ module ApplicationHelper
       h "7 (#{str[1..3]}) #{str[4..6]}-#{str[7..8]}-#{str[9..10]}"
     end
   end
+
+  def title(str, container = nil)
+    @page_title = str
+    content_tag(container, str) if container
+  end
+
+  def flash_messages
+    messages = []
+    %w(notice warning error).each do |msg|
+      messages << content_tag(:div, html_escape(flash[msg.to_sym]), :class => "flash #{msg}") unless flash[msg.to_sym].blank?
+    end
+    messages
+  end
+
 end

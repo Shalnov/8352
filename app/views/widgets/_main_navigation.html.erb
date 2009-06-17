@@ -1,0 +1,17 @@
+<%
+  render_navigation :main do
+
+    if logged_in?
+      add_item do |i|
+        i.named 'Logout'
+        i.links_to logout_path
+      end
+    else
+      add_item do |i|
+        i.named 'Login'
+        i.links_to login_path
+      end
+    end
+
+  end
+%>

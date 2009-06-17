@@ -1,6 +1,4 @@
-class Admin::PhonesController < ApplicationController
-  
-  layout 'admin'
+class Admin::PhonesController < Admin::ApplicationController
   
   active_scaffold :phones do |config|
     show.link.label     = 'Показать'

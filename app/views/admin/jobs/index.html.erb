@@ -1,0 +1,22 @@
+<%= title "Listing jobs", :h2 %>
+
+<table class="ttable">
+  <thead>
+    <th>Class</th>
+    <th>State</th>
+    <th>Started at</th>
+    <th>Created at</th>
+    <th>Updated at</th>
+  </thead>
+  <% @jobs.each do |job| %>
+    <tr id="<%= dom_id(job) %>">
+      <%= render :partial => "job", :locals => {:job => job} %>
+    </tr>
+    <%= periodically_call_remote(
+      :url       => admin_job_path(job), 
+      :method    => "get", 
+      :interval  => 5, 
+      :condition => "/^(running|pending|stopping)$/.match(job_state_#{dom_id(job)})")
+    %>  
+  <% end %>
+</table>
