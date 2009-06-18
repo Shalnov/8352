@@ -67,9 +67,16 @@ namespace :deploy do
 #    task t, :roles => :app do ; end
 #  end
   
+
+#  desc "Run this after every successful deployment"
+#  task :after_default do
+#    restart_background_fu
+#  end
+
   desc "Run this after every successful deployment"
-  task :after_default do
-    restart_background_fu
+  task :git_module_update do
+    run "git submodule init"
+    run "git submodule update"
   end
 
 end
@@ -81,5 +88,7 @@ task :restart_background_fu do
 end
 
 
-#after "deploy:setup", "localize:copy_database_config"
+
+
+after "deploy:update_code", "deploy:git_module_update"
 
