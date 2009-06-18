@@ -11,3 +11,5 @@ log/*.pid
 tmp/**/*
 nbproject
 *~
+.#*
+*#
