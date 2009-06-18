@@ -74,12 +74,6 @@ namespace :deploy do
 #    restart_background_fu
 #  end
 
-#  desc "Run this after every successful deployment"
-#  task :git_module_update do
-#    run "git submodule init"
-#    run "git submodule update"
-#  end
-
 end
 
 desc "Restart BackgroundFu daemon"
@@ -87,9 +81,4 @@ task :restart_background_fu do
   run "RAILS_ENV=#{rails_env} ruby #{current_path}/script/daemons stop"
   run "RAILS_ENV=#{rails_env} ruby #{current_path}/script/daemons start"
 end
-
-
-
-
-after "deploy:update_code", "deploy:git_module_update"
 
