@@ -8,7 +8,7 @@
   <tbody>
     <% [partial_object].flatten.each do |source| %>
       <tr <%= "id='#{dom_id(source.jobs.first)}'" unless source.jobs.empty? %> >
-        <%= render source %>
+        <%= render :partial => 'source', :object => source %>
       </tr>
       <%= periodically_call_remote(
         :url       => admin_source_path(source),
