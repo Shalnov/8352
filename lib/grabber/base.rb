@@ -1,7 +1,7 @@
 module Grabber
   class Base
 
-    include BackgroundFu::WorkerMonitoring
+#    include BackgroundFu::WorkerMonitoring
 
     attr_reader :number_of_attempts
 

@@ -184,5 +184,10 @@ module Grabber
 
   end
 
+  def record_progress(progress)
+    
+  end
+
+
 end
 
