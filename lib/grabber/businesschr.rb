@@ -82,8 +82,8 @@ module Grabber
     end
 
     def run
-      progress = 0
-      record_progress(progress)
+#      progress = 0
+#      record_progress(progress)
 
       source = Source.find_by_grabber_module(self.class.to_s.split('::').last)
       source.links.create :url => @target_url if source.links.root.nil?
@@ -93,8 +93,8 @@ module Grabber
             level_2(link_level_1) do |link_level_2|
                   level_3(link_level_2) do |link_level_3|
                         update_results(link_level_3, level_info(link_level_3))
-                        progress += 1
-                        record_progress(progress)
+#                        progress += 1
+#                        record_progress(progress)
                   end if link_level_2.is_follow
             end if link_level_1.is_follow
       end
@@ -184,10 +184,9 @@ module Grabber
 
   end
 
-  def record_progress(progress)
-    
-  end
-
+#  def record_progress(progress)
+#
+#  end
 
 end
 
