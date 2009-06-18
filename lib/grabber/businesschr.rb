@@ -105,78 +105,29 @@ module Grabber
       if grab_result.is_a?(Array)
         grab_result.each{|result_hash| update_results(grab_link, result_hash) }
       else
+          stored_results = grab_link.source.results.not_checked.find :all, :conditions => { :name       => grab_result[:name],
+                                                                                            :address    => grab_result[:address],
+                                                                                            :phones     => grab_result[:phones],
+                                                                                            :email      => grab_result[:email],
+                                                                                            :site_url   => grab_result[:site_url],
+                                                                                            :category   => grab_result[:category],
+                                                                                            :work_time  => grab_result[:work_time],
+                                                                                            :other_info => grab_result[:other_info] }
 
-    #     если 1 линк указывает на 1 организацию
-    #     (т.е. с вероятностью 99% линк "прямой" и указывает непосредственно на страницу с этой организацией(наверняка в линке присутствует id организации)),
-    #     то проблем нет
-    #
-    #     если 1 линк указывает на несколько организаций, то с вероятностью 99% - это список организаций,
-    #     который при может изменяться. Т.е. в следующий раз граббер может получить уже другой список по данному линку,
-    #     например добавили в середину списка несколько новых организаций (а вывод списка идет в алфавитом порядке) и весь список
-    #     сдвинулся.
-    #
-    #     однако, 1 линк может также указывать на список с 1 элементом. В будущем этот список тоже может измениться
-    #
-
-    #     Начнем отталкиваться от того, что каждая организация имеет своё уникальное (имя).
-    #     Но этого недостаточно.
-    #     Более вероятный вариант уникальности организации: (имя + адрес).
-    #     Значит для начала будем проверять по (имени):
-    #     1. Если ничего не найдем - заносим как новая
-    #     2. Если найдем 1 - заносим как изменение
-    #     3. Если найдем > 1 - то проверяем по (имени + адресу):
-    #         3.1 Если ничего не найдем - заносим как новую
-    #         3.2 Если найдем 1 - заносим как изменение
-    #         3.3 Если найдем > 1 - то:
-    #             а) можем предположить что это либо дубли, либо ошибка в бд и дальше рассматривать не будем.
-    #             б) можем проверить по связке (имя + адрес + телефон(ы))... а стоит ли ?
-    #
-
-    #
-    #    stored_results = grab_link.results.find_all_by_name(grab_result[:name])
-    #    if stored_results.empty?
-    #      grab_link.results.create grab_result.merge!({ :is_updated => true })
-    #    else
-    #      if stored_results.size == 1
-    ##        stored_results.first.update_attributes(grab_result.merge!({ :is_updated => true }))
-    #        stored_results.first.update_attributes(grab_result.merge!({ :is_updated => true }))
-    #      else
-    #        stored_results = grab_link.results.find_all_by_name_and_address(grab_result[:name], grab_result[:address])
-    #        if stored_results.size == 1
-    #          stored_results.first.update_attributes(grab_result.merge!({ :is_updated => true }))
-    #        else
-    ##          !!!!! если будем отбрасывать, то возможно потеряем организацию (хотя существование 2-х разных организаций с одинаковым именем и адресом врядли нормальное явление)
-    ##          !!!!! если будем писать в базу, то с каждым проходом граббера получим +1 дубликат к уже существующим, которые придется разгребать оператору
-    ##          grab_link.results.create grab_result.merge!({ :is_updated => true })
-    #        end
-    #      end
-    #    end
-
-    #    ============== v. 2
-      # ищем по всем записям текущего источника данных
-      stored_results = grab_link.source.results.not_checked.find :all, :conditions => { :name       => grab_result[:name],
-                                                                                        :address    => grab_result[:address],
-                                                                                        :phones     => grab_result[:phones],
-                                                                                        :email      => grab_result[:email],
-                                                                                        :site_url   => grab_result[:site_url],
-                                                                                        :category   => grab_result[:category],
-                                                                                        :work_time  => grab_result[:work_time],
-                                                                                        :other_info => grab_result[:other_info] }
-
-      if stored_results.empty?
-        # или новая или измененная
-        stored_results = grab_link.source.results.not_checked.find_all_by_name_and_address(grab_result[:name], grab_result[:address])
-        if stored_results.empty?
-          # новая
-          grab_link.results.create grab_result.merge!({ :is_checked => true, :is_updated => true })
-        else
-          # измененная
-          stored_results.first.update_attributes(grab_result.merge!({ :is_checked => true, :is_updated => true }))
-        end
-      else
-        # присутствует и не менялась
-        stored_results.first.update_attributes :is_checked => true, :is_updated => false
-      end
+          if stored_results.empty?
+            # или новая или измененная
+            stored_results = grab_link.source.results.not_checked.find_all_by_name_and_address(grab_result[:name], grab_result[:address])
+            if stored_results.empty?
+              # новая
+              grab_link.results.create grab_result.merge!({ :is_checked => true, :is_updated => true })
+            else
+              # измененная
+              stored_results.first.update_attributes(grab_result.merge!({ :is_checked => true, :is_updated => true }))
+            end
+          else
+            # присутствует и не менялась
+            stored_results.first.update_attributes :is_checked => true, :is_updated => false
+          end
 
     #------------------------------
     end

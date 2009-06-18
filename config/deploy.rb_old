@@ -2,8 +2,8 @@
 #       Application
 #############################################################
 
-set :application, "8352.info"
-set :deploy_to, "/home/p8352/#{application}"
+set :application, "8352"
+set :deploy_to, "/home/visions/public_html/#{application}"
 
 #############################################################
 #       Settings
@@ -20,8 +20,8 @@ set :rails_env, "development"
 #       Servers
 #############################################################
 
-set :user, "p8352"
-set :domain, "77.240.152.34"
+set :user, "visions"
+set :domain, "8352.visionscradle.com"
 server domain, :app, :web
 role :db, domain, :primary => true
 
@@ -31,7 +31,7 @@ role :db, domain, :primary => true
 
 set :scm, :git
 set :branch, "master"
-set :repository, "git@github.com:atlancer/8352.git"
+set :repository, "git@democore.net:8352.git"
 set :deploy_via, :remote_cache
 
 #############################################################
