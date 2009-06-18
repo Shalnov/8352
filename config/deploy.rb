@@ -14,8 +14,8 @@ default_run_options[:pty] = false
 ssh_options[:forward_agent] = true
 set :use_sudo, false
 set :scm_verbose, true
-set :rails_env, "development"
-#set :rails_env, "production"
+#set :rails_env, "development"
+set :rails_env, "production"
 
 #############################################################
 #       Servers
