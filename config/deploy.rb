@@ -34,6 +34,7 @@ set :scm, :git
 set :branch, "master"
 set :repository, "git://github.com/atlancer/8352.git"
 set :deploy_via, :remote_cache
+set :git_enable_submodules, 1
 
 #############################################################
 #	Passenger
@@ -73,11 +74,11 @@ namespace :deploy do
 #    restart_background_fu
 #  end
 
-  desc "Run this after every successful deployment"
-  task :git_module_update do
-    run "git submodule init"
-    run "git submodule update"
-  end
+#  desc "Run this after every successful deployment"
+#  task :git_module_update do
+#    run "git submodule init"
+#    run "git submodule update"
+#  end
 
 end
 
