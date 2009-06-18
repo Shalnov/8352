@@ -3,7 +3,8 @@
 #############################################################
 
 set :application, "8352.info"
-set :deploy_to, "/home/p8352/#{application}"
+set :user_home, "/home/p8352"
+set :deploy_to, "#{user_home}/#{application}"
 
 #############################################################
 #       Settings
@@ -74,6 +75,11 @@ namespace :deploy do
 #    restart_background_fu
 #  end
 
+   desc "Copy production database.yml file to current release"
+   task :database_yml do 
+	run "cp #{user_home}/8352.info.settings/database.yml #{current_path}/config/database.yml"
+   end
+
 end
 
 desc "Restart BackgroundFu daemon"
@@ -82,3 +88,5 @@ task :restart_background_fu do
   run "RAILS_ENV=#{rails_env} ruby #{current_path}/script/daemons start"
 end
 
+
+after "deploy:symlink", "deploy:database_yml"
