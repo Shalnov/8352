@@ -22,6 +22,7 @@ set :rails_env, "development"
 
 set :user, "p8352"
 set :domain, "77.240.152.34"
+set :port, 444
 server domain, :app, :web
 role :db, domain, :primary => true
 
