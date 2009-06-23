@@ -55,21 +55,22 @@ namespace :deploy do
     
   end
 
-  # Restart passenger on deploy
-#  desc "Restarting mod_rails with restart.txt"
-#  task :restart, :roles => :app, :except => { :no_release => true } do
-#    run "touch #{current_path}/tmp/restart.txt"
-#  end
-  
-#  [:start, :stop].each do |t|
-#    desc "#{t} task is a no-op with mod_rails"
-#    task t, :roles => :app do ; end
-#  end
-  
-  desc "Run this after every successful deployment"
-  task :after_default do
+ # Restart passenger on deploy
+  desc "Restarting mod_rails with restart.txt"
+  task :restart, :roles => :app, :except => { :no_release => true } do
+    run "touch #{current_path}/tmp/restart.txt"
     restart_background_fu
   end
+  
+  [:start, :stop].each do |t|
+    desc "#{t} task is a no-op with mod_rails"
+    task t, :roles => :app do ; end
+  end
+  
+#  desc "Run this after every successful deployment"
+#  task :after_default do
+#    restart_background_fu
+#  end
 
 end
 
@@ -80,5 +81,4 @@ task :restart_background_fu do
 end
 
 
-#after "deploy:setup", "localize:copy_database_config"
 
