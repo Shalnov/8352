@@ -37,9 +37,12 @@ module PhoneHelper
     elsif phone.size==6
       phone=@current_prefix+phone
     else
-      raise 
+      raise "PhoneHelper::normalize_phone error"
     end
-    
+
+#    phone = TelefonRename.renamed_number(phone) || phone
+#    TelefonFederal.federal_number(phone) || phone
+
     renames=TelefonRename.
       find_by_sql ["select  newphone || substr(?,length(oldphone)+1,12) as newnumber from telefon_renames where substr(?,1,length(oldphone))=oldphone",
                   phone,phone]
@@ -49,7 +52,7 @@ module PhoneHelper
       find_by_sql ["select  federal || substr(?,length(city)+1,12) as federal from telefon_federals where substr(?,1,length(city))=city",
                   phone,phone]
     phone = federals[0].federal if federals.size>0
-    
+
     phone
   end
 

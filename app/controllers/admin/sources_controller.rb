@@ -1,5 +1,7 @@
 class Admin::SourcesController < Admin::ApplicationController
+  
   layout 'admin'
+
   require_role :admin
 
   before_filter :collect_new_grabber_modules, :only => [:index, :new]

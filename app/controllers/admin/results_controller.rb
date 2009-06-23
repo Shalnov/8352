@@ -1,5 +1,7 @@
 class Admin::ResultsController < Admin::ApplicationController
 
+  layout 'admin'
+
   require_role :user
 
   before_filter :find_source
