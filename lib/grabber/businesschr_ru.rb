@@ -4,17 +4,69 @@ module Grabber
     require 'open-uri'
     require 'nokogiri'
     require 'logger'
-    require 'mechanize'
 
-    attr_reader :target_url, :description
+    attr_reader :target, :target_url, :target_description, :level_methods
 
     def initialize
       super
-      @target_url = 'http://businesschr.ru/'
-      @description = 'businesschr site'
+      @target_url = 'http://www.cheb.ru/spravka/'
+      @target_description = 'www.cheb.ru'
+      @target = Source.find_by_grabber_module(self.class.to_s.split('::').last)
+      @target.links.create :url => @target_url if @target.links.root.nil?
+      @target.results.each {|r| r.update_attributes :is_checked => false, :is_updated => false }
     end
-
-    def level_1(link) # get main catalog
+    
+#      progress = 0
+#      record_progress(progress)
+#   -----------------------------------------------------------------------
+    def run
+      link_collector(@target_url) do |link_to_page|
+        update_results(link_to_page, grab_from_page(link_to_page)) unless link_to_page.is_appeared
+      end
+    end
+#   -----------------------------------------------------------------------
+    def link_collector link, &block
+      self.send(@level_methods.shift.to_sym, link) do |next_level_link|
+        if @level_methods.empty?
+          yield next_level_link if block_given?
+        else
+          link_collector next_level_link, &block
+        end
+      end
+    end
+#   -----------------------------------------------------------------------
+    def update_results(grab_link, grab_result)
+      # grab_result is Array(many companies per page) or Hash (one company per page)
+      if grab_result.is_a?(Array)
+        grab_result.each{|result_hash| update_results(grab_link, result_hash) }
+      else
+          stored_results = grab_link.source.results.not_checked.find :all, :conditions => { :name       => grab_result[:name],
+                                                                                            :address    => grab_result[:address],
+                                                                                            :phones     => grab_result[:phones],
+                                                                                            :email      => grab_result[:email],
+                                                                                            :site_url   => grab_result[:site_url],
+                                                                                            :category   => grab_result[:category],
+                                                                                            :work_time  => grab_result[:work_time],
+                                                                                            :other_info => grab_result[:other_info] }
+          if stored_results.empty?
+            # или новая или измененная
+            stored_results = grab_link.source.results.not_checked.find_all_by_name_and_address(grab_result[:name], grab_result[:address])
+            if stored_results.empty?
+              # новая
+              grab_link.results.create grab_result.merge!({ :is_checked => true, :is_updated => true })
+            else
+              # измененная
+              stored_results.first.update_attributes(grab_result.merge!({ :is_checked => true, :is_updated => true }))
+            end
+          else
+            # присутствует и не менялась
+            stored_results.first.update_attributes :is_checked => true, :is_updated => false
+          end
+      end
+    end
+#   -----------------------------------------------------------------------
+#   -----------------------------------------------------------------------
+    def method_level_1(link)
       uri = URI.parse(link.url)
       Nokogiri::HTML(uri.open.read).search('html/body/table/tr[4]/td[1]/table/tr[1]/td[1]/table//a').each do |tag_a|
         if tag_a['href'] =~ /^\?do=catalog\&cat=\d+$/
@@ -24,7 +76,7 @@ module Grabber
       end
     end
 
-    def level_2(link) # get subcatalog
+    def method_level_2(link)
       uri = URI.parse(link.url)
       Nokogiri::HTML(uri.open.read).search('/html/body/table/tr[4]/td/table/tr/td[2]/table/tr[3]/td/table[2]//a').each do |tag_a|
         if tag_a['href'] =~ /^\?do=catalog\&cat=\d+$/
@@ -34,7 +86,7 @@ module Grabber
       end
     end
 
-    def level_3(link) # get link to page info
+    def method_level_3(link)
       uri = URI.parse(link.url)
       first_page_body = uri.open.read
       links_to_next_pages = Nokogiri::HTML(first_page_body).search('//a[@class="list"]').map { |tag_a| tag_a['href'] }
@@ -49,8 +101,7 @@ module Grabber
       end
     end
 
-    def level_info(link) # grab page info
-
+    def grab_from_page(link)
       attributes = { :raw_html => Nokogiri::HTML(open(link.url).read).search('/html/body/table/tr[4]/td/table/tr/td[2]/table/tr[3]/td/table[4]').first.to_s }
 
       Nokogiri::HTML(attributes[:raw_html]).search('//td').each do |tag_td|
@@ -80,64 +131,6 @@ module Grabber
       end
       attributes
     end
-
-    def run
-#      progress = 0
-#      record_progress(progress)
-
-      source = Source.find_by_grabber_module(self.class.to_s.split('::').last)
-      source.links.create :url => @target_url if source.links.root.nil?
-      source.results.each {|r| r.update_attributes :is_checked => false, :is_updated => false }
-
-      level_1(source.links.root) do |link_level_1|
-            level_2(link_level_1) do |link_level_2|
-                  level_3(link_level_2) do |link_level_3|
-                        update_results(link_level_3, level_info(link_level_3))
-#                        progress += 1
-#                        record_progress(progress)
-                  end if link_level_2.is_follow
-            end if link_level_1.is_follow
-      end
-    end
-
-    def update_results(grab_link, grab_result)
-      # grab_result is Array(many companies per page) or Hash (one company per page)
-      if grab_result.is_a?(Array)
-        grab_result.each{|result_hash| update_results(grab_link, result_hash) }
-      else
-          stored_results = grab_link.source.results.not_checked.find :all, :conditions => { :name       => grab_result[:name],
-                                                                                            :address    => grab_result[:address],
-                                                                                            :phones     => grab_result[:phones],
-                                                                                            :email      => grab_result[:email],
-                                                                                            :site_url   => grab_result[:site_url],
-                                                                                            :category   => grab_result[:category],
-                                                                                            :work_time  => grab_result[:work_time],
-                                                                                            :other_info => grab_result[:other_info] }
-
-          if stored_results.empty?
-            # или новая или измененная
-            stored_results = grab_link.source.results.not_checked.find_all_by_name_and_address(grab_result[:name], grab_result[:address])
-            if stored_results.empty?
-              # новая
-              grab_link.results.create grab_result.merge!({ :is_checked => true, :is_updated => true })
-            else
-              # измененная
-              stored_results.first.update_attributes(grab_result.merge!({ :is_checked => true, :is_updated => true }))
-            end
-          else
-            # присутствует и не менялась
-            stored_results.first.update_attributes :is_checked => true, :is_updated => false
-          end
-
-    #------------------------------
-    end
-    end
-
+    
   end
-
-#  def record_progress(progress)
-#
-#  end
-
 end
-
