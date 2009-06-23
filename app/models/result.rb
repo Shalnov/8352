@@ -31,25 +31,12 @@ class Result < ActiveRecord::Base
     end
   end
 
-
   def phones_str
     self.phones.to_s.gsub(/\D/,'')
   end
 
   def phones_exist?
     !phones_str.size.zero?
-  end
-
-  def phones_normalize
-
-  # 1) проверяем по старой нумерации
-  # если нашли в старой, то конвертим в новую
-  # 2) проверяем по новой
-
-#  find_in_old
-#  phones.to_new_numeration
-
-
   end
 
 end

@@ -1,17 +1,17 @@
 module Grabber
-  class Businesschr < Grabber::Base
+  class ChebRu < Grabber::Base
 
     require 'open-uri'
     require 'nokogiri'
     require 'logger'
-    require 'mechanize'
+#    require 'mechanize'
 
     attr_reader :target_url, :description
 
     def initialize
       super
-      @target_url = 'http://businesschr.ru/'
-      @description = 'businesschr site'
+      @target_url = 'http://www.cheb.ru/spravka/'
+      @description = 'www.cheb.ru'
     end
 
     def level_1(link) # get main catalog
