@@ -8,4 +8,5 @@ Streamlined.ui_for(User) do
   { :link_to=>{ :action=>'edit'}},
   :email, :roles
 
+  edit_columns :login, :email, :roles, :crypted_password
 end   
