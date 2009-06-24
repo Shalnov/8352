@@ -40,10 +40,8 @@ set :git_enable_submodules, 1
 
 #############################################################
 namespace :deploy do
-
   desc "Create the apache config file"
   task :after_update_code do
-  
     apache_config = <<-EOF
     <VirtualHost #{domain}:80>
       ServerName #{domain}
@@ -52,14 +50,13 @@ namespace :deploy do
     </VirtualHost>
       
     EOF
-    
     put apache_config, "#{shared_path}/apache.conf"
   end
 
   desc "Restarting mod_rails with restart.txt"
   task :restart, :roles => :app, :except => { :no_release => true } do
     run "touch #{current_path}/tmp/restart.txt"
-    restart_background_fu
+    background_fu.restart
   end
 
   # override the start and stop tasks because those don’t really do anything in the mod_rails  
@@ -72,13 +69,24 @@ namespace :deploy do
   task :database_yml do 
     run "cp #{user_home}/8352.info.settings/database.yml #{current_path}/config/database.yml"
   end
-
 end
 
-desc "Restart BackgroundFu daemon"
-task :restart_background_fu do
-  run "RAILS_ENV=#{rails_env} ruby #{current_path}/script/daemons stop"
-  run "RAILS_ENV=#{rails_env} ruby #{current_path}/script/daemons start"
+namespace :background_fu do
+  desc "Start BackgroundFu daemon"
+  task :start, :roles => :app do
+    run "RAILS_ENV=#{rails_env} ruby #{current_path}/script/daemons start"
+  end
+
+  desc "Stop BackgroundFu daemon"
+  task :stop, :roles => :app do
+    run "RAILS_ENV=#{rails_env} ruby #{current_path}/script/daemons start"
+  end
+
+  desc "Restart BackgroundFu daemon"
+  task :restart, :roles => :app do
+    stop
+    start
+  end
 end
 
 after "deploy:symlink", "deploy:database_yml"
