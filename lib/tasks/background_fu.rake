@@ -9,10 +9,9 @@ namespace :background_fu do
     system "ruby ./script/daemons stop"
   end
 
-  desc "Restart BackgroundFu daemon"
-  task :restart do
-    stop
-    start
-  end
-
+#  desc "Restart BackgroundFu daemon"
+#  task :restart do
+#    stop
+#    start
+#  end
 end

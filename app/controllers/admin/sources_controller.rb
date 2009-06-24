@@ -49,7 +49,7 @@ class Admin::SourcesController < Admin::ApplicationController
 private
 
   def collect_new_grabber_modules
-    Dir["#{RAILS_ROOT}/lib/grabber/*"].each { |file| require file }
+    Dir["#{RAILS_ROOT}/lib/grabber/*.rb"].each { |file| require file }
     @new_grabber_modules = Grabber.constants - ["Base"] - Source.all.map{ |s| s.grabber_module }
   end
 
