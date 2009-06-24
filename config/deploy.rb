@@ -16,7 +16,8 @@ set :deploy_to, "#{user_home}/#{application}"
 default_run_options[:pty] = false
 #default_run_options[:shell] = false
 ssh_options[:forward_agent] = true
-ssh_options[:verbose] = :debug
+#ssh_options[:verbose] = :debug
+ssh_options[:keys] = ["~/.ssh/identity"]
 set :use_sudo, false
 set :scm_verbose, true
 #set :rails_env, "development"
@@ -28,6 +29,7 @@ set :rails_env, "production"
 
 set :user, "p8352"
 set :domain, "77.240.152.34"
+
 set :port, 444
 server domain, :app, :web
 role :db, domain, :primary => true
@@ -59,6 +61,24 @@ namespace :deploy do
     EOF
     
     put apache_config, "#{shared_path}/apache.conf"
+  end
+  
+  desc "Fill roles"
+  task :after_setup do
+    run "cd #{current_path}; RAILS_ENV=#{rails_env} rake db:fill_roles"
+    
+    run "cd #{current_path}; RAILS_ENV=#{rails_env} rake db:p8352:add_default_roles"
+    # add default roles: "admin", "editor", "reviewer"
+    
+    run "cd #{current_path}; RAILS_ENV=#{rails_env} rake db:p8352:add_default_users"
+    # add default user "admin" with attributes:
+    #   email="username@some-domain-name.com",
+    #   password="admin123"
+    #   role="admin"
+    
+    run "cd #{current_path}; RAILS_ENV=#{rails_env} rake db:p8352:add_sources"
+    # add sources from libs/grabber/*
+
   end
 
   desc "Restarting mod_rails with restart.txt"
