@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+load 'vendor/plugins/thinking-sphinx/lib/thinking_sphinx/deploy/capistrano' 
+# -*- coding: utf-8 -*-
 #############################################################
 #       Application
 #############################################################
@@ -11,7 +14,9 @@ set :deploy_to, "#{user_home}/#{application}"
 #############################################################
 
 default_run_options[:pty] = false
+#default_run_options[:shell] = false
 ssh_options[:forward_agent] = true
+ssh_options[:verbose] = :debug
 set :use_sudo, false
 set :scm_verbose, true
 #set :rails_env, "development"
@@ -79,6 +84,13 @@ desc "Restart BackgroundFu daemon"
 task :restart_background_fu do
   run "RAILS_ENV=#{rails_env} ruby #{current_path}/script/daemons stop"
   run "RAILS_ENV=#{rails_env} ruby #{current_path}/script/daemons start"
+  run "cd #{current_path}; RAILS_ENV=#{rails_env} rake thinking_sphinx:running_start"
 end
 
+#desc "Cleanup older revisions"
+#task :after_deploy do
+#  cleanup
+#end 
+
+after "deploy:setup", "thinking_sphinx:shared_sphinx_folder" 
 after "deploy:symlink", "deploy:database_yml"
