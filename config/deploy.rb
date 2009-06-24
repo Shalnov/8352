@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-load 'vendor/plugins/thinking-sphinx/lib/thinking_sphinx/deploy/capistrano' 
+load 'vendor/plugins/thinking-sphinx/lib/thinking_sphinx/deploy/capistrano'
 # -*- coding: utf-8 -*-
 #############################################################
 #       Application
@@ -40,26 +40,23 @@ role :db, domain, :primary => true
 
 set :scm, :git
 set :branch, "master"
-set :repository, "git://github.com/dapi/8352.git"
-#set :repository, "git://github.com/atlancer/8352.git"
+#set :repository, "git://github.com/dapi/8352.git"
+set :repository, "git://github.com/atlancer/8352.git"
 set :deploy_via, :remote_cache
 set :git_enable_submodules, 1
 
 #############################################################
 namespace :deploy do
-
   desc "Create the apache config file"
   task :after_update_code do
-  
     apache_config = <<-EOF
     <VirtualHost #{domain}:3000>
       ServerName #{domain}
       DocumentRoot #{deploy_to}/current/public
       RailsEnv #{rails_env}
     </VirtualHost>
-      
+
     EOF
-    
     put apache_config, "#{shared_path}/apache.conf"
   end
   
@@ -84,33 +81,44 @@ namespace :deploy do
   desc "Restarting mod_rails with restart.txt"
   task :restart, :roles => :app, :except => { :no_release => true } do
     run "touch #{current_path}/tmp/restart.txt"
-    restart_background_fu
+    background_fu.restart
   end
 
-  # override the start and stop tasks because those don’t really do anything in the mod_rails  
+  # override the start and stop tasks because those don’t really do anything in the mod_rails
   [:start, :stop].each do |t|
     desc "#{t} task is a no-op with mod_rails"
     task t, :roles => :app do ; end
   end
-  
+
   desc "Copy production database.yml file to current release"
-  task :database_yml do 
+  task :database_yml do
     run "cp #{user_home}/8352.info.settings/database.yml #{current_path}/config/database.yml"
   end
-
 end
 
-desc "Restart BackgroundFu daemon"
-task :restart_background_fu do
-  run "RAILS_ENV=#{rails_env} ruby #{current_path}/script/daemons stop"
-  run "RAILS_ENV=#{rails_env} ruby #{current_path}/script/daemons start"
-  run "cd #{current_path}; RAILS_ENV=#{rails_env} rake thinking_sphinx:running_start"
+namespace :background_fu do
+  desc "Start BackgroundFu daemon"
+  task :start, :roles => :app do
+    run "cd #{current_path}; rake background_fu:start RAILS_ENV=#{rails_env}"
+  end
+
+  desc "Stop BackgroundFu daemon"
+  task :stop, :roles => :app do
+    run "cd #{current_path}; rake background_fu:stop RAILS_ENV=#{rails_env}"
+  end
+
+  desc "Restart BackgroundFu daemon"
+  task :restart, :roles => :app do
+    stop
+    start
+    run "cd #{current_path}; RAILS_ENV=#{rails_env} rake thinking_sphinx:running_start"
+  end
 end
 
 #desc "Cleanup older revisions"
 #task :after_deploy do
 #  cleanup
-#end 
+#end
 
-after "deploy:setup", "thinking_sphinx:shared_sphinx_folder" 
+#after "deploy:setup", "thinking_sphinx:shared_sphinx_folder"
 after "deploy:symlink", "deploy:database_yml"

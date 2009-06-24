@@ -10,7 +10,7 @@ class Source < ActiveRecord::Base
     require "Grabber::#{self.grabber_module}".underscore
     grabber = "Grabber::#{self.grabber_module}".constantize.new
     self.update_attributes :target_url => grabber.target_url,
-                           :description => grabber.description
+                           :description => grabber.target_description
   end
 
 end
