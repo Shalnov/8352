@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+load 'vendor/plugins/thinking-sphinx/lib/thinking_sphinx/deploy/capistrano' 
+# -*- coding: utf-8 -*-
 #############################################################
 #       Application
 #############################################################
@@ -11,7 +14,9 @@ set :deploy_to, "#{user_home}/#{application}"
 #############################################################
 
 default_run_options[:pty] = false
+#default_run_options[:shell] = false
 ssh_options[:forward_agent] = true
+ssh_options[:verbose] = :debug
 set :use_sudo, false
 set :scm_verbose, true
 #set :rails_env, "development"
@@ -43,7 +48,7 @@ namespace :deploy do
   desc "Create the apache config file"
   task :after_update_code do
     apache_config = <<-EOF
-    <VirtualHost #{domain}:80>
+    <VirtualHost #{domain}:3000>
       ServerName #{domain}
       DocumentRoot #{deploy_to}/current/public
       RailsEnv #{rails_env}
@@ -86,7 +91,15 @@ namespace :background_fu do
   task :restart, :roles => :app do
     stop
     start
+    run "cd #{current_path}; RAILS_ENV=#{rails_env} rake thinking_sphinx:running_start"
   end
+
 end
 
+#desc "Cleanup older revisions"
+#task :after_deploy do
+#  cleanup
+#end 
+
+after "deploy:setup", "thinking_sphinx:shared_sphinx_folder" 
 after "deploy:symlink", "deploy:database_yml"
