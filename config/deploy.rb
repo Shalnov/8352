@@ -16,7 +16,7 @@ set :deploy_to, "#{user_home}/#{application}"
 default_run_options[:pty] = false
 #default_run_options[:shell] = false
 ssh_options[:forward_agent] = true
-ssh_options[:verbose] = :debug
+#ssh_options[:verbose] = :debug
 set :use_sudo, false
 set :scm_verbose, true
 #set :rails_env, "development"
@@ -93,7 +93,6 @@ namespace :background_fu do
     start
     run "cd #{current_path}; RAILS_ENV=#{rails_env} rake thinking_sphinx:running_start"
   end
-
 end
 
 #desc "Cleanup older revisions"
