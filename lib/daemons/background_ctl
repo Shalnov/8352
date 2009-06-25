@@ -4,6 +4,10 @@ require 'daemons'
 require 'yaml'
 require 'erb'
 
+#require 'logger'
+#ll = Logger.new('/home/ralph/projects/8352/log/my_1.log')
+#ll.info "#{ENV['PATH']}" if ENV['PATH']
+
 class Hash
   def with_symbols!
     self.keys.each{|key| self[key.to_s.to_sym] = self[key] }; self

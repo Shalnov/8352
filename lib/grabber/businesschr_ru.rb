@@ -29,27 +29,27 @@ module Grabber
       end
     end
 #   -----------------------------------------------------------------------
-    def link_collector link, &block
-@logger.info "link_collector: start"
-#@level_methods.each{|ll| @logger.info "link_collector, methods:>#{ll}" }
-
-
-      method_level = @level_methods.shift
-      self.send(method_level.to_sym, link) do |next_level_link|
-        @logger.info "link_collector: in to next_level_link block"
-        if @level_methods.empty?
-#          @logger.info "link_collector: yield next_level_link"
-          yield next_level_link #if block_given?
-        else
-
-          link_collector next_level_link, &block
-        
-        end
-#        @logger.info "link_collector: out from next_level_link block"
-      end
-      @level_methods.unshift method_level
-@logger.info "link_collector: end"
-    end
+#    def link_collector link, &block
+#@logger.info "link_collector: start"
+##@level_methods.each{|ll| @logger.info "link_collector, methods:>#{ll}" }
+#
+#
+#      method_level = @level_methods.shift
+#      self.send(method_level.to_sym, link) do |next_level_link|
+#        @logger.info "link_collector: in to next_level_link block"
+#        if @level_methods.empty?
+##          @logger.info "link_collector: yield next_level_link"
+#          yield next_level_link #if block_given?
+#        else
+#
+#          link_collector next_level_link, &block
+#
+#        end
+##        @logger.info "link_collector: out from next_level_link block"
+#      end
+#      @level_methods.unshift method_level
+#@logger.info "link_collector: end"
+#    end
 #   -----------------------------------------------------------------------
     def update_results(grab_link, grab_result)
       # grab_result is Array(many companies per page) or Hash (one company per page)
@@ -85,7 +85,7 @@ module Grabber
     def method_level_1(link)
 @logger.info "=> method_level_1: start"
       uri = URI.parse(link.url)
-      Nokogiri::HTML(uri.open.read).search('html/body/table/tr[4]/td[1]/table/tr[1]/td[1]/table//a').each do |tag_a|
+      nokogiri_doc(uri).search('html/body/table/tr[4]/td[1]/table/tr[1]/td[1]/table//a').each do |tag_a|
         if tag_a['href'] =~ /^\?do=catalog\&cat=\d+$/
           child_link = link.children.find_or_create_by_url_and_source_id_and_name "#{uri.scheme}://#{uri.host}#{':' + uri.port.to_s if uri.port != 80}/#{tag_a['href']}", link.source_id, tag_a.content
           @logger.info "=> method_level_1: yield start"
@@ -99,7 +99,7 @@ module Grabber
     def method_level_2(link)
 @logger.info "start method_level_2"
       uri = URI.parse(link.url)
-      Nokogiri::HTML(uri.open.read).search('/html/body/table/tr[4]/td/table/tr/td[2]/table/tr[3]/td/table[2]//a').each do |tag_a|
+      nokogiri_doc(uri).search('/html/body/table/tr[4]/td/table/tr/td[2]/table/tr[3]/td/table[2]//a').each do |tag_a|
         if tag_a['href'] =~ /^\?do=catalog\&cat=\d+$/
           child_link = link.children.find_or_create_by_url_and_source_id_and_name "#{uri.scheme}://#{uri.host}#{':' + uri.port.to_s if uri.port != 80}/#{tag_a['href']}", link.source_id, tag_a.content
           yield child_link if child_link.is_follow
@@ -111,11 +111,13 @@ module Grabber
     def method_level_3(link)
 @logger.info "start method_level_3"
       uri = URI.parse(link.url)
-      first_page_body = uri.open.read
-      links_to_next_pages = Nokogiri::HTML(first_page_body).search('//a[@class="list"]').map { |tag_a| tag_a['href'] }
-      links_to_next_pages.shift # drop link to 1th page (1th page is downloaded to first_page_body variable)
-      ([first_page_body] + links_to_next_pages).each_with_index do |element, index|
-        Nokogiri::HTML(index.zero? ? element : open(element).read).search('/html/body/table/tr[4]/td/table/tr/td[2]/table/tr[3]//a').each do |tag_a|
+
+      first_page = nokogiri_doc(uri)
+
+      links_to_next_pages = first_page.search('//a[@class="list"]').map { |tag_a| tag_a['href'] }
+      links_to_next_pages.shift 
+      links_to_next_pages.unshift(first_page).each do |element|
+        nokogiri_doc(element).search('/html/body/table/tr[4]/td/table/tr/td[2]/table/tr[3]//a').each do |tag_a|
           if tag_a.content.include?('Подробнее >>')
             child_link = link.children.find_or_create_by_url_and_source_id "#{uri.scheme}://#{uri.host}#{':' + uri.port.to_s if uri.port != 80}/#{tag_a['href']}", link.source_id
             yield child_link if child_link.is_follow
@@ -126,7 +128,8 @@ module Grabber
     end
 
     def grab_from_page(link)
-      attributes = { :raw_html => Nokogiri::HTML(open(link.url).read).search('/html/body/table/tr[4]/td/table/tr/td[2]/table/tr[3]/td/table[4]').first.to_s }
+
+      attributes = { :raw_html => nokogiri_doc(URI.parse(link.url)).search('/html/body/table/tr[4]/td/table/tr/td[2]/table/tr[3]/td/table[4]').first.to_s }
 
       Nokogiri::HTML(attributes[:raw_html]).search('//td').each do |tag_td|
         td = tag_td.content
