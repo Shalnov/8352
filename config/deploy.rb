@@ -54,6 +54,13 @@ namespace :deploy do
       ServerName #{domain}
       DocumentRoot #{deploy_to}/current/public
       RailsEnv #{rails_env}
+
+    <Directory />
+      AllowOverride None
+      Order deny,allow
+      # Deny from all
+    </Directory>
+
     </VirtualHost>
 
     EOF
