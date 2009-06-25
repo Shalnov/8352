@@ -17,7 +17,9 @@ default_run_options[:pty] = false
 #default_run_options[:shell] = false
 ssh_options[:forward_agent] = true
 #ssh_options[:verbose] = :debug
-ssh_options[:keys] = ["~/.ssh/identity"]
+#ssh_options[:config] = "~/.ssh/config"
+ssh_options[:keys] = [File.join(ENV["HOME"], ".ssh",  "identity")] 
+#ssh_options[:keys] = ["~/.ssh/identity"]
 set :use_sudo, false
 set :scm_verbose, true
 #set :rails_env, "development"
@@ -47,6 +49,12 @@ set :git_enable_submodules, 1
 
 #############################################################
 namespace :deploy do
+  
+  desc "Destroy daemons jobs"
+  task :destroy_jobs do
+    run "cd #{current_path}; echo \"Job.destroy_all\nLink.destroy_all\nSource.destroy_all\" | ./script/console production"
+  end
+  
   desc "Create the apache config file"
   task :after_update_code do
     apache_config = <<-EOF
