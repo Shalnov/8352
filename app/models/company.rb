@@ -2,7 +2,7 @@
 require 'acts_as_taggable'
 
 class Company < ActiveRecord::Base
-  acts_as_taggable
+#  acts_as_taggable
 
   serialize :dump, Hash
   
@@ -26,8 +26,8 @@ class Company < ActiveRecord::Base
 
   has_many :phones,   :dependent => :destroy
   has_many :emails,   :dependent => :destroy
-  has_many :taggings, :as => :taggable, :dependent => :destroy
-  has_many :tags,     :through => :taggings
+#  has_many :taggings, :as => :taggable, :dependent => :destroy
+#  has_many :tags,     :through => :taggings
 
   has_many :results
 
