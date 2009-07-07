@@ -39,4 +39,7 @@ class Result < ActiveRecord::Base
     !phones_str.size.zero?
   end
 
+  def self.next_for_import
+    self.find(:first, :conditions => {:is_updated => true})
+  end
 end
