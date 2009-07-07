@@ -3,6 +3,7 @@ require 'logger'
 module Grabber
   class Importer
     def self.run
+      logger = Logger.new("#{RAILS_ROOT}/log/importer.log")
       while (res = Result.next_for_import)
         if res.company_id
           # update attributes for existing company
@@ -20,7 +21,8 @@ module Grabber
         else
           company = Company.new
           # find by phone
-          if company = get_company_by_phones(res.phones)
+          if c = get_company_by_phones(res.phones)
+            company = c
             if company.name == res.name
               # update attributes
               company.update_attributes_from_result(res)
@@ -38,10 +40,11 @@ module Grabber
             else
               # add new record
               company.update_attributes_from_result(res)
+              company.full_name = res.name
               company.is_new = true
             end
           end
-          company.save
+          logger.error "[#{Time.now.to_s}] Errors in grabbed company: #{company.errors.full_messages.inspect}" unless company.save
           res.company_id = company.id
         end
         res.is_updated = false
@@ -50,10 +53,15 @@ module Grabber
     end
     
     def self.get_company_by_phones(phones)
-      phones.split(',').each do |phone|
-        formated_phone = clear_phone_number(phone)
-        return p.company if formated_phone && formated_phone != 0 && p = Phone.find_by_number(formated_phone)
+      c = nil
+      if phones
+        phones.split(',').each do |phone|
+          formated_phone = clear_phone_number(phone)
+          c = p.company if formated_phone && formated_phone != 0 && p = Phone.find_by_number(formated_phone)
+          break
+        end
       end
+      c
     end
     
     def self.clear_phone_number(number)

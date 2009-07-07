@@ -39,6 +39,10 @@ class Company < ActiveRecord::Base
                                 :reject_if => proc { |phone| phone['number'].blank? }
   accepts_nested_attributes_for :emails, :allow_destroy => true
 
+  RESULTS_FIELDS = { :name => :name,
+                     :site => :site_url,
+                     :working_time => :work_time,
+                     :address => :address }
   class << self
     def find_with_scope( *args )
       options = args.extract_options!
@@ -75,10 +79,7 @@ class Company < ActiveRecord::Base
   
   # update attributes
   def update_attributes_from_result(res)
-    update_attribute_w_check(:name, res.name)               if res.name != name
-    update_attribute_w_check(:site, res.site_url)           if res.site_url != site
-    update_attribute_w_check(:working_time, res.work_time)  if res.work_time != working_time
-    update_attribute_w_check(:address, res.address)         if res.address != address
+    RESULTS_FIELDS.each_pair {|k,v| update_attribute_w_check(k, res[v]) if res[v] != self[k] }
     #TODO: phones, emails
   end
   
@@ -87,7 +88,7 @@ class Company < ActiveRecord::Base
   #   1. mark record as need_human
   #   2. save attribute value in moderate_attributes hash
   def update_attribute_w_check(field, value)
-    if moderate_attributes[field] && moderate_attributes[field][:status] == :operator_changed
+    if moderate_attributes && moderate_attributes[field] && moderate_attributes[field][:status] == :operator_changed
       add_value_for_moderation(field, value)
       need_human = true
     else
@@ -97,10 +98,7 @@ class Company < ActiveRecord::Base
   
   # save attribute values in moderate_attributes hash
   def store_attributes_from_result(res)
-    add_value_for_moderation(:name, res.name)               if res.name != name
-    add_value_for_moderation(:site, res.site_url)           if res.site_url != site
-    add_value_for_moderation(:working_time, res.work_time)  if res.work_time != working_time
-    add_value_for_moderation(:address, res.address)         if res.address != address
+    RESULTS_FIELDS.each_pair {|k,v| add_value_for_moderation(k, res[v]) if res[v] != self[k] }
     #TODO: phones, emails
   end
   
