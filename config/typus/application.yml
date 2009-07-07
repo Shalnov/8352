@@ -1,0 +1,215 @@
+# Typus Models Configuration File
+#
+# Use the README file on the same folder as this file as a reference to
+# customize this file to your needs.
+
+Category:
+  fields:
+    list: id, name, companies_count, position, children_count, ancestors_count, descendants_count, hidden, parent
+    form: name, description, companies_count, position, children_count, ancestors_count, descendants_count, hidden, parent
+    show: id, name, description, companies_count, position, children_count, ancestors_count, descendants_count, hidden, parent
+  actions:
+    index:
+    edit:
+  order_by:
+  relationships: children, companies, parent
+  filters:
+  search:
+  application: 8352.info
+  description:
+
+Company:
+  fields:
+    list: id, name, full_name, inn, address, site, director, working_time, sources, pending, category
+    form: name, full_name, inn, address, site, director, description, working_time, sources, pending, dump, category
+    show: id, name, full_name, inn, address, site, director, description, working_time, sources, created_at, updated_at, pending, dump, category
+  actions:
+    index:
+    edit:
+  order_by:
+  relationships: category, emails, phones, results
+  filters:
+  search:
+  application: 8352.info
+  description:
+
+Email:
+  fields:
+    list: id, email, person, department, company
+    form: email, person, department, company
+    show: id, email, person, department, company
+  actions:
+    index:
+    edit:
+  order_by:
+  relationships: company
+  filters:
+  search:
+  application: 8352.info
+  description:
+
+Link:
+  fields:
+    list: id, name, url, is_follow, links_count, source, parent
+    form: name, url, is_follow, links_count, source, parent
+    show: id, name, url, is_follow, links_count, created_at, updated_at, source, parent
+  actions:
+    index:
+    edit:
+  order_by:
+  relationships: children, parent, results, source
+  filters:
+  search:
+  application: 8352.info
+  description:
+
+Phone:
+  fields:
+    list: id, number, person, department, working_time, description, short_code, company
+    form: number, person, department, working_time, description, short_code, company
+    show: id, number, person, department, working_time, description, short_code, created_at, updated_at, company
+  actions:
+    index:
+    edit:
+  order_by:
+  relationships: company
+  filters:
+  search:
+  application: 8352.info
+  description:
+
+Result:
+  fields:
+    list: id, name, address, phones, email, site_url, category, work_time, http_last_modify, is_checked, is_updated, is_removed, link, company, storage
+    form: name, address, phones, email, site_url, category, work_time, other_info, raw_html, http_last_modify, is_checked, is_updated, is_removed, link, company, storage
+    show: id, name, address, phones, email, site_url, category, work_time, other_info, raw_html, http_last_modify, is_checked, is_updated, is_removed, created_at, updated_at, link, company, storage
+  actions:
+    index:
+    edit:
+  order_by:
+  relationships: company, link, storage
+  filters:
+  search:
+  application: 8352.info
+  description:
+
+Role:
+  fields:
+    list: id, name
+    form: name
+    show: id, name
+  actions:
+    index:
+    edit:
+  order_by:
+  relationships: users
+  filters:
+  search:
+  application: 8352.info
+  description:
+
+Source:
+  fields:
+    list: id, target_url, grabber_module, description
+    form: target_url, grabber_module, description
+    show: id, target_url, grabber_module, description, created_at, updated_at
+  actions:
+    index:
+    edit:
+  order_by:
+  relationships: jobs, links, results
+  filters:
+  search:
+  application: 8352.info
+  description:
+
+Storage:
+  fields:
+    list: id, name, address, phones, email, site_url, category, work_time
+    form: name, address, phones, email, site_url, category, work_time, other_info
+    show: id, name, address, phones, email, site_url, category, work_time, other_info, created_at, updated_at
+  actions:
+    index:
+    edit:
+  order_by:
+  relationships: results
+  filters:
+  search:
+  application: 8352.info
+  description:
+
+Tag:
+  fields:
+    list: id, name, taggings_count
+    form: name, taggings_count
+    show: id, name, taggings_count
+  actions:
+    index:
+    edit:
+  order_by:
+  relationships: taggings
+  filters:
+  search:
+  application: 8352.info
+  description:
+
+Tagging:
+  fields:
+    list: id, tag
+    form: tag
+    show: id, created_at, updated_at, tag
+  actions:
+    index:
+    edit:
+  order_by:
+  relationships: tag
+  filters:
+  search:
+  application: 8352.info
+  description:
+
+TelefonFederal:
+  fields:
+    list: id, federal, city, operator
+    form: federal, city, operator
+    show: id, federal, city, operator, created_at, updated_at
+  actions:
+    index:
+    edit:
+  order_by:
+  relationships: 
+  filters:
+  search:
+  application: 8352.info
+  description:
+
+TelefonRename:
+  fields:
+    list: id, oldphone, newphone, rename_date
+    form: oldphone, newphone, rename_date
+    show: id, oldphone, newphone, rename_date, created_at, updated_at
+  actions:
+    index:
+    edit:
+  order_by:
+  relationships: 
+  filters:
+  search:
+  application: 8352.info
+  description:
+
+User:
+  fields:
+    list: id, login, name, email, crypted_password, salt, remember_token, remember_token_expires_at, activation_code, activated_at
+    form: login, name, email, crypted_password, salt, remember_token, remember_token_expires_at, activation_code, activated_at
+    show: id, login, name, email, crypted_password, salt, created_at, updated_at, remember_token, remember_token_expires_at, activation_code, activated_at
+  actions:
+    index:
+    edit:
+  order_by:
+  relationships: roles
+  filters:
+  search:
+  application: 8352.info
+  description:
+

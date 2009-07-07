@@ -1,6 +1,6 @@
 class TagsController < ApplicationController
-  layout 'streamlined'
-  acts_as_streamlined
+#  layout 'streamlined'
+#  acts_as_streamlined
 end
 
 class TagsBackup

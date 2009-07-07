@@ -1,6 +1,8 @@
 class Category < ActiveRecord::Base
   acts_as_category
-  
+  acts_as_list # :scope => "parent_id"
+#  acts_as_tree :order => "id"
+
   has_many :companies
   
   validates_presence_of :name

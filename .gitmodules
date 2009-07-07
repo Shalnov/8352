@@ -13,15 +13,18 @@
 [submodule "vendor/plugins/will_paginate"]
 	path = vendor/plugins/will_paginate
 	url = git://github.com/mislav/will_paginate.git
-[submodule "vendor/plugins/active_scaffold"]
-	path = vendor/plugins/active_scaffold
-	url = git://github.com/activescaffold/active_scaffold.git
 [submodule "vendor/plugins/thinking-sphinx"]
 	path = vendor/plugins/thinking-sphinx
 	url = git://github.com/freelancing-god/thinking-sphinx.git
 [submodule "vendor/plugins/render_component"]
 	path = vendor/plugins/render_component
 	url = git://github.com/lackac/render_component.git
-[submodule "vendor/plugins/streamlined"]
-	path = vendor/plugins/streamlined
-	url = git://github.com/relevance/streamlined.git
+[submodule "vendor/plugins/typus"]
+	path = vendor/plugins/typus
+	url = git://github.com/fesplugas/typus.git
+[submodule "vendor/plugins/acts_as_list"]
+	path = vendor/plugins/acts_as_list
+	url = git://github.com/rails/acts_as_list.git
+[submodule "vendor/plugins/paperclip"]
+	path = vendor/plugins/paperclip
+	url = git://github.com/thoughtbot/paperclip.git
