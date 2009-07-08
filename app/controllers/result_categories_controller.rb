@@ -1,0 +1,2 @@
+class ResultCategoriesController < ApplicationController
+end
