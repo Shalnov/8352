@@ -58,7 +58,7 @@ namespace :deploy do
   desc "Create the apache config file"
   task :after_update_code do
     apache_config = <<-EOF
-    <VirtualHost #{domain}:3000>
+    <VirtualHost #{domain}:3002>
       ServerName #{domain}
       DocumentRoot #{deploy_to}/current/public
       RailsEnv #{rails_env}
