@@ -3,6 +3,8 @@ class Result < ActiveRecord::Base
   belongs_to :storage
   belongs_to :company
 
+  has_one :result_category
+  
   before_save :strip_fields
 
   named_scope :checked, { :conditions => { :is_checked => true } }
@@ -39,4 +41,9 @@ class Result < ActiveRecord::Base
     !phones_str.size.zero?
   end
 
+  def self.next_for_import
+    self.find(:first, :include => [:result_category], 
+                      :conditions => ["is_updated = :is_updated AND result_categories.category_id IS NOT NULL",
+                                      { :is_updated => true }])
+  end
 end

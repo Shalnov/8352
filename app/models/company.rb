@@ -1,10 +1,12 @@
-# -*- coding: utf-8 -*-
-require 'acts_as_taggable'
+#require 'acts_as_taggable'
+
+#TODO: when operator changes racord - update moderate_attributes
 
 class Company < ActiveRecord::Base
 #  acts_as_taggable
 
   serialize :dump, Hash
+  serialize :moderate_attributes, Hash
   
   define_index do
     indexes :name, :sortable => true
@@ -37,6 +39,10 @@ class Company < ActiveRecord::Base
                                 :reject_if => proc { |phone| phone['number'].blank? }
   accepts_nested_attributes_for :emails, :allow_destroy => true
 
+  RESULTS_FIELDS = { :name => :name,
+                     :site => :site_url,
+                     :working_time => :work_time,
+                     :address => :address }
   class << self
     def find_with_scope( *args )
       options = args.extract_options!
@@ -69,5 +75,55 @@ class Company < ActiveRecord::Base
                   :emails => Marshal.dump(self.emails),
                   :tags => Marshal.dump(self.tags) }
     self.write_attribute(:dump, self.dump)
+  end
+  
+  # update attributes
+  def update_attributes_from_result(res)
+    RESULTS_FIELDS.each_pair {|k,v| update_attribute_w_check(k, res[v]) if res[v] != self[k] }
+    #TODO: phones, emails
+  end
+  
+  # update specified attribute
+  # if attribute changed by moderator:
+  #   1. mark record as need_human
+  #   2. save attribute value in moderate_attributes hash
+  def update_attribute_w_check(field, value)
+    if moderate_attributes && moderate_attributes[field] && moderate_attributes[field][:status] == :operator_changed
+      add_value_for_moderation(field, value)
+      need_human = true
+    else
+      self[field] = value
+    end
+  end
+  
+  # save attribute values in moderate_attributes hash
+  def store_attributes_from_result(res)
+    RESULTS_FIELDS.each_pair {|k,v| add_value_for_moderation(k, res[v]) if res[v] != self[k] }
+    #TODO: phones, emails
+  end
+  
+  # add value to hash by key - current time
+  # if update to frequently - store only 5 values
+  def add_value_for_moderation(field, value)
+    moderate_attributes[field] ||= {}
+    moderate_attributes[field][:versions] ||= {}
+    versions = moderate_attributes[field][:versions]
+
+    time_key = Time.now.strftime('%Y%m%d%H%M%S')
+    
+    if versions && versions[time_key]
+      if versions[time_key] == value
+        return
+      else
+        unless 5.times do |i|
+                 unless versions[time_key + i.to_s]
+                   time_key = time_key + i.to_s
+                 end
+               end
+          time_key = time_key + "5"
+        end
+      end
+    end
+    versions[time_key] = value
   end
 end
