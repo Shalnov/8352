@@ -136,5 +136,5 @@ end
 #  cleanup
 #end
 
-#after "deploy:setup", "thinking_sphinx:shared_sphinx_folder"
+after "deploy:setup", "thinking_sphinx:shared_sphinx_folder"
 after "deploy:symlink", "deploy:database_yml"
