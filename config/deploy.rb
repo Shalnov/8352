@@ -59,7 +59,8 @@ namespace :deploy do
   task :after_update_code do
     apache_config = <<-EOF
     <VirtualHost #{domain}:3002>
-      ServerName #{domain}
+      ServerName 8352.info
+      ServerAlias 8352.info www.8352.info
       DocumentRoot #{deploy_to}/current/public
       RailsEnv #{rails_env}
 
