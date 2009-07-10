@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-    <title>8352.info - телефоны Чувашии</title>
+    <title>8352.info</title>
     <%= stylesheet_link_tag 'scaffold' %>
     <%= javascript_include_tag :defaults %>
 	  <% javascript_tag do %>
@@ -14,24 +14,10 @@
   <body>
 
 <div id="header"><a href="/"><h1 id="logo">chuvashia.ru</h1></a>
-<p>Все телефоны Чувашии.</p>
     <p style="color: green"><%= flash[:notice] %></p>
     <p style="color: red"><%= flash[:error] %></p>
 </div>
 
-
-
-<div id="leftbar">
-Список организаций:	<br />
-<a href="">По названиям</a>	<br />
-<a href="">По адресам</a>	<br />
-<a href="">По деятельности</a>
-	<br />
-	<br />
-
-	<br />
-	<br />
-</div>
 
 
 <div id="main">
@@ -48,19 +34,6 @@
 
 </div>
 
-
-<div id="rightbar">
-	<% if logged_in? %>
-	<%= render :partial => "sessions/destroy" %>
-	<% else %>
-	<%= render :partial => "sessions/sessionform" %>
-	<% end %>
-	<hr />
-
-<a href="">отправить SMS</a>
-<p>тэги тэги тэги</p>
- 	<%= link_to 'Тэги', tags_url %>
-</div>
 
 
 <div id="footer">
