@@ -15,6 +15,9 @@ class Result < ActiveRecord::Base
                           :order => :id,
                           :include => :link }
 
+  IMPORT_CONDITIONS = ["is_updated = :is_updated AND result_categories.category_id IS NOT NULL",
+                                      { :is_updated => true }]
+
   def strip_fields
     self.strip_field!(:name)
     self.strip_field!(:address)
@@ -43,7 +46,11 @@ class Result < ActiveRecord::Base
 
   def self.next_for_import
     self.find(:first, :include => [:result_category], 
-                      :conditions => ["is_updated = :is_updated AND result_categories.category_id IS NOT NULL",
-                                      { :is_updated => true }])
+                      :conditions => IMPORT_CONDITIONS)
+  end
+  
+  def self.records_for_import
+    self.find(:all, :include => [:result_category], 
+                      :conditions => IMPORT_CONDITIONS)
   end
 end

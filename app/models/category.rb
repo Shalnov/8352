@@ -40,4 +40,8 @@ class Category < ActiveRecord::Base
     end
   end
   
+  def self.update_count
+    Result.count(:include => ['result_category'], :conditions => ["is_updated = :is_updated AND result_categories.category_id IS NULL",
+                                  { :is_updated => true }])
+  end
 end
