@@ -10,8 +10,12 @@ class Phone < ActiveRecord::Base
     number
   end
 
+  def self.strip_non_digit(number)
+    number.to_s.gsub(/\D/,'')
+  end
+
   def strip_non_digit
-    self.number.to_s.gsub!(/\D/,'')
+    self.number = Phone.strip_non_digit(self.number)
   end
   
 end

@@ -55,7 +55,7 @@ module Import
       c = nil
       if phones
         phones.split(',').each do |phone|
-          formated_phone = clear_phone_number(phone)
+          formated_phone = Phone.strip_non_digit(phone).to_i
           c = p.company if formated_phone && formated_phone != 0 && p = Phone.find_by_number(formated_phone)
           break
         end
@@ -63,8 +63,5 @@ module Import
       c
     end
     
-    def self.clear_phone_number(number)
-      number.to_s.gsub(/([^0-9])/, '').to_i
-    end
   end
 end

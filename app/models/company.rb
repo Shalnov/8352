@@ -80,6 +80,12 @@ class Company < ActiveRecord::Base
   # update attributes
   def update_attributes_from_result(res)
     RESULTS_FIELDS.each_pair {|k,v| update_attribute_w_check(k, res[v]) if res[v] != self[k] }
+    if res.phones && !res.phones.blank?
+      update_attribute_w_check(:phone, Phone.strip_non_digit(res.phones))
+    end
+    if res.email && !res.email.blank?
+      update_attribute_w_check(:email, res.email)
+    end
     #TODO: phones, emails
   end
   
@@ -92,14 +98,36 @@ class Company < ActiveRecord::Base
       add_value_for_moderation(field, value)
       need_human = true
     else
-      self[field] = value
+      case field
+      when :phone
+        if self.phones.select {|p| p.number == value }.size == 0
+          self.phones << Phone.new(:number => value)
+        end
+      when :email
+        if self.emails.select {|e| e.email == value }.size == 0
+          self.emails << Email.new(:email => value)
+        end
+      else
+        self[field] = value
+      end
     end
   end
   
   # save attribute values in moderate_attributes hash
   def store_attributes_from_result(res)
     RESULTS_FIELDS.each_pair {|k,v| add_value_for_moderation(k, res[v]) if res[v] != self[k] }
-    #TODO: phones, emails
+    # check phones and emails
+    if res.phones && !res.phones.blank?
+      phone = Phone.strip_non_digit(res.phones)
+      if self.phones.select {|p| p.number == phone }.size == 0
+        add_value_for_moderation(:phone, phone)
+      end
+    end
+    if res.email && !res.email.blank?
+      if self.emails.select {|e| e.email == res.email }.size == 0
+        add_value_for_moderation(:email, res.email)
+      end
+    end
   end
   
   # add value to hash by key - current time
