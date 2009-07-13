@@ -45,6 +45,7 @@ class Result < ActiveRecord::Base
   end
 
   def self.next_for_import
+<<<<<<< HEAD:app/models/result.rb
     self.find(:first, :include => [:result_category], 
                       :conditions => IMPORT_CONDITIONS)
   end
@@ -52,5 +53,8 @@ class Result < ActiveRecord::Base
   def self.records_for_import
     self.find(:all, :include => [:result_category], 
                       :conditions => IMPORT_CONDITIONS)
+=======
+    self.find(:first, :conditions => {:is_updated => true})
+>>>>>>> bfba66347e3e2ae8efb0809d952ae5225bbb01f7:app/models/result.rb
   end
 end
