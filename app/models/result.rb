@@ -1,22 +1,26 @@
+# -*- coding: utf-8 -*-
 class Result < ActiveRecord::Base
+  include PhoneHelper
   belongs_to :link
-  belongs_to :storage
   belongs_to :company
+  belongs_to :source
 
-  has_one :result_category
+  has_one :result_category, :foreign_key => "category_name", :primary_key=> "category"
   
   before_save :strip_fields
 
-  named_scope :checked, { :conditions => { :is_checked => true } }
-  named_scope :not_checked, { :conditions => { :is_checked => false } }
+#  named_scope :checked, { :conditions => { :is_checked => true } }
+#  named_scope :not_checked, { :conditions => { :is_checked => false } }
   
   named_scope :updated, { :conditions => { :is_updated => true },
-                          :limit => 10,
                           :order => :id,
-                          :include => :link }
-
-  IMPORT_CONDITIONS = ["is_updated = :is_updated AND result_categories.category_id IS NOT NULL",
-                                      { :is_updated => true }]
+  }
+  
+  
+  named_scope :importable, lambda { |source_id|  {
+      :include => :result_category,
+      :conditions => ["is_updated AND result_categories.category_id IS NOT NULL AND results.source_id=?", source_id] }
+  }
 
   def strip_fields
     self.strip_field!(:name)
@@ -29,32 +33,41 @@ class Result < ActiveRecord::Base
   end
 
   def strip_field!(field = nil)
-    false
+    false #.strip .strip!
     if self.attribute_names.include?(field.to_s) && 
        !self[field].nil? && (self[field].mb_chars.length > self.column_for_attribute(field).limit)
       self.update_attribute field, self[field].mb_chars[0..(self.column_for_attribute(field).limit - 1)].to_s
     end
   end
+  
+  RESULTS_FIELDS = { :name => :name,
+    :site => :site_url,
+    :working_time => :work_time,
+    :address => :address }
 
-  def phones_str
-    self.phones.to_s.gsub(/\D/,'')
+  def company_fields
+    return { 
+      :name=> self.name,
+      :site=> self.site_url,
+      :working_time => self.work_time,
+      :address=> self.address}
   end
 
-  def phones_exist?
-    !phones_str.size.zero?
-  end
 
-  def self.next_for_import
-<<<<<<< HEAD:app/models/result.rb
-    self.find(:first, :include => [:result_category], 
-                      :conditions => IMPORT_CONDITIONS)
+  def normalized_phones
+    return nil unless self.phones
+    pat=/(\d+)\s*(.*)/
+    h={}
+    self.phones.split(/,|;/).map { |x| 
+      x=x.strip.to_s
+      r=x.scan(pat)
+      phone=normalize_phone(r[0][0])
+      if phone
+        name=r[0][1]
+        h[phone]=name.blank? ? nil : name.to_s.gsub(/\(|\)/,'')
+      end
+    }
+    h
   end
   
-  def self.records_for_import
-    self.find(:all, :include => [:result_category], 
-                      :conditions => IMPORT_CONDITIONS)
-=======
-    self.find(:first, :conditions => {:is_updated => true})
->>>>>>> bfba66347e3e2ae8efb0809d952ae5225bbb01f7:app/models/result.rb
-  end
 end

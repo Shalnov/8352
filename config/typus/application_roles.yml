@@ -27,8 +27,8 @@ admin:
   Phone: create, read, update, delete
   Result: create, read, update, delete
   Role: create, read, update, delete
-  Source: create, read, update, delete
-  Storage: create, read, update, delete
+  Source: create, read, update, delete, export, export_all, set_categories
+  ResultCategory: create, read, update, delete
   Tag: create, read, update, delete
   Tagging: create, read, update, delete
   TelefonFederal: create, read, update, delete

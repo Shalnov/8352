@@ -26,7 +26,7 @@ module PhoneHelper
   def normalize_phone(phone)
     
     # убрать все знаки кроме цифр
-    phone=phone.gsub(/[^0-9]/,'')
+    phone=phone.to_s.gsub(/[^0-9]/,'')
     
     @current_prefix="78352"
     
@@ -37,7 +37,9 @@ module PhoneHelper
     elsif phone.size==6
       phone=@current_prefix+phone
     else
-      raise "PhoneHelper::normalize_phone error"
+      # TODO Писать в лог
+      p "PhoneHelper::normalize_phone error - bad phone number '#{phone}'"
+      return nil
     end
 
 #    phone = TelefonRename.renamed_number(phone) || phone

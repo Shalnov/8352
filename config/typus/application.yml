@@ -20,16 +20,16 @@ Category:
 
 Company:
   fields:
-    list: id, name, full_name, inn, address, site, director, working_time, sources, pending, category
-    form: name, full_name, inn, address, site, director, description, working_time, sources, pending, dump, category
-    show: id, name, full_name, inn, address, site, director, description, working_time, sources, created_at, updated_at, pending, dump, category
+    list: id, name, inn, address, site, category
+    form: name, inn, address, site, director, description, working_time, sources, pending, dump, category
+    show: id, name, inn, address, site, director, description, working_time, sources, created_at, updated_at, pending, dump, category
   actions:
     index:
     edit:
   order_by:
   relationships: category, emails, phones, results
   filters:
-  search:
+  search: name, address
   application: 8352.info
   description:
 
@@ -80,14 +80,14 @@ Phone:
 
 Result:
   fields:
-    list: id, name, address, phones, email, site_url, category, work_time, http_last_modify, is_checked, is_updated, is_removed, link, company, storage
-    form: name, address, phones, email, site_url, category, work_time, other_info, raw_html, http_last_modify, is_checked, is_updated, is_removed, link, company, storage
-    show: id, name, address, phones, email, site_url, category, work_time, other_info, raw_html, http_last_modify, is_checked, is_updated, is_removed, created_at, updated_at, link, company, storage
+    list: id, name, address, phones, email, site_url, category, work_time, http_last_modify, is_checked, is_updated, is_removed, link, company
+    form: name, address, phones, email, site_url, category, work_time, other_info, raw_html, http_last_modify, is_checked, is_updated, is_removed, link, company
+    show: id, name, address, phones, email, site_url, category, work_time, other_info, raw_html, http_last_modify, is_checked, is_updated, is_removed, created_at, updated_at, link, company
   actions:
     index:
     edit:
   order_by:
-  relationships: company, link, storage
+  relationships: company, link
   filters:
   search:
   application: 8352.info
@@ -108,31 +108,34 @@ Role:
   application: 8352.info
   description:
 
-Source:
+
+ResultCategory:
   fields:
-    list: id, target_url, grabber_module, description
-    form: target_url, grabber_module, description
-    show: id, target_url, grabber_module, description, created_at, updated_at
+    list: category_name, category_id
+#    options: 
+#      templates:
+#        category_id: category
   actions:
     index:
-    edit:
-  order_by:
-  relationships: jobs, links, results
+    show:
+    exit:
+  order_by: category_name
   filters:
   search:
   application: 8352.info
   description:
 
-Storage:
+Source:
   fields:
-    list: id, name, address, phones, email, site_url, category, work_time
-    form: name, address, phones, email, site_url, category, work_time, other_info
-    show: id, name, address, phones, email, site_url, category, work_time, other_info, created_at, updated_at
+    list: grabber_module, target_url
+    form: target_url, grabber_module, description
+    show: id, target_url, grabber_module, description, created_at, updated_at
   actions:
-    index:
-    edit:
+    index: export_all
+    edit: export
+    show: export
   order_by:
-  relationships: results
+  relationships: result_categories #links, results
   filters:
   search:
   application: 8352.info

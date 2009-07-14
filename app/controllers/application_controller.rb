@@ -19,22 +19,22 @@ class ApplicationController < ActionController::Base
   # Uncomment the :secret if you're not using the cookie session store
   protect_from_forgery # :secret => '77f405cf4951a5bd83147bbd0b312736'
   
-  def admin_protection_filter
-    admin_filter if params[:controller] =~ /^admin/
-  end
+#   def admin_protection_filter
+#     admin_filter if params[:controller] =~ /^admin/
+#   end
   
-  def admin_filter
-    access_denied if !has_role?("editor")
-  end
+#   def admin_filter
+#     access_denied if !has_role?("editor")
+#   end
 
-  def has_role?(role)
-    authorized? && current_user.has_role?(role)
-  end
+#   def has_role?(role)
+#     authorized? && current_user.has_role?(role)
+#   end
   
-  def role_admin_area(role, &block)
-    if authorized? && current_user.has_role?(role)
-      block.call
-    end
-  end
+#   def role_admin_area(role, &block)
+#     if authorized? && current_user.has_role?(role)
+#       block.call
+#     end
+#   end
   
 end

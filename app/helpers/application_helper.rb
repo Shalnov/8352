@@ -2,6 +2,8 @@
 module ApplicationHelper
   include ActsAsTaggable::TagsHelper
   include PhoneHelper
+  include Admin::PublicHelper
+
   
   def render_category_with_all_childs(category, category_func, admin=false, description=false)
     res = "<li>"

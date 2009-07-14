@@ -78,6 +78,7 @@ Rails::Initializer.run do |config|
   config.gem "thoughtbot-factory_girl", :lib => "factory_girl", :source => "http://gems.github.com"
   config.gem 'redgreen', :version=>"1.2.2"
   config.gem 'ya2yaml', :version=>"0.26"
+  config.gem 'andand', :version=>"1.3.1"
 end
 
 require 'configatron'

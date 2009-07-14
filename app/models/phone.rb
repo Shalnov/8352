@@ -1,7 +1,8 @@
 class Phone < ActiveRecord::Base
   belongs_to :company
-
-  before_save :strip_non_digit
+  include PhoneHelper
+  
+  before_save :normalize
 
   validates_presence_of :number
   validates_numericality_of :number, :greater_than => 70000000000, :less_than => 80000000000
@@ -10,12 +11,8 @@ class Phone < ActiveRecord::Base
     number
   end
 
-  def self.strip_non_digit(number)
-    number.to_s.gsub(/\D/,'')
-  end
-
-  def strip_non_digit
-    self.number = Phone.strip_non_digit(self.number)
+  def normalize
+    self.number=normalize_phone(self.number)
   end
   
 end

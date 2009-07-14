@@ -8,6 +8,7 @@ class CreateResultCategories < ActiveRecord::Migration
       t.timestamps
     end
     add_index :result_categories, [:category_id, :result_id], :unique => true
+    add_index :result_categories, [:category_name]
   end
 
   def self.down
