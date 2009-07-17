@@ -1,0 +1,17 @@
+<h2>Импорт данных в каталог</h2>
+
+
+<dl>
+<dt>Обновлено записей</dt><dd><%= @updated %></dd>
+</dl>
+<dl>
+<dt>Добавлено новых</dt><dd><%= @new %></dd>
+<dt>Всего обработано</dt><dd><%= @all %></dd>
+<dt>Необработано записей</dt><dd><%= @source.results.updated.count  %></dd>
+</dl>
+
+
+<%= link_to "back..", "/admin/sources" %>
+
+
+
