@@ -27,7 +27,7 @@ admin:
   Phone: create, read, update, delete
   Result: create, read, update, delete
   Role: create, read, update, delete
-  Source: create, read, update, delete, export, export_all, set_categories
+  Source: create, read, update, delete, set_categories, import_results, reset_imported_companies, reset_imported_categories
   ResultCategory: create, read, update, delete
   Tag: create, read, update, delete
   Tagging: create, read, update, delete

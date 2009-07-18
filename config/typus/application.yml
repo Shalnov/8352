@@ -5,30 +5,32 @@
 
 Category:
   fields:
-    list: id, name, companies_count, position, children_count, ancestors_count, descendants_count, hidden, parent
-    form: name, description, companies_count, position, children_count, ancestors_count, descendants_count, hidden, parent
+    list: name, parent, companies_count, position, hidden
+    form: name, parent, description, hidden
     show: id, name, description, companies_count, position, children_count, ancestors_count, descendants_count, hidden, parent
   actions:
     index:
     edit:
-  order_by:
+  order_by: parent_id, position
   relationships: children, companies, parent
+  options:
+    per_page: 30
   filters:
-  search:
+  search: name
   application: 8352.info
   description:
 
 Company:
   fields:
-    list: id, name, inn, address, site, category
-    form: name, inn, address, site, director, description, working_time, sources, pending, dump, category
-    show: id, name, inn, address, site, director, description, working_time, sources, created_at, updated_at, pending, dump, category
+    list: name, results_count, address, site, category
+    form: name, inn, address, site, director, description, working_time, sources
+    show: id, results_count, name, inn, address, site, director, description, working_time, sources, created_at, updated_at, pending, dump, category
   actions:
     index:
     edit:
   order_by:
   relationships: category, emails, phones, results
-  filters:
+  filters: category
   search: name, address
   application: 8352.info
   description:
@@ -65,7 +67,7 @@ Link:
 
 Phone:
   fields:
-    list: id, number, person, department, working_time, description, short_code, company
+    list: id, number, company, person, department, description
     form: number, person, department, working_time, description, short_code, company
     show: id, number, person, department, working_time, description, short_code, created_at, updated_at, company
   actions:
@@ -74,22 +76,27 @@ Phone:
   order_by:
   relationships: company
   filters:
-  search:
+  search: number, person, departmend
+  options:
+    per_page: 30
   application: 8352.info
   description:
 
 Result:
   fields:
-    list: id, name, address, phones, email, site_url, category, work_time, http_last_modify, is_checked, is_updated, is_removed, link, company
-    form: name, address, phones, email, site_url, category, work_time, other_info, raw_html, http_last_modify, is_checked, is_updated, is_removed, link, company
-    show: id, name, address, phones, email, site_url, category, work_time, other_info, raw_html, http_last_modify, is_checked, is_updated, is_removed, created_at, updated_at, link, company
+    list: name, category_name, address, is_updated, company
+    form: name, address, phones, email, site_url, result_category, category_name, work_time, other_info, raw_html, http_last_modify, company, is_checked, is_updated, is_removed
+#, link
+    show: id, name, address, phones, email, site_url, category_name, work_time, other_info, raw_html, http_last_modify, is_checked, is_updated, is_removed, created_at, updated_at, link, company
   actions:
     index:
     edit:
   order_by:
+  options:
+    per_page: 10
   relationships: company, link
-  filters:
-  search:
+  filters: is_updated, is_removed
+  search: name, address
   application: 8352.info
   description:
 
@@ -111,17 +118,18 @@ Role:
 
 ResultCategory:
   fields:
-    list: category_name, category_id
+    list: category_name, category
+    show: id, category_name, category
 #    options: 
 #      templates:
 #        category_id: category
   actions:
     index:
-    show:
+    show: 
     exit:
   order_by: category_name
   filters:
-  search:
+  search: category_name
   application: 8352.info
   description:
 
@@ -131,13 +139,14 @@ Source:
     form: target_url, grabber_module, description
     show: id, target_url, grabber_module, description, created_at, updated_at
   actions:
-    index: export_all
-    edit: export
-    show: export
+    edit: show
+    show: import_results, reset_imported_categories, reset_imported_companies
   order_by:
-  relationships: result_categories #links, results
+  relationships: result_categories #, results #links, results
   filters:
   search:
+  options:
+    default_action_on_item: show
   application: 8352.info
   description:
 

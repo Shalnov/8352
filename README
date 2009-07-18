@@ -28,3 +28,8 @@ rake db:make_admin_by_login login=admin
 5. rake thinking_sphinx:start
 
 
+
+
+
+# TODO
+# Использовать http://jquery.sanchezsalvador.com/page/jquerycombobox.aspx как tree combobox

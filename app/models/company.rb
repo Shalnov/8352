@@ -1,26 +1,26 @@
 # -*- coding: utf-8 -*-
-require 'acts_as_taggable'
+#require 'acts_as_taggable'
 
 class Company < ActiveRecord::Base
 #  acts_as_taggable
 
-  serialize :dump, Hash
+#  serialize :dump, Hash
   
-  define_index do
-    indexes :name, :sortable => true
-#    indexes full_name, :sortable => true
-    indexes description
-    indexes address
-    indexes category.name, :as => :category
-    indexes [
-      phones.number, phones.person
-    ], :as => :phone
-    indexes emails.email, :as => :emails
+#   define_index do
+#     indexes :name, :sortable => true
+# #    indexes full_name, :sortable => true
+#     indexes description
+#     indexes address
+#     indexes category.name, :as => :category
+#     indexes [
+#       phones.number, phones.person
+#     ], :as => :phone
+#     indexes emails.email, :as => :emails
 
-    # необходимо для поиска '*ксары*' => Чебоксары
-    set_property :enable_star => 1
-    set_property :min_infix_len => 1
-  end
+#     # необходимо для поиска '*ксары*' => Чебоксары
+#     set_property :enable_star => 1
+#     set_property :min_infix_len => 1
+#   end
   
   belongs_to :category, :counter_cache => true
 
@@ -32,7 +32,7 @@ class Company < ActiveRecord::Base
 
   has_many :results
 
-  validates_presence_of :name #, :full_name
+  validates_presence_of :name, :category_id #, :full_name
   
   accepts_nested_attributes_for :phones, :allow_destroy => true,
                                 :reject_if => proc { |phone| phone['number'].blank? }
@@ -54,13 +54,6 @@ class Company < ActiveRecord::Base
     end
     
     
-    def create_from_result(res)
-      company = self.create(res.company_fields)
-      company.update_phones(res.normalized_phones)
-      company.save!
-      company
-    end
-    
     # Давайте мне хэш телефонов и я найду компанию
     def find_by_phones(phones)
       
@@ -81,6 +74,7 @@ class Company < ActiveRecord::Base
   
   
   def update_phones(phones)
+    return unless phones
     phones.each_key { |number|
       if phone=Phone.find_by_number(number)
         # TODO Поискать чего обновлять в телефонах
@@ -93,13 +87,6 @@ class Company < ActiveRecord::Base
   end
   
 #    RESULTS_FIELDS.each_pair {|k,v| update_attribute_w_check(k, res[v]) if res[v] != self[k] }
-
-  def import_result(res)
-    self.update_attributes(res.company_fields)
-    self.update_phones(res.normalized_phones)
-    res.company_id=self.id
-    self.save!
-  end
   
 #   def dump_attributes
 #     self.dump ||= {}

@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 class Source < ActiveRecord::Base
   has_many :links
-  has_many :results #, :through => :links
+  has_many :results
+  has_many :companies, :through => :results
   has_many :result_categories
 #  has_many :jobs
 
@@ -13,39 +14,63 @@ class Source < ActiveRecord::Base
     self.update_attributes :target_url => grabber.target_url,
                            :description => grabber.target_description
   end
+  
 
   def set_categories(cats)
+
     cats.each_value do |cat|
-      if cat[:id] && !cat[:id].blank?
+      
+      p "cat=#{cat}"
+      puts "CAT=#{cat[:id]}"
+      
+      if cat[:id]=="all"
+        # TODO поискать уже в результатах
+        category=Category.find_or_create_from_string(cat[:title])
+        ResultCategory.create!(:category_id=>category.id,
+                               :category_name=>cat[:title],
+                               :source_id=>self.id)
+      elsif cat[:id].blank? || cat[:id]==""
+        # ничего не устанавливаем
+      elsif cat[:id].to_i>0
         ResultCategory.create!(:category_id=>cat[:id],
                                :category_name=>cat[:title],
                                :source_id=>self.id)
+
+      else
+        raise "Bad category id selected: #{cat[:id]}"
       end
     end
   end
+  
 
-  def export_to_catalog
+  def import_results
     #   logger = Logger.new("#{RAILS_ROOT}/log/importer.log")
+    
     results = Result.importable(self.id)
+    
     updated_companies_count=0
     new_companies_count=0
     
-    results.map { |res|
+    results.andand.each { |res|
       
-      if company = res.company || Company.find_by_result(res)
-
-        company.import_result(res)
-        updated_companies_count+=1
+      if res.company
         
+        res.update_company()
+        
+        updated_companies_count+=1
+
+      elsif company = Company.find_by_result(res)
+
+        res.update_company(company)
+        updated_companies_count+=1
+
       else
         
-        Company.create_from_result(res)
+        company=res.import_new_company
         new_companies_count+=1
         
       end
-      
-      res.is_updated = false
-      res.save
+            
     }
     
     {:updated=>updated_companies_count,
@@ -53,13 +78,11 @@ class Source < ActiveRecord::Base
       :all=>new_companies_count+updated_companies_count
     }
   end
-    
-  
   
   def unprocessed_categories
-    Result.find_by_sql(["select category, count(*) from results left join result_categories on category=category_name where is_updated and category_id IS NULL and results.source_id=? group by category",
+    Result.find_by_sql(["select results.category_name, count(*) from results left join result_categories on result_categories.category_name=results.category_name where is_updated and category_id IS NULL and results.source_id=? group by results.category_name",
                         self.id]).
-      map{|r| r.category}.compact.sort
+      map{|r| r.category_name}.compact.sort
   end
 
 

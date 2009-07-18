@@ -11,6 +11,7 @@ config/deploy.rb
 log/*.log
 log/*.pid
 tmp/**/*
+utils/*.sql
 nbproject
 *~
 .#*
