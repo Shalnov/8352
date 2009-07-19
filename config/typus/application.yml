@@ -234,7 +234,7 @@ Source:
   fields:
     list: grabber_module, target_url
     form: target_url, grabber_module, description
-    show: id, target_url, grabber_module, description, created_at, updated_at
+    show: target_url, id, grabber_module, description, created_at, updated_at
   actions:
     edit: show
     show: import_results, reset_imported_categories, reset_imported_companies
@@ -249,7 +249,7 @@ Source:
 
 Result:
   fields:
-    list: name, category_name, address, is_updated, company
+    list: name, category_name, address, is_updated, company, source
     form: name, address, phones, email, site_url, result_category, category_name, work_time, other_info, raw_html, http_last_modify, company, is_checked, is_updated, is_removed
 #, link
     show: id, name, address, phones, email, site_url, category_name, work_time, other_info, raw_html, http_last_modify, is_checked, is_updated, is_removed, created_at, updated_at, link, company

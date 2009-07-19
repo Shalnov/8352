@@ -14,7 +14,6 @@ class Source < ActiveRecord::Base
     self.update_attributes :target_url => grabber.target_url,
                            :description => grabber.target_description
   end
-  
 
   def set_categories(cats)
 

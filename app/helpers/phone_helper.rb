@@ -71,7 +71,7 @@ module PhoneHelper
       phone[0]="7"
     elsif phone.size==10
       phone="7"+phone
-    elsif phone.size+city.prefix.size==11 # 6+5 или 5+6
+    elsif phone.size+city.prefix.size==11 # 6+5 или 5+6 TOFIX некоторые имеют больше, например http://dapi.orionet.ru:3000/admin/results/edit/62691
       phone=city.prefix+phone
       # TODO Писать в лог
     else
