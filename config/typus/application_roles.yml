@@ -21,6 +21,7 @@
 
 admin:
   Category: create, read, update, delete
+  City: create, read, update, delete
   Company: create, read, update, delete
   Email: create, read, update, delete
   Link: create, read, update, delete

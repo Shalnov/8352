@@ -48,7 +48,7 @@ Rails::Initializer.run do |config|
   # The internationalization framework can be changed to have another default locale (standard is :en) or more load paths.
   # All files from config/locales/*.rb,yml are added automatically.
   # config.i18n.load_path << Dir[File.join(RAILS_ROOT, 'my', 'locales', '*.{rb,yml}')]
-  # config.i18n.default_locale = :de
+  # config.i18n.default_locale = :ru
 
   # Your secret key for verifying cookie session data integrity.
   # If you change this key, all old sessions will become invalid!
@@ -79,6 +79,11 @@ Rails::Initializer.run do |config|
   config.gem 'redgreen', :version=>"1.2.2"
   config.gem 'ya2yaml', :version=>"0.26"
   config.gem 'andand', :version=>"1.3.1"
+  
+  config.gem "yaroslav-russian",
+  :lib     => 'russian', 
+  :source  => 'http://gems.github.com'
+
 end
 
 require 'configatron'

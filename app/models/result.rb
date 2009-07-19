@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 class Result < ActiveRecord::Base
   include PhoneHelper
+  extend ActiveSupport::Memoizable
 
   belongs_to :link
   belongs_to :company, :counter_cache => true
@@ -9,13 +10,6 @@ class Result < ActiveRecord::Base
 
   belongs_to :result_category
   has_one :category, :through=>:result_category
-
-  #, :foreign_key => "category_name" #, , :primary_key=> "category_name"  :conditions => ["source_id=?",source_id] 
-  
-#  before_save :strip_fields
-
-#  named_scope :checked, { :conditions => { :is_checked => true } }
-#  named_scope :not_checked, { :conditions => { :is_checked => false } }
   
   named_scope :updated, { :conditions => { :is_updated => true },
                           :order => :id }
@@ -27,29 +21,7 @@ class Result < ActiveRecord::Base
       #      :limit => 500
     }
   }
-
-#   def strip_fields
-#     self.strip_field!(:name)
-#     self.strip_field!(:address)
-#     self.strip_field!(:phones)
-#     self.strip_field!(:email)
-#     self.strip_field!(:site_url)
-#     self.strip_field!(:category)
-#     self.strip_field!(:work_time)
-#   end
-
-#   def strip_field!(field = nil)
-#     false #.strip .strip!
-#     if self.attribute_names.include?(field.to_s) && 
-#        !self[field].nil? && (self[field].mb_chars.length > self.column_for_attribute(field).limit)
-#       self.update_attribute field, self[field].mb_chars[0..(self.column_for_attribute(field).limit - 1)].to_s
-#     end
-#   end
   
-  RESULTS_FIELDS = { :name => :name,
-    :site => :site_url,
-    :working_time => :work_time,
-    :address => :address }
 
   def company_fields
     { 
@@ -57,57 +29,57 @@ class Result < ActiveRecord::Base
       :site=> self.site_url,
       :working_time => self.work_time,
       :address => self.address,
+      :description => self.other_info,
       :category_id => self.result_category.category_id 
     }
   end
 
-
-  def normalized_phones
-    return nil unless self.phones
-    pat=/(\d+)\s*(.*)/
-    h={}
-    self.phones.split(/,|;/).map { |x| 
-      x=x.strip.to_s
-      r=x.scan(pat)
-      if !r.blank?
-        phone=normalize_phone(r[0][0])
-        if phone
-          name=r[0][1]
-          h[phone]=name.blank? ? nil : name.to_s.gsub(/\(|\)/,'')
-        end
-        
-      else 
-        p "WARN: Bad phone recognize: '#{x}' from #{self.phones}"
-      end
-    }
-    h
-  end
   
   def import_new_company
     
-    company = self.create_company(self.company_fields)
-    company.update_phones(self.normalized_phones)
-#    company.save!
+    self.create_company(self.company_fields)
     
-#    self.company_id=company.id
+    self.company.update_phones(self.normalized_phones)
+    
     self.is_updated=false
     self.save!
-
-    company
   end
+  
   
   def update_company(company=nil)
         
     self.company=company if company
     
-        # TODO Пока ничего кроме телефонов не обновляем!
-    self.company.update_phones(self.normalized_phones)    
-
+    # TODO Обновление и других параметров, помимо телефонов
     
+    self.company.update_phones(self.normalized_phones)
+
     self.is_updated=false
     self.save!
-
-    company
+  end
+  
+  def lookup_city_in_address
+    return if self.address.blank?
+    city=nil
+    self.address.split(/\W+/).each { |e| 
+      
+      # TODO Искать case insensetive city
+      city=City.find_by_name(e.mb_chars.capitalize.to_s)
+      return city if city
+    }
+    city
+  end
+  
+  memoize :lookup_city_in_address
+  
+  def normalized_phones
+    return if self.phones.blank?
+    np=[]
+    self.phones.split(/,|;/).each { |x| 
+      p=parse_phone(x,lookup_city_in_address)
+      np << p if p
+    }
+    np
   end
   
 end

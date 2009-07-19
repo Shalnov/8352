@@ -3,11 +3,8 @@
 class Admin::SourcesController < Admin::MasterController #ApplicationController
   
   def show
-#    @new_categories = @item.unprocessed_categories
-#    @category_for_select = Category.all_for_select
     @croots=Category.roots
     super
-
   end
   
   def reset_imported_categories

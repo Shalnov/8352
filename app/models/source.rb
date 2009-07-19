@@ -19,10 +19,7 @@ class Source < ActiveRecord::Base
   def set_categories(cats)
 
     cats.each_value do |cat|
-      
-      p "cat=#{cat}"
-      puts "CAT=#{cat[:id]}"
-      
+            
       if cat[:id]=="all"
         # TODO поискать уже в результатах
         category=Category.find_or_create_from_string(cat[:title])
@@ -37,7 +34,7 @@ class Source < ActiveRecord::Base
                                :source_id=>self.id)
 
       else
-        raise "Bad category id selected: #{cat[:id]}"
+        raise "Error! Bad category id selected: #{cat[:id]}"
       end
     end
   end

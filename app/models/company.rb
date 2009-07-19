@@ -2,7 +2,10 @@
 #require 'acts_as_taggable'
 
 class Company < ActiveRecord::Base
+  
+
 #  acts_as_taggable
+
 
 #  serialize :dump, Hash
   
@@ -26,11 +29,14 @@ class Company < ActiveRecord::Base
 
   has_many :phones,   :dependent => :destroy
   has_many :emails,   :dependent => :destroy
+  has_many :results
+  has_many :sources,  :through=> :results
+  
   
 #  has_many :taggings, :as => :taggable, :dependent => :destroy
 #  has_many :tags,     :through => :taggings
 
-  has_many :results
+
 
   validates_presence_of :name, :category_id #, :full_name
   
@@ -41,27 +47,16 @@ class Company < ActiveRecord::Base
 
   class << self    
     
-    def get_company_by_phones(phones)
-      c = nil
-      if phones
-        phones.split(',').each do |phone|
-          formated_phone = Phone.strip_non_digit(phone).to_i
-          c = p.company if formated_phone && formated_phone != 0 && p = Phone.find_by_number(formated_phone)
-          break
-        end
-      end
-      c
-    end
-    
     
     # Давайте мне хэш телефонов и я найду компанию
     def find_by_phones(phones)
-      
       # TODO определить тип hash/array/string/number и делать поступать соответсвенно
-      return nil unless phones && phones.size>0
-      phones.each_key { |number|
-        phone=Phone.find_by_number(number)        
-        return phone.company if phone
+      
+      phones.andand.each { |h|
+        unless h[:number].blank?
+          phone=Phone.find_by_number(h[:number])        
+          return phone.company if phone
+        end
       }
       nil
     end
@@ -73,18 +68,25 @@ class Company < ActiveRecord::Base
   end
   
   
-  def update_phones(phones)
-    return unless phones
-    phones.each_key { |number|
-      if phone=Phone.find_by_number(number)
-        # TODO Поискать чего обновлять в телефонах
-      else
-        Phone.create!(:company_id=>self.id,
-                      :number=>number,
-                      :department=>phones[number])
-      end
-    }
+  def update_phone(h)
+    
+    if phone=Phone.find_by_number(h[:number])
+      # TODO Поискать чего обновлять в телефонах
+      # TODO Устанавливать необходимость ручной замены, если изменился is_fax или department
+      phone.update_attribute(:department,h[:department]) if phone.department.blank? && !h[:department].blank?
+      phone.save!
+    else
+
+      self.phones.create(h) || raise(RecordNotSaved)
+    end
+    
   end
+  
+  
+  def update_phones(phones)
+    phones.andand.each{ |x| self.update_phone(x)  }
+  end
+
   
 #    RESULTS_FIELDS.each_pair {|k,v| update_attribute_w_check(k, res[v]) if res[v] != self[k] }
   
