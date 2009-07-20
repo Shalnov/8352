@@ -12,6 +12,7 @@ log/*.log
 log/*.pid
 tmp/**/*
 utils/*.sql
+vendor/*
 nbproject
 *~
 .#*

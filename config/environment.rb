@@ -79,6 +79,7 @@ Rails::Initializer.run do |config|
   config.gem 'redgreen', :version=>"1.2.2"
   config.gem 'ya2yaml', :version=>"0.26"
   config.gem 'andand', :version=>"1.3.1"
+  config.gem 'rubyist-aasm', :lib =>"aasm", :version=>"2.0.5"
   
   config.gem "yaroslav-russian",
   :lib     => 'russian', 

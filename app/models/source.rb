@@ -47,26 +47,13 @@ class Source < ActiveRecord::Base
     updated_companies_count=0
     new_companies_count=0
     
-    results.andand.each { |res|
-      
-      if res.company
-        
-        res.update_company()
-        
-        updated_companies_count+=1
-
-      elsif company = Company.find_by_result(res)
-
-        res.update_company(company)
-        updated_companies_count+=1
-
-      else
-        
-        company=res.import_new_company
+    results.andand.each { |res| 
+      res.import
+      if res.imported? 
         new_companies_count+=1
-        
+      elsif res.partly_imported?
+        updated_companies_count+=1
       end
-            
     }
     
     {:updated=>updated_companies_count,
@@ -76,7 +63,7 @@ class Source < ActiveRecord::Base
   end
   
   def unprocessed_categories
-    Result.find_by_sql(["select results.category_name, count(*) from results left join result_categories on result_categories.category_name=results.category_name where is_updated and category_id IS NULL and results.source_id=? group by results.category_name",
+    Result.find_by_sql(["select results.category_name, count(*) from results left join result_categories on result_categories.category_name=results.category_name where state='updated' and category_id IS NULL and results.source_id=? group by results.category_name",
                         self.id]).
       map{|r| r.category_name}.compact.sort
   end

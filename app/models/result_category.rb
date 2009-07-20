@@ -10,7 +10,7 @@ class ResultCategory < ActiveRecord::Base
     Result.
       update_all({
                    :result_category_id=>self.id,
-                   :is_updated=>true
+                   :state=>'updated'
                  },
                  {
                    :category_name=>self.category_name

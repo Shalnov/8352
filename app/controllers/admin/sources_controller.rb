@@ -17,7 +17,7 @@ class Admin::SourcesController < Admin::MasterController #ApplicationController
   def reset_imported_companies
     @source=Source.find_by_id(params[:id])
     @source.companies.each { |c| c.destroy }
-    Result.update_all({:company_id=>nil,:is_updated=>true},{:source_id=>@source.id})
+    Result.update_all({:company_id=>nil,:state=>'updated'},{:source_id=>@source.id})
     
     redirect_to :action=>:show, :id=>params[:id]
   end
@@ -40,7 +40,6 @@ class Admin::SourcesController < Admin::MasterController #ApplicationController
     
     @source=Source.find_by_id(params[:id])
     @result=@source.import_results
-    
    
   end
 

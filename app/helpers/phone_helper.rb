@@ -2,9 +2,6 @@
 module PhoneHelper
   extend ActiveSupport::Memoizable
   
-  def phone_code(type)
-    type == true ? "3 знака" : "5 знаков"
-  end
   
   def h_phone(phone)
     
@@ -24,7 +21,6 @@ module PhoneHelper
   def parse_phone(str,city=nil)
     return if str.blank?
     
-
     str=str.to_s.strip
 #    pat=/([0-9\-]+)\s*(.*)/
     
