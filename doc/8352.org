@@ -98,9 +98,13 @@
 	 http://dapi.orionet.ru:3000/admin/results/edit/57386
 	 http://dapi.orionet.ru:3000/admin/results/edit/56747
 ** Поиск по company.normalized_name
+** typus -> master
 ** Установить коды городы
 ** Вынести импорт категорий на отдельную страницу
 ** pending для результатов
+** Проблемные телефоны
+	 http://dapi.orionet.ru:3000/admin/results/edit/51535
+	 найти остальные и сделать тесты
 ** Журнал ошибок для импортирования results
 ** Вывод повторяющихся компаний (select count(*) from results group by company_id)
 		
