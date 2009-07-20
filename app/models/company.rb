@@ -26,6 +26,7 @@ class Company < ActiveRecord::Base
 #   end
   
   belongs_to :category, :counter_cache => true
+  belongs_to :city, :counter_cache => true
 
   has_many :phones,   :dependent => :destroy
   has_many :emails,   :dependent => :destroy
