@@ -28,8 +28,12 @@ ActionController::Routing::Routes.draw do |map|
   map.register  '/register',  :controller => 'users',     :action => 'create'
   map.signup    '/signup',    :controller => 'users',     :action => 'new'
 
-  map.resources :users,       :collection => { :activate => :get }
-  map.resource  :session
+#  map.resources :users,       :collection => { :activate => :get }
+  
+  map.resource  :user_session
+  map.resource  :account, :controller => "users"
+  map.resources :users
+  
   map.resources :companies,   :collection => { :search => :post }
   map.resources :categories,  :has_many => [:companies]
 #  map.resources :tags,        :has_many => [:companies]

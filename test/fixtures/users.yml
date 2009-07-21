@@ -1,51 +1,27 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-quentin:
-  id:                        1
-  login:                     quentin
-  email:                     quentin@example.com
-  # salt:                      356a192b7913b04c54574d18c28d46e6395428ab # SHA1('0')
-  # crypted_password:          230f6f5d3aba96c81f437a5c959de21cc4332333 # 'monkey'
-  salt:                      2cf0cc2318fe74a363187cfc98e6f4758abc8436
-  crypted_password:          c8cb02a268e345917ab90c7dfb5c740a88551b82
-  created_at:                <%= 5.days.ago.to_s :db  %>
-  remember_token_expires_at: <%= 1.days.from_now.to_s %>
-  remember_token:            77de68daecd823babbb58edb1c8e14d7106e83bb
-  activation_code:           
-  activated_at:              <%= 5.days.ago.to_s :db %>
-      
-aaron:
-  id:                        2
-  login:                     aaron
-  email:                     aaron@example.com
-  # salt:                      da4b9237bacccdf19c0760cab7aec4a8359010b0 # SHA1('1')
-  # crypted_password:          d5c1b67103ba2c8b5641990dc386f506396462b0 # 'monkey'
-  salt:                      4c61aac0fea89e4be2b3697cdc3f506a0c444d79
-  crypted_password:          64b1c27aec2e807c122aea795700fe64fd02241b
-  created_at:                <%= 1.days.ago.to_s :db %>
-  remember_token_expires_at: 
-  remember_token:            
-  activation_code:           1b6453892473a467d07372d45eb05abc2031647a
-  activated_at:              
+one:
+  login: MyString
+  email: MyString
+  crypted_password: MyString
+  password_salt: MyString
+  persistence_token: MyString
+  login_count: 1
+  last_request_at: 2009-07-21 13:19:52
+  last_login_at: 2009-07-21 13:19:52
+  current_login_at: 2009-07-21 13:19:52
+  last_login_ip: MyString
+  current_login_ip: MyString
 
-
-old_password_holder:
-  id:                        3
-  login:                     old_password_holder
-  email:                     salty_dog@example.com
-  salt:                      7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  crypted_password:          00742970dc9e6319f8019fd54864d3ea740f04b1 # test
-  created_at:                <%= 1.days.ago.to_s :db %>
-
-  activation_code:           
-  activated_at:              <%= 5.days.ago.to_s :db %>
-
-
-
-admin:
-  id: 4
-  login: admin
-  email: admin@example.com
-  salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
-  # activation_code: adminscode # only if you're activating new signups
-  created_at: <%= 1.days.ago.to_s :db %>
+two:
+  login: MyString
+  email: MyString
+  crypted_password: MyString
+  password_salt: MyString
+  persistence_token: MyString
+  login_count: 1
+  last_request_at: 2009-07-21 13:19:52
+  last_login_at: 2009-07-21 13:19:52
+  current_login_at: 2009-07-21 13:19:52
+  last_login_ip: MyString
+  current_login_ip: MyString

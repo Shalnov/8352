@@ -1,39 +1,36 @@
 class UsersController < ApplicationController
-
+  before_filter :require_no_user, :only => [:new, :create]
+  before_filter :require_user, :only => [:show, :edit, :update]
+  
   def new
     @user = User.new
   end
  
   def create
-    logout_keeping_session!
     @user = User.new(params[:user])
-    success = @user && @user.save
-    if success && @user.errors.empty?
-      
-      @user.activate! if ENV["RAILS_ENV"] == "development"
-
-      flash[:notice] = "Спасибо за регистрацию. Письмо с кодом активации отправлено вам на почту."
-      redirect_back_or_default('/')
+    if @user.save
+      flash[:notice] = "Account registered!"
+      redirect_back_or_default account_url
     else
-      flash[:error]  = "Ошибка создания учетной записи."
-      render :action => 'new'
+      render :action => :new
     end
   end
-
-  def activate
-    logout_keeping_session!
-    user = User.find_by_activation_code(params[:activation_code]) unless params[:activation_code].blank?
-    case
-    when (!params[:activation_code].blank?) && user && !user.active?
-      user.activate!
-      flash[:notice] = "Регистрация завершена, пожалуйста, залогиньтесь."
-      redirect_to login_url
-    when params[:activation_code].blank?
-      flash[:error] = "Учетная запись не активирована, пожалуйста, откройте ссылку из письма."
-      redirect_back_or_default('/')
-    else 
-      flash[:error]  = "Неверный код активации."
-      redirect_back_or_default('/')
+ 
+  def show
+    @user = @current_user
+  end
+ 
+  def edit
+    @user = @current_user
+  end
+ 
+  def update
+    @user = @current_user # makes our views "cleaner" and more consistent
+    if @user.update_attributes(params[:user])
+      flash[:notice] = "Account updated!"
+      redirect_to account_url
+    else
+      render :action => :edit
     end
   end
 end
