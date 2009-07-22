@@ -4,15 +4,26 @@ module PhoneHelper
   
   
   def h_phone(phone)
+    return '' unless phone    
+    # Может сделать вывод также в городском формате?
+    #str = phone.number.to_s
+    str = phone.to_s
+    if str=~/^79/
+      h "7 (#{str[1..3]}) #{str[4..6]}-#{str[7..8]}-#{str[9..10]}"
+    else
+      h "7 (#{str[1..4]}) #{str[5..6]}-#{str[7..8]}-#{str[9..10]}"
+    end
+  end
+
+  def h_phone_city(phone)
     
     # Может сделать вывод также в городском формате?
-    
-    if phone.number < 79*10**9
-      str = phone.number.to_s
-      h "7 (#{str[1..4]}) #{str[5..6]}-#{str[7..8]}-#{str[9..10]}"
-    else
-      str = phone.number.to_s
+    #str = phone.number.to_s
+    str = phone.to_s
+    if str=~/^79/
       h "7 (#{str[1..3]}) #{str[4..6]}-#{str[7..8]}-#{str[9..10]}"
+    else
+      h "7 (#{str[1..4]}) #{str[5..6]}-#{str[7..8]}-#{str[9..10]}"
     end
   end
 
@@ -59,6 +70,7 @@ module PhoneHelper
     
   def normalize_phone(phone,city=nil)
     city=get_current_city unless city
+    return nil if phone.blank?
     
     phone_old=phone
     phone=phone.to_s.gsub(/[^0-9]/,'')
@@ -75,20 +87,9 @@ module PhoneHelper
       return phone
     end
 
-#    phone = TelefonRename.renamed_number(phone) || phone
-#    TelefonFederal.federal_number(phone) || phone
+    phone = TelefonRename.rename_number(phone)
+    TelefonFederal.federal_number(phone)
 
-    renames=TelefonRename.
-      find_by_sql ["select  newphone || substr(?,length(oldphone)+1,12) as newnumber from telefon_renames where substr(?,1,length(oldphone))=oldphone",
-                  phone,phone]
-    phone = renames[0].newnumber if renames.size>0
-
-    federals=TelefonFederal.
-      find_by_sql ["select  federal || substr(?,length(city)+1,12) as federal from telefon_federals where substr(?,1,length(city))=city",
-                  phone,phone]
-    phone = federals[0].federal if federals.size>0
-
-    phone
   end
 
   

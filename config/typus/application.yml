@@ -25,16 +25,35 @@ Category:
 
 City:
   fields:
-    list: name, prefix, is_prefix_owner
-    form: name, prefix, is_prefix_owner
-    show: id, name, prefix, is_prefix_owner
+    list: name, ctype, prefix, is_prefix_owner
+    form: ctype, name, prefix, is_prefix_owner
+    show: id, ctype, name, prefix, is_prefix_owner
+    options:
+      selectors: ctype
   actions:
     edit: show
   order_by:
-  filters:
+  filters: ctype
   search: name, prefix
   options:
     default_action_on_item: show
+  application: 8352.info
+  description:
+
+TelefonFederal:
+  fields:
+    list: operator, federal, city
+    form: federal, city, operator
+    show: federal, city, operator
+  actions:
+    index: check_number
+    edit: check_number
+  order_by: operator, federal
+  relationships: 
+  filters: operator
+  options:
+    per_page: 50
+  search: federal, city, operator
   application: 8352.info
   description:
 
