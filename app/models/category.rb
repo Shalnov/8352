@@ -16,12 +16,12 @@ class Category < ActiveRecord::Base
   validates_uniqueness_of :name, :case_sensitive=>false, :scope => [:parent_id]
   validates_presence_of :name
   
-  memoize :children
+#  memoize :children
 
   class << self 
     extend ActiveSupport::Memoizable 
     
-    memoize :roots
+ #   memoize :roots
 
   end 
 #   define_index do

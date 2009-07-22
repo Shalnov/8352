@@ -41,7 +41,7 @@ role :db, domain, :primary => true
 #############################################################
 
 set :scm, :git
-set :branch, "master"
+#set :branch, "master"
 
 # http://www.capify.org/index.php/SCM_Server_Non-Standard_Port
 #set :repository, "git://github.com/dapi/8352.git"
