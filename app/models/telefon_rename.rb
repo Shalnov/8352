@@ -1,4 +1,10 @@
 class TelefonRename < ActiveRecord::Base
+  
+  validates_presence_of :oldphone, :newphone, :rename_date
+  validates_uniqueness_of  :oldphone, :newphone
+  validates_format_of   :oldphone, :with => /^7\d\d\d+$/
+  validates_format_of   :newphone, :with => /^7\d\d\d+$/
+
 
   def self.rename_number(phone)
     

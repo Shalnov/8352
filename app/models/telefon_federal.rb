@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
 class TelefonFederal < ActiveRecord::Base
+  
+  validates_presence_of :federal, :city, :operator
+  validates_uniqueness_of  :federal, :city
+  validates_format_of   :federal, :with => /^7\d\d\d+$/
+  validates_format_of   :city, :with => /^7\d\d\d+$/
 
   def self.federal_number(phone)
     federals=TelefonFederal.

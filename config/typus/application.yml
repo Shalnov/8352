@@ -57,6 +57,23 @@ TelefonFederal:
   application: 8352.info
   description:
 
+TelefonRename:
+  fields:
+    list: oldphone, newphone, rename_date
+    form: oldphone, newphone, rename_date
+    show: oldphone, newphone, rename_date
+  actions:
+    index: check_number
+    edit: check_number
+  order_by: oldphone, newphone
+  relationships: 
+  filters: 
+  options:
+    per_page: 50
+  search: oldphone, newphone
+  application: 8352.info
+  description:
+
 Tag:
   fields:
     list: id, name, taggings_count
