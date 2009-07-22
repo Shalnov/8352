@@ -6,13 +6,13 @@
 Category:
   fields:
     list: name, parent, companies_count, position, hidden
-    form: name, parent, description, hidden
+    form: parent, name, description, hidden
     show: id, name, description, companies_count, position, children_count, ancestors_count, descendants_count, hidden, parent
   actions:
     index:
     edit:
   order_by: parent_id, position
-  relationships: companies #, parent, children #, c
+#  relationships: children #companies #, parent, children #, 
   options:
     per_page: 30
   filters:
@@ -267,9 +267,9 @@ ResultCategory:
 
 Source:
   fields:
-    list: grabber_module, target_url
-    form: target_url, grabber_module, description
-    show: target_url, id, grabber_module, description, created_at, updated_at
+    list: target_url
+    form: target_url, grabber_name
+    show: target_url, id, grabber_name, created_at, updated_at
   actions:
     edit: show
     show: import_results, reset_imported_categories, reset_imported_companies

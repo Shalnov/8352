@@ -2,8 +2,8 @@
 #   gem install sqlite3-ruby (not necessary on OS X Leopard)
 development:
   adapter: postgresql
-  database: d8352_dev
-  username: anton
+  database: d8352_site_dev
+  username: danil
   password: 
   host: 127.0.0.1
 # d8352_dev
@@ -25,4 +25,10 @@ production:
   database: d8352
   username: 8352.info
   password: 
+  host: orionet.ru
+
+grabber:
+  adapter: postgresql
+  database: d8352grabber
+  username: 8352.info.grabber
   host: orionet.ru

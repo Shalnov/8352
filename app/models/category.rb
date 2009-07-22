@@ -13,7 +13,7 @@ class Category < ActiveRecord::Base
 
   has_many :companies #, :counter_cache => true
   
-  
+  validates_uniqueness_of :name, :case_sensitive=>false, :scope => [:parent_id]
   validates_presence_of :name
   
   memoize :children

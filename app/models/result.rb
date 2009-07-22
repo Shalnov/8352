@@ -1,17 +1,15 @@
 # -*- coding: utf-8 -*-
 class Result < ActiveRecord::Base
   
-  belongs_to :link
+  self.establish_connection :grabber
+  
   belongs_to :company, :counter_cache => true
   
   belongs_to :source
 
-
   belongs_to :result_category
   has_one :category, :through=>:result_category
 
-  
-  
   include PhoneHelper
   extend ActiveSupport::Memoizable
   
@@ -24,13 +22,10 @@ class Result < ActiveRecord::Base
   aasm_initial_state :updated
   aasm_state :updated
   aasm_state :pending
-  aasm_state :imported
+  aasm_state :importedq
   aasm_state :partly_imported
   
-  def self.state
-    ['updated','pending','imported','partly_imported']
-  end
-  
+   
   # Запись обновилась из источника
   aasm_event :set_updated do
     transitions :to => :updated, :from => [:imported,:hunged]
@@ -69,6 +64,13 @@ class Result < ActiveRecord::Base
   }
   
 
+  
+    # для typus
+  def self.state
+    ['updated','pending','imported','partly_imported']
+  end
+
+  
   
   def company_fields
     { 

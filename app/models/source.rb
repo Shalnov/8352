@@ -1,9 +1,15 @@
 # -*- coding: utf-8 -*-
 class Source < ActiveRecord::Base
-  has_many :links
+  #establish_connection configurations[RAILS_ENV]['grabber2']  
+  self.establish_connection :grabber
+  
   has_many :results
+
+  has_many :ad_results
+
   has_many :companies, :through => :results
   has_many :result_categories
+  
 #  has_many :jobs
 
   after_create :update_from_grabber_module
