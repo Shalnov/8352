@@ -11,7 +11,7 @@ class Category < ActiveRecord::Base
   # чтобы работыло move_higher через typus
   acts_as_list
 
-  has_many :companies, :counter_cache => true
+  has_many :companies #, :counter_cache => true
   
   
   validates_presence_of :name

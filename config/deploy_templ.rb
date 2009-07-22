@@ -48,6 +48,7 @@ set :branch, "master"
 set :repository, "ssh://danil@dapi.orionet.ru/home/danil/projects/github/dapi/8352"
 
 set :deploy_via, :remote_cache
+#set :deploy_via, :copy
 set :git_enable_submodules, 1
 
 #############################################################
