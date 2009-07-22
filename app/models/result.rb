@@ -86,6 +86,7 @@ class Result < ActiveRecord::Base
 
   
   def import_new_company
+    # TODO Лочить запись results при 
     self.create_company(self.company_fields)
     self.company.update_phones(self.normalized_phones)
     self.set_imported
@@ -94,7 +95,7 @@ class Result < ActiveRecord::Base
   
   
   def update_company(company=nil)
-        
+    # TODO Лочить запись results при 
     self.company=company if company
     # TODO Обновление и других параметров, помимо телефонов
     self.company.update_phones(self.normalized_phones)

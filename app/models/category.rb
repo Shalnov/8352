@@ -7,14 +7,19 @@ class Category < ActiveRecord::Base
   
   acts_as_category
   
-
   # чтобы работыло move_higher через typus
   acts_as_list
-
+ 
   has_many :companies #, :counter_cache => true
   
   validates_uniqueness_of :name, :case_sensitive=>false, :scope => [:parent_id]
   validates_presence_of :name
+  
+  before_save :nill_hidden
+  
+  def nill_hidden
+    self.hidden=nil unless self.hidden
+  end
   
 #  memoize :children
 
