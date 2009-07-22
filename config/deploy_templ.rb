@@ -42,8 +42,11 @@ role :db, domain, :primary => true
 
 set :scm, :git
 set :branch, "master"
-set :repository, "git://github.com/dapi/8352.git"
-#set :repository, "git://github.com/atlancer/8352.git"
+
+# http://www.capify.org/index.php/SCM_Server_Non-Standard_Port
+#set :repository, "git://github.com/dapi/8352.git"
+set :repository, "ssh://danil@dapi.orionet.ru/home/danil/projects/github/dapi/8352"
+
 set :deploy_via, :remote_cache
 set :git_enable_submodules, 1
 

@@ -19,9 +19,10 @@ test:
   pool: 5
   timeout: 5000
 
+
 production:
   adapter: postgresql
-  database: d8352_production
-  username: d8352
-  password:
-  host: 127.0.0.1
+  database: d8352
+  username: 8352.info
+  password: 
+  host: orionet.ru

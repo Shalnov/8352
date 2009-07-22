@@ -12,15 +12,13 @@ Category:
     index:
     edit:
   order_by: parent_id, position
-  relationships: children, companies, parent
+  relationships: companies #, parent, children #, c
   options:
     per_page: 30
   filters:
   search: name
   application: 8352.info
   description:
-
-
 
 
 City:
