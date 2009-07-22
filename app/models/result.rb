@@ -3,6 +3,7 @@ class Result < ActiveRecord::Base
   
   belongs_to :link
   belongs_to :company, :counter_cache => true
+  
   belongs_to :source
 
 
@@ -25,6 +26,10 @@ class Result < ActiveRecord::Base
   aasm_state :pending
   aasm_state :imported
   aasm_state :partly_imported
+  
+  def self.state
+    ['updated','pending','imported','partly_imported']
+  end
   
   # Запись обновилась из источника
   aasm_event :set_updated do

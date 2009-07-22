@@ -9,8 +9,6 @@ class Category < ActiveRecord::Base
 
   has_many :companies #, :counter_cache => true
   
-#  memoize :roots
-
   
   validates_presence_of :name
   

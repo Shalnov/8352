@@ -290,6 +290,8 @@ Result:
     form: name, address, phones, email, site_url, result_category, category_name, work_time, other_info, raw_html, http_last_modify, company, is_checked, state, is_removed
 #, link
     show: id, name, address, phones, email, site_url, category_name, work_time, other_info, raw_html, http_last_modify, is_checked, state, is_removed, created_at, updated_at, link, company
+    options:
+      selectors: state
   actions:
     index:
     edit:

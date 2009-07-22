@@ -1,5 +1,8 @@
-<ul>
-<% for category in @categories %>
-	<%= render_categories_front_end(category, false, true) %>
-<% end %>
+<!--<ul>
+<%# for category in @categories %>
+	<%#= render_categories_front_end(category, false, true) %>
+<%# end %>
 </ul>
+-->
+<%= aac_sortable_tree(Category) %>
+<%# aac_rights_tree(Category.roots,{:matrix=>true}) %>
