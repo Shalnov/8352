@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 class Source < ActiveRecord::Base
-  #establish_connection configurations[RAILS_ENV]['grabber2']  
+
   self.establish_connection :grabber
   
   has_many :results

@@ -10,7 +10,7 @@ Category:
     show: id, name, description, companies_count, position, children_count, ancestors_count, descendants_count, hidden, parent
   actions:
     index:
-    edit:
+    edit: show
   order_by: parent_id, position
 #  relationships: children #companies #, parent, children #, 
   options:
