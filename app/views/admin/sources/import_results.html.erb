@@ -6,8 +6,10 @@
 <p>Всего обработано: <%= @result[:all] %></p>
 <p>Еще необработано записей: <%= @source.results.updated.count  %></p>
 
-<hr>
-<%= link_to "back..", "/admin/sources/#{@source.id}" %>
+<hr/>
+
+<%= link_to "back..", "/admin/sources/show/#{@source.id}" %>
+
 
 
 

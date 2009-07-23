@@ -3,8 +3,7 @@
   <%= actions %>
 <% end %>
 
-<h2><%= link_to @resource[:class].typus_human_name.pluralize, :action => 'index' %> &rsaquo; 
-    <%= _("Show") %></h2>
+<h2><%= link_to @resource[:class].typus_human_name.pluralize, :action => 'index' %> &rsaquo;  <%= _("Show") %></h2>
 
 <%= typus_block :location => @resource[:self], :partial => 'show' %>
 
@@ -20,7 +19,7 @@
 <dl>
 <!--<dt>Записей импортировано</dt><dd><%# @item.companies.count  %></dd> -->
 <dt>Обновленных</dt><dd><%= @item.results.updated.count  %></dd>
-<dt>Записей, готовых к импортированию</dt><dd><%= @item.results.importable.count  %></dd>
+<dt>Готовых к импортированию</dt><dd><%= @item.results.importable.count  %></dd>
 </dl>
 
 <hr/>

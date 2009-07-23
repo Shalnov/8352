@@ -22,7 +22,7 @@ class Result < ActiveRecord::Base
   aasm_initial_state :updated
   aasm_state :updated
   aasm_state :pending
-  aasm_state :importedq
+  aasm_state :imported
   aasm_state :partly_imported
   
    
@@ -52,15 +52,15 @@ class Result < ActiveRecord::Base
   
 
   # Обновленные
-  named_scope :updated, { :conditions => { :state => 'updated' },
-                          :order => :id }
+  named_scope :updated, { 
+    :conditions => { :state => 'updated' },
+    :order => :id 
+  }
   
   # Готовые к имортированую (все для кого установлены категории
-  named_scope :importable, lambda { |source_id|  {
-      :include => :result_category,
-      :conditions => ["state='updated' AND results.source_id=? AND result_categories.id=results.result_category_id", source_id]
-      #      :limit => 500
-    }
+  named_scope :importable,   {
+    :include => :result_category,
+    :conditions => ["state='updated' and result_category_id is not null"]
   }
   
 
