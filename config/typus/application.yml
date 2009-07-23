@@ -296,7 +296,7 @@ Result:
   order_by:
   options:
     selectors: state
-    per_page: 10
+    per_page: 30
   relationships: company, link
   filters: aasm_state, is_removed
   search: name, address, phones, email, site_url

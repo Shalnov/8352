@@ -38,7 +38,9 @@
     </tr>
   <% @item.unprocessed_categories.each_with_index do |rc, i| %>
     <tr>
-      <td><%= hidden_field "categories[#{i}]", "title", :value => rc.category_name %><%= "#{rc.category_name} (#{rc.count})" %></td>
+      <td><%= hidden_field "categories[#{i}]", "title", :value => rc.category_name %>
+<%= link_to "#{rc.category_name} (#{rc.count})", :controller=>"results", :source_id=>@item.id, :category_name=>rc.category_name %>
+</td>
       <td>
 <%# , :selected=>"all" %>
 <%= aac_select @croots, {:name=>"categories[#{i}][id]", :option_nil=>"-", :option_all=>"auto" } %></td>
