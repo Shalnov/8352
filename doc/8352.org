@@ -104,6 +104,7 @@
 *** Ищем телефоны в поле description
 		http://dapi.orionet.ru:3000/admin/results/edit/56612
 		
+*** AJAX Дерево категорий
 *** Преобразуем address:
 **** Город (city)
 **** Адрес по старнарту России

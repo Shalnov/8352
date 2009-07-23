@@ -69,9 +69,9 @@ class Source < ActiveRecord::Base
   end
   
   def unprocessed_categories
-    Result.find_by_sql(["select results.category_name, count(*) from results left join result_categories on result_categories.category_name=results.category_name where state='updated' and category_id IS NULL and results.source_id=? group by results.category_name",
+    Result.find_by_sql(["select results.category_name, count(*) as count from results left join result_categories on result_categories.category_name=results.category_name where state='updated' and category_id IS NULL and results.source_id=? group by results.category_name",
                         self.id]).
-      map{|r| r.category_name}.compact.sort
+      sort { |x,y| x.category_name<=>y.category_name }
   end
 
 
