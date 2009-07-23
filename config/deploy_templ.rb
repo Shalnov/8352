@@ -18,7 +18,7 @@ default_run_options[:pty] = false
 ssh_options[:forward_agent] = true
 #ssh_options[:verbose] = :debug
 #ssh_options[:config] = "~/.ssh/config"
-ssh_options[:keys] = [File.join(ENV["HOME"], ".ssh",  "identity")] 
+#ssh_options[:keys] = [File.join(ENV["HOME"], ".ssh",  "identity")] 
 #ssh_options[:keys] = ["~/.ssh/identity"]
 set :use_sudo, false
 set :scm_verbose, true

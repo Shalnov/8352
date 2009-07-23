@@ -250,8 +250,9 @@ Link:
 
 ResultCategory:
   fields:
-    list: category_name, category
-    show: id, category_name, category
+    list: category_name, category, source_id
+    show: id, category_name, category, source_id
+    form: category_name, category, source
 #    options: 
 #      templates:
 #        category_id: category
