@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 class Category < ActiveRecord::Base
   
-  extend ActiveSupport::Memoizable 
+#  extend ActiveSupport::Memoizable 
   
   # TODO Попытаться отключить обновление разных параметров при каждом добавлении категории
   
@@ -24,12 +24,12 @@ class Category < ActiveRecord::Base
   
 #  memoize :children
 
-  class << self 
-    extend ActiveSupport::Memoizable 
+#  class << self 
+#    extend ActiveSupport::Memoizable 
     
-   memoize :roots
+#   memoize :roots
 
-  end 
+#  end 
 #   define_index do
 #     indexes :name
 #     indexes description

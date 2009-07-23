@@ -5,8 +5,8 @@
 
 Category:
   fields:
-    list: name, parent, companies_count, position, hidden
-    form: parent, name, description, hidden
+    list: parent, name, companies_count, position, hidden
+    form: parent, name, description
     show: id, name, description, companies_count, position, children_count, ancestors_count, descendants_count, hidden, parent
   actions:
     index:
@@ -284,7 +284,7 @@ Source:
 
 Result:
   fields:
-    list: name, category_name, address, state, company, source
+    list: category_name, name, address, state
     form: name, address, phones, email, site_url, result_category, category_name, work_time, other_info, raw_html, http_last_modify, company, is_checked, state, is_removed
 #, link
     show: id, name, address, phones, email, site_url, category_name, work_time, other_info, raw_html, http_last_modify, is_checked, state, is_removed, created_at, updated_at, link, company
@@ -293,7 +293,7 @@ Result:
   actions:
     index:
     edit:
-  order_by:
+  order_by: category_name, name
   options:
     selectors: state
     per_page: 30
