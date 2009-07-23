@@ -22,7 +22,7 @@ class Category < ActiveRecord::Base
     self.hidden=nil# unless self.hidden
   end
   
-  memoize :children
+#  memoize :children
 
   class << self 
     extend ActiveSupport::Memoizable 
@@ -87,7 +87,7 @@ class Category < ActiveRecord::Base
   
   def self.find_or_create_from_string(str)
     category=nil
-    str.split(/,|;|\//).map { |x|
+    str.split(/\//).map { |x|
       x.strip!
       category=Category.find_or_create(x,category)
     }
