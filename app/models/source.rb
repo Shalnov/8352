@@ -7,7 +7,7 @@ class Source < ActiveRecord::Base
 
   has_many :ad_results
 
-  has_many :companies, :through => :results
+#  has_many :companies, :through => :results
   has_many :result_categories
   
 #  has_many :jobs
@@ -69,8 +69,9 @@ class Source < ActiveRecord::Base
   end
   
   def unprocessed_categories
-    Result.find_by_sql(["select results.category_name, count(*) as count from results left join result_categories on result_categories.category_name=results.category_name where state='updated' and category_id IS NULL and results.source_id=? group by results.category_name",
-                        self.id]).
+#    Result.find_by_sql(["select results.category_name, count(*) as count from results left join result_categories on result_categories.category_name=results.category_name where state='updated' and category_id IS NULL and results.source_id=? group by results.category_name",
+    Result.find_by_sql([" select results.category_name, count(*) as count from results  where state='updated'  and results.source_id=? and category_name not in (select category_name from result_categories where source_id=?) group by results.category_name",
+                        self.id, self.id]).
       sort { |x,y| x.category_name<=>y.category_name }
   end
 
