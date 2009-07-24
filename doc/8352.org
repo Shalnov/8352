@@ -10,11 +10,12 @@
 		:PROPERTIES:
 		:hours:    30
 		:END:
-*** DONE yandex.ru/Чебоксары
+*** DONE adresa.yandex.ru/?region=11156
 *** yell.ru/Чебоксары
 *** delpo.ru
 *** www.domotido.ru/company
 *** kompas21.ru
+*** 21.e-adres.ru
 ** Авто экспорт данных [50%] 																					 :dapi:
 
 	 Нажали на кнопку "автоэкспорт" серве

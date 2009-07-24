@@ -5,7 +5,7 @@
 
 Category:
   fields:
-    list: parent, name, companies_count, position, hidden
+    list: name, parent, companies_count, position, hidden
     form: parent, name, description
     show: id, name, description, companies_count, position, children_count, ancestors_count, descendants_count, hidden, parent
   actions:
