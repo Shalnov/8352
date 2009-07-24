@@ -92,3 +92,6 @@ require 'configatron'
 configatron.site_url    = '8352.info'
 configatron.admin_email = 'admin@orionet.ru'
 configatron.companies_per_page = 10
+
+Typus::Configuration.options[:recover_password] = true
+Typus::Configuration.options[:index_after_save] = true
