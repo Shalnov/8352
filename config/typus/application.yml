@@ -5,9 +5,9 @@
 
 Category:
   fields:
-    list: name, parent, companies_count, position, hidden
-    form: parent, name, description
-    show: id, name, description, companies_count, position, children_count, ancestors_count, descendants_count, hidden, parent
+    list: name, parent, tag_list #companies_count, position, hidden
+    form: parent, name, tag_list, description
+    show: id, name, description, tag_list, companies_count, position, children_count, ancestors_count, descendants_count, hidden, parent
   actions:
     index:
     edit: show
@@ -16,6 +16,7 @@ Category:
   options:
     per_page: 30
   filters:
+  relationships: tags
   search: name
   application: 8352.info
   description:
@@ -74,31 +75,33 @@ TelefonRename:
 
 Tag:
   fields:
-    list: id, name, taggings_count
-    form: name, taggings_count
-    show: id, name, taggings_count
+    list: name, is_category, taggings_count
+    form: name, is_category, taggings_count
+    show: id, name, is_category, taggings_count
   actions:
     index:
     edit:
-  order_by:
+  order_by: name
   relationships: taggings
   filters:
-  search:
+  options:
+    per_page: 50
+  search: name
   application: 8352.info
   description:
 
 Tagging:
   fields:
-    list: id, tag
-    form: tag
-    show: id, created_at, updated_at, tag
+    list: id, tag, taggable_id, taggable_type
+    form: tag, taggable_id, taggable_type
+    show: id, created_at, updated_at, tag, taggable_id, taggable_type
   actions:
     index:
     edit:
-  order_by:
+  order_by: 
   relationships: tag
-  filters:
-  search:
+  filters: 
+  search: tag
   application: 8352.info
   description:
 
@@ -115,16 +118,18 @@ Tagging:
 
 Company:
   fields:
-    list: name, results_count, address, site, category
-    form: name, inn, address, site, director, description, working_time, sources
-    show: id, results_count, name, inn, address, site, director, description, working_time, sources, created_at, updated_at, pending, dump, category
+    list: name, results_count, tag_list, category
+    form: name, inn, address, site, tag_list, director, description, working_time
+    show: id, results_count, name, tag_list, inn, address, site, director, description, working_time, sources, created_at, updated_at, pending, dump, category
   actions:
     index:
     edit:
   order_by:
-  relationships: category, emails, phones, results
-  filters: category
-  search: name, address
+  relationships: category, emails, phones, results, tags
+  filters: category, tag
+  options:
+    per_page: 30
+  search: name, address, tag
   application: Company catalog
   description:
 
@@ -170,65 +175,6 @@ Phone:
 
 # APPLICATION:
 #
-# Company catalog
-#
-
-
-Company:
-  fields:
-    list: name, results_count, city, address, site, category
-    form: name, inn, address, city, site, director, description, working_time, sources
-    show: id, results_count, name, inn, address, site, city, director, description, working_time, sources, created_at, updated_at, pending, dump, category
-  actions:
-    index:
-    edit:
-  order_by:
-  relationships: category, emails, phones, results
-  filters: category
-  search: name, address
-  application: Company catalog
-  description:
-
-Email:
-  fields:
-    list: id, email, person, department, company
-    form: email, person, department, company
-    show: id, email, person, department, company
-  actions:
-    index:
-    edit:
-  order_by:
-  relationships: company
-  filters:
-  options:
-    per_page: 30
-  search:
-  application: Company catalog
-  description:
-
-
-Phone:
-  fields:
-    list: id, number, company, person, department, description
-    form: number, person, department, working_time, description, short_code, company
-    show: id, number, person, department, working_time, description, short_code, created_at, updated_at, company
-  actions:
-    index:
-    edit:
-  order_by:
-  relationships: company
-  filters:
-  search: number, person, departmend
-  options:
-    per_page: 30
-  application: Company catalog
-  description:
-
-
-
-
-# APPLICATION:
-#
 # Company grabber
 #
 
@@ -250,9 +196,9 @@ Link:
 
 ResultCategory:
   fields:
-    list: category_name, category, source_id
-    show: id, category_name, category, source_id
-    form: category_name, category, source
+    list: category_name, category, tag_list, source_id
+    show: id, category_name, category, tag_list, source_id
+    form: category_name, category, tag_list, source
 #    options: 
 #      templates:
 #        category_id: category
@@ -262,6 +208,9 @@ ResultCategory:
     exit:
   order_by: category_name
   filters:
+  options:
+    per_page: 30
+  relationships: tags
   search: category_name
   application: Company grabber
   description:

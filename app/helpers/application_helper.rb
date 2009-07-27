@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 module ApplicationHelper
-  include ActsAsTaggable::TagsHelper
+#  include ActsAsTaggable::TagsHelper
   include PhoneHelper
   include Admin::PublicHelper
 
@@ -35,6 +35,7 @@ module ApplicationHelper
   def title(str, container = nil)
     @page_title = str
     content_tag(container, str) if container
+    # Использоваль content_for для замены title страницы?
   end
 
   def flash_messages

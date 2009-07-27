@@ -3,9 +3,9 @@
 
 class Company < ActiveRecord::Base
   
-
-#  acts_as_taggable
-
+  acts_as_taggable
+  
+ # set_cached_tag_list_column_name "my_caching_column_name"
 
 #  serialize :dump, Hash
   
