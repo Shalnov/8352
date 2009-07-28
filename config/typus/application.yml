@@ -3,24 +3,6 @@
 # Use the README file on the same folder as this file as a reference to
 # customize this file to your needs.
 
-Category:
-  fields:
-    list: name, parent, tag_list #companies_count, position, hidden
-    form: parent, name, tag_list, description
-    show: id, name, description, tag_list, companies_count, position, children_count, ancestors_count, descendants_count, hidden, parent
-  actions:
-    index:
-    edit: show
-  order_by: parent_id, position
-#  relationships: children #companies #, parent, children #, 
-  options:
-    per_page: 30
-  filters:
-  relationships: tags
-  search: name
-  application: 8352.info
-  description:
-
 
 City:
   fields:
@@ -73,22 +55,42 @@ TelefonRename:
   application: 8352.info
   description:
 
+
 Tag:
   fields:
-    list: name, is_category, taggings_count
-    form: name, is_category, taggings_count
-    show: id, name, is_category, taggings_count
+    list: name, is_primary, taggings_count
+    form: name, is_primary, taggings_count
+    show: id, name, is_primary, taggings_count
   actions:
     index:
     edit:
   order_by: name
-  relationships: taggings
+  relationships: taggings, tag_synonyms
+  filters: is_primary
+  options:
+    per_page: 50
+  search: name
+  application: Tags
+  description:
+
+TagsSynonym:
+  fields:
+    list: tag, name
+    form: tag, name
+    show: tag, name
+  actions:
+    index:
+    edit:
+  order_by: name
+  relationships: tag
   filters:
   options:
     per_page: 50
   search: name
-  application: 8352.info
+  application: Tags
   description:
+
+
 
 Tagging:
   fields:
@@ -102,7 +104,7 @@ Tagging:
   relationships: tag
   filters: 
   search: tag
-  application: 8352.info
+  application: Tags
   description:
 
 
@@ -114,6 +116,24 @@ Tagging:
 #
 # Company catalog
 #
+
+Category:
+  fields:
+    list: name, parent, tag_list #companies_count, position, hidden
+    form: parent, name, tag_list, description
+    show: id, name, description, tag_list, companies_count, position, children_count, ancestors_count, descendants_count, hidden, parent
+  actions:
+    index:
+    edit: show
+  order_by: parent_id, position
+#  relationships: children #companies #, parent, children #, 
+  options:
+    per_page: 30
+  filters:
+  relationships: tags
+  search: name
+  application: Company catalog
+  description: Основные категории компаний
 
 
 Company:
@@ -131,7 +151,7 @@ Company:
     per_page: 30
   search: name, address, tag
   application: Company catalog
-  description:
+  description: Каталог компаний
 
 Email:
   fields:

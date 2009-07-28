@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class ResultCategory < ActiveRecord::Base
   
   self.establish_connection :grabber
@@ -13,6 +14,9 @@ class ResultCategory < ActiveRecord::Base
 
   after_save :update_results
   before_destroy :update_results
+  
+  # TODO Проверять на обязательное присутствие одного из primary тэгов
+  # или, может быть, на один из тэгов присутствующий в category
   
   def update_results
     Result.

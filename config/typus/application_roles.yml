@@ -32,6 +32,7 @@ admin:
   ResultCategory: create, read, update, delete
   Tag: create, read, update, delete
   Tagging: create, read, update, delete
+  TagsSynonym: create, read, update, delete
   TelefonFederal: create, read, update, delete, check_number
   TelefonRename: create, read, update, delete, check_number
   User: create, read, update, delete
