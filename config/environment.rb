@@ -89,6 +89,8 @@ Rails::Initializer.run do |config|
 end
 
 require 'configatron'
+require 'lib/tags'
+
 configatron.site_url    = '8352.info'
 configatron.admin_email = 'admin@orionet.ru'
 configatron.companies_per_page = 10

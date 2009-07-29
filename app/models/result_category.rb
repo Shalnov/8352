@@ -18,6 +18,10 @@ class ResultCategory < ActiveRecord::Base
   # TODO Проверять на обязательное присутствие одного из primary тэгов
   # или, может быть, на один из тэгов присутствующий в category
   
+  def name
+    self.category_name
+  end
+  
   def update_results
     Result.
       update_all({

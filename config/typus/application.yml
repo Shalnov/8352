@@ -58,14 +58,14 @@ TelefonRename:
 
 Tag:
   fields:
-    list: name, is_primary, taggings_count
-    form: name, is_primary, taggings_count
-    show: id, name, is_primary, taggings_count
+    list: name, is_primary, taggings #,  taggings_count
+    form: name, is_primary, description, taggings_count
+    show: id, name, is_primary, description, taggings_count
   actions:
     index:
     edit:
   order_by: name
-  relationships: taggings, tag_synonyms
+  relationships: taggings, tags_synonyms
   filters: is_primary
   options:
     per_page: 50
@@ -75,14 +75,13 @@ Tag:
 
 TagsSynonym:
   fields:
-    list: tag, name
-    form: tag, name
-    show: tag, name
+    list: name, tag
+    form: name, tag
+    show: name, tag
   actions:
     index:
     edit:
   order_by: name
-  relationships: tag
   filters:
   options:
     per_page: 50
@@ -91,16 +90,17 @@ TagsSynonym:
   description:
 
 
-
 Tagging:
   fields:
-    list: id, tag, taggable_id, taggable_type
+    list: id, tag, taggable_type, taggable
     form: tag, taggable_id, taggable_type
-    show: id, created_at, updated_at, tag, taggable_id, taggable_type
+    show: id, created_at, updated_at, tag, taggable, taggable_id, taggable_type
   actions:
     index:
     edit:
   order_by: 
+  options:
+    per_page: 50
   relationships: tag
   filters: 
   search: tag
