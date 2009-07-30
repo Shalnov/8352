@@ -1,6 +1,19 @@
 <p>
-  <b>Тэг:</b>
-  <%=h @tag.name %>
+  <b>Тэги:</b>
+   <% @tags.each do |t| %>
+<%= h t.name %>,
+   <% end %>
 </p>
 
-<%= render :partial => "companies/list", :locals => { :companies => @companies }%>
+<h2>См.также (<%= @nested_tags.size %>)</h2>
+
+<% if @nested_tags.size > 0 %>
+
+<% for t in @nested_tags %>
+<%=h t %>, 
+<% end %>
+
+	<%#= will_paginate companies %>
+<% end %>
+
+<%# render :partial => "companies/list", :locals => { :companies => @companies }%>

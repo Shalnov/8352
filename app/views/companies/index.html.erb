@@ -1,35 +1,6 @@
 <h1>Listing companies</h1>
 
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Full name</th>
-    <th>Inn</th>
-    <th>Address</th>
-    <th>Site</th>
-    <th>Director</th>
-    <th>Description</th>
-    <th>Working time</th>
-    <th>Sources</th>
-  </tr>
-
-<% for company in @companies %>
-  <tr>
-    <td><%=h company.name %></td>
-    <td><%=h company.full_name %></td>
-    <td><%=h company.inn %></td>
-    <td><%=h company.address %></td>
-    <td><%=h company.site %></td>
-    <td><%=h company.director %></td>
-    <td><%=h company.description %></td>
-    <td><%=h company.working_time %></td>
-    <td><%=h company.sources %></td>
-    <td><%= link_to 'Show', company %></td>
-    <td><%= link_to 'Edit', edit_company_path(company) %></td>
-    <td><%= link_to 'Destroy', company, :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
-<% end %>
-</table>
+<%= render :partial => "companies/list", :locals => { :companies => @companies }%>
 
 <br />
 

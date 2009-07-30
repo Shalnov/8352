@@ -148,8 +148,8 @@ Company:
   relationships: category, emails, phones, results, tags
   filters: category, tag
   options:
-    per_page: 30
-  search: name, address, tag
+    per_page: 50
+  search: name, address
   application: Company catalog
   description: Каталог компаний
 

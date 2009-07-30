@@ -1,33 +1,71 @@
+# -*- coding: utf-8 -*-
 class TagsController < ApplicationController
-#  layout 'streamlined'
-#  acts_as_streamlined
-end
-
-class TagsBackup
-  # GET /tags
-  # GET /tags.xml
   def index
-    @tags = Company.tag_counts(:conditions => {:pending => false})
+    @tags = Company.tag_counts() #:conditions => {:pending => false}
 
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @tags }
     end
   end
-
-  # GET /tags/1
-  # GET /tags/1.xml
+  
+  
   def show
-    @tag = Tag.find_by_name(params[:id])
-
-    @companies = @tag.taggings.map(&:taggable).compact.uniq
-    @companies = @companies.paginate :page => params[:page], :per_page => configatron.companies_per_page
+    @names = params[:id].split(',')
+    
+    @tags = @names.map { |name| Tag.find_by_name(name) }
+    
+    @companies=Company.find_tagged_with(params[:id],:match_all=>true)
+    
+    # Все теги выбранных элементов помимо указанных тэгов
+    #    @nested_tags=@taggings.map(&:tag_list)
+    
+    
+    @nested_tags=Tag.nested_tags(@tags)
+    
+    
+#        .reject{|t| t.taggable_type!='RestultCategory'}.map(&:taggable).compact.uniq
+ #   @tags.map
+    
+    #    res=ResultCategory.find_tagged_with(params[:id],:match_all=>true)
+#    @taggings=Tagging.find(:all, :conditions=>{:tag_id=>@tags.map { |t| t.id}})
+    
+#    @taggables=@taggings.map(&:tag).uniq.delete(@tags) || []
+    
+#    @taggables=@taggings.map(&:tag).uniq.delete(@tags) || []
+    
+#    @taggables=
+ #   @nested_tags=@taggings.map(&:tag).uniq.delete(@tags) || []
+    
+#    @tag = Tag.find_by_name(params[:id])
+    
+#    @companies = @tag.taggings.map(&:taggable).compact.uniq
+#    @companies = @tag.taggings.reject{|t| t.taggable_type!='Company'}.map(&:taggable).compact.uniq
+#    @cats = @tag.taggings.reject{|t| t.taggable_type!='RestultCategory'}.map(&:taggable).compact.uniq
+#    @cats = @tag.taggings.map(&:taggable).compact.uniq
+    
+#    @nested_tags = []
+#     @tag.taggings.map(&:taggable).each { |t| @nested_tags=@nested_tags+t.tags }
+    
+#     @nested_tags.compact.uniq.delete(@tag).sort { |x,y| x.name<=>y.name }
+    
+#    @companies = @companies.paginate :page => params[:page], :per_page => configatron.companies_per_page
     
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @tag }
+   #   format.xml  { render :xml => @tag }
     end
   end
+
+  
+end
+
+class TagsBackup
+  # GET /tags
+  # GET /tags.xml
+
+  # GET /tags/1
+  # GET /tags/1.xml
 
   # GET /tags/new
   # GET /tags/new.xml

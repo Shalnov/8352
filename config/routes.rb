@@ -34,8 +34,11 @@ ActionController::Routing::Routes.draw do |map|
   map.resource  :account, :controller => "users"
   map.resources :users
   
-  map.resources :companies,   :collection => { :search => :post }
+  map.resources :companies,   :has_many => [:tags], :collection => { :search => :post }
   map.resources :categories,  :has_many => [:companies]
+  
+  map.resources :tags
+  
 #  map.resources :tags,        :has_many => [:companies]
 
   map.connect ':controller/:action/:id'

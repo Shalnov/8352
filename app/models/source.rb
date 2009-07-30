@@ -55,6 +55,8 @@ class Source < ActiveRecord::Base
     
     results.andand.each { |res| 
       res.import
+#       p res
+#       raise "raise"
       if res.imported? 
         new_companies_count+=1
       elsif res.partly_imported?

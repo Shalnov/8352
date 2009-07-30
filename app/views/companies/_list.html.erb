@@ -1,9 +1,25 @@
+
 <% if companies.size > 0 %>
-	<p>
-	  <b>Компании:</b><br />
-		<% companies.each do |company| %>
-			<%= link_to company.name, category_company_url(company.category, company) %> <br />
-		<% end %>
-	</p>
-	<%= will_paginate companies %>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Address</th>
+    <th>Tag list</th>
+  </tr>
+
+<% for company in companies %>
+  <tr>
+    <td><%=h company.name %></td>
+    <td><%=h company.address %></td>
+    <td><%=h company.tag_list %></td>
+    <td><%= link_to 'Show', company %></td>
+    <td><%= link_to 'Edit', edit_company_path(company) %></td>
+    <td><%= link_to 'Destroy', company, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+
+
+	<%#= will_paginate companies %>
 <% end %>

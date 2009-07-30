@@ -82,6 +82,9 @@ Rails::Initializer.run do |config|
   config.gem 'rubyist-aasm', :lib =>"aasm", :version=>"2.0.5"
   config.gem 'authlogic'
   
+  config.gem 'mislav-will_paginate', :lib => 'will_paginate', 
+  :source => 'http://gems.github.com'
+
   config.gem "yaroslav-russian",
   :lib     => 'russian', 
   :source  => 'http://gems.github.com'
@@ -90,6 +93,7 @@ end
 
 require 'configatron'
 require 'lib/tags'
+require "will_paginate"
 
 configatron.site_url    = '8352.info'
 configatron.admin_email = 'admin@orionet.ru'

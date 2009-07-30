@@ -1,9 +1,11 @@
+# -*- coding: utf-8 -*-
 class CompaniesController < ApplicationController
   # GET /companies
   # GET /companies.xml
   def index
-    @companies = Company.find(:all)
-    @companies = Company.find_all_by_category_id(params[:category_id]) if params[:category_id]
+    @companies = Company.find(:all,:limit=>50)
+#    @tags = 
+#    @companies = Company.find_all_by_category_id(params[:category_id]) if params[:category_id]
 
     respond_to do |format|
       format.html # index.html.erb

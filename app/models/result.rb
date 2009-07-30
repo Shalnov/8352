@@ -58,12 +58,14 @@ class Result < ActiveRecord::Base
   }
   
   # Готовые к имортированую (все для кого установлены категории
-  named_scope :importable,   {
+  named_scope :importable, lambda  { |source_id|
+    { 
     :include => :result_category,
-    :conditions => ["state='updated' and result_category_id is not null"]
+    :conditions => ["state='updated' and results.source_id=? and result_category_id is not null",
+                    source_id]
+    }
   }
   
-
   
     # для typus
   def self.state
@@ -89,6 +91,8 @@ class Result < ActiveRecord::Base
     # TODO Лочить запись results при 
     self.create_company(self.company_fields)
     self.company.update_phones(self.normalized_phones)
+    self.company.tag_list << self.result_category.tag_list.map { |t| t.name }
+ #   self.company.save_tags
     self.set_imported
     self.save!
   end
@@ -99,9 +103,14 @@ class Result < ActiveRecord::Base
     self.company=company if company
     # TODO Обновление и других параметров, помимо телефонов
     self.company.update_phones(self.normalized_phones)
+#    p "tag_list #{self.company.id}, #{self.result_category}", self.company.tag_list=self.result_category.tag_list
+
+    self.company.tag_list.add(self.result_category.tag_list.map { |t| t.to_s })
+    self.company.save_tags
     self.set_partly_imported
+#    p "tag_list #{self.company.id}",self.company.tag_list
     self.save!
-    
+ #   raise 'test'    
   end
   
   
