@@ -1,12 +1,9 @@
-<%= link_to 'Добавить компанию', new_category_company_path(@category) %>
+<%#= link_to 'Добавить компанию', new_category_company_path(@category) %>
+<%= link_to 'Все категории', categories_path() %>
+
+<h1><%=h @category.name %></h1>
 
 <p>
-  <b>Категория:</b>
-  <%=h @category.name %>
-</p>
-
-<p>
-  <b>Описание:</b>
   <%=h @category.description %>
 </p>
 

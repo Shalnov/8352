@@ -13,7 +13,7 @@ class Source < ActiveRecord::Base
 #  has_many :jobs
 
   after_create :update_from_grabber_module
-
+  
   def update_from_grabber_module
     require "Grabber::#{self.grabber_module}".underscore
     grabber = "Grabber::#{self.grabber_module}".constantize.new
@@ -46,8 +46,9 @@ class Source < ActiveRecord::Base
   
 
   def import_results
+
     #   logger = Logger.new("#{RAILS_ROOT}/log/importer.log")
-    
+      
     results = Result.importable(self.id)
     
     updated_companies_count=0

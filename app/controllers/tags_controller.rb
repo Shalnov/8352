@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 class TagsController < ApplicationController
   def index
-    @tags = Company.tag_counts() #:conditions => {:pending => false}
+    @tags = Company.tag_counts().sort { |a,b| a.name <=> b.name } #:conditions => {:pending => false}
 
     respond_to do |format|
       format.html # index.html.erb
@@ -17,11 +17,25 @@ class TagsController < ApplicationController
     
     @companies=Company.find_tagged_with(params[:id],:match_all=>true)
     
+    
     # Все теги выбранных элементов помимо указанных тэгов
-    #    @nested_tags=@taggings.map(&:tag_list)
     
+    @n=[]
+      
+    @companies.map { |c| @n = @n + c.tag_list }
     
-    @nested_tags=Tag.nested_tags(@tags)
+    @nested_tags=@n.compact.uniq.reject { |n| 
+      res=false
+      @names.each { |a|
+        res=true if a==n
+      }
+      res
+    }.map { |n| Tag.find_by_name(n) } || []
+
+#    @nested_tags=[]
+    # unless @nested_tags
+    
+#    @nested_tags=Tag.find_nested_tags(@tags,Company).sort { |a,b| a.name<=>b.name }
     
     
 #        .reject{|t| t.taggable_type!='RestultCategory'}.map(&:taggable).compact.uniq

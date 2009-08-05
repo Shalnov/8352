@@ -3,9 +3,9 @@ class CompaniesController < ApplicationController
   # GET /companies
   # GET /companies.xml
   def index
-    @companies = Company.find(:all,:limit=>50)
-#    @tags = 
-#    @companies = Company.find_all_by_category_id(params[:category_id]) if params[:category_id]
+    @companies = params[:category_id] ? 
+    Company.find_all_by_category_id(params[:category_id]) : 
+      Company.find(:all,:limit=>50)
 
     respond_to do |format|
       format.html # index.html.erb

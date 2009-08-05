@@ -3,6 +3,11 @@ module ApplicationHelper
 #  include ActsAsTaggable::TagsHelper
   include PhoneHelper
   include Admin::PublicHelper
+  
+  
+  def tags_link(tags)
+    tags.map(&:name) * ','
+  end
 
   
   def render_category_with_all_childs(category, category_func, admin=false, description=false)

@@ -21,3 +21,6 @@ background-color:red;
 }
 
 #logo {color: black}
+
+
+.ccol {  position: relative; float: left; padding-right: 20px;  }

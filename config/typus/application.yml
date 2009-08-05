@@ -119,8 +119,8 @@ Tagging:
 
 Category:
   fields:
-    list: name, parent, tag_list #companies_count, position, hidden
-    form: parent, name, tag_list, description
+    list: name, parent, position, tag_list #companies_count, position, hidden
+    form: parent, name, position, tag_list, description
     show: id, name, description, tag_list, companies_count, position, children_count, ancestors_count, descendants_count, hidden, parent
   actions:
     index:

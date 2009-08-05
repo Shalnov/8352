@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 module CategoriesHelper
   
   extend ActiveSupport::Memoizable
@@ -25,13 +26,19 @@ module CategoriesHelper
     result += "<li#{html_headline}>"
     result += '<b>' if @category == category.id
 
+    result += link_to h(category.name),category_path(category)
+#    result += link_to h(category.name), {:controller => 'category', :id => category.id }
     if category.ancestors_count > 0 and category.children.count == 0 then
-     result += h(category.name)
+#     result += h(category.name)
     elsif category.ancestors_count == 0 or category.children.count > 0 then
-     result += content_tag('a', h(category.name), :onclick => "new Element.toggle('#{anchor}')", :href => "\##{anchor}")
+      result += '&nbsp;'
+      result += content_tag('a', '[*]', :onclick => "new Element.toggle('#{anchor}'); return false",  :href => "\##{anchor}")
     else
-     result += link_to_unless_current h(category.name), {:controller => 'category', :id => category.id }# unless category.ancestors_count == 0
+#     result += link_to_unless_current h(category.name), {:controller => 'category', :id => category.id }# unless category.ancestors_count == 0
     end
+#    result += '&nbsp;'
+#    result += link_to 'компании', "/companies/?category_id=#{category.id}"
+#    result += link_to 'компании', {:controller => 'category', :id => category.id }
     result += '</b>' if @category == category.id
     result += html_count # if !category.companies_count.blank? and category.companies_count > 0
     result += '</li>'
