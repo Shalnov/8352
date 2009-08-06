@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+require "phone_parser"
+require "address_parser"
+
 class Result < ActiveRecord::Base
   
   self.establish_connection :grabber
@@ -13,42 +16,52 @@ class Result < ActiveRecord::Base
   include PhoneHelper
   extend ActiveSupport::Memoizable
   
-#  acts_as_state_machine :initial=>:updated, :column=>'state'
   
-  include AASM
-  
-  aasm_column :state
-  
-  aasm_initial_state :updated
-  aasm_state :updated
-  aasm_state :pending
-  aasm_state :imported
-  aasm_state :partly_imported
-  
-   
-  # Запись обновилась из источника
-  aasm_event :set_updated do
-    transitions :to => :updated, :from => [:imported,:hunged]
-    #, :from => [:importef,]
-  end
-  
-  # Запись удачно импортирована
-  aasm_event :set_imported do
-    transitions :to => :imported, :from => [:updated,:pending]
-  end
-  
-  # Запись импортирована, но частично (уже есть такая компания)
-  aasm_event :set_partly_imported do
-    transitions :to => :partly_imported, :from => [:updated,:pending]
-  end
-  
-  # Запись требует вмешательства оператора
-  aasm_event :set_pending do
-    transitions :to => :pending, :from => [:updated]
+    
+# ------------------------------------------------------------------------------
+    state_machine :state, :initial => :updated do
+
+    event :mark_imported do
+      transition :updated => :imported
+    end
+
+    event :mark_updated do
+      transition :imported => :updated
+    end
+
   end
 
+  # ------------------------------------------------------------------------------
+  # Эти статусы имеют значение только если state=imported
+  #
   
-  
+  state_machine :importer_state, :initial => :none do
+    
+    before_transition :do => :mark_imported
+    
+    event :mark_none do
+      transition all => :none
+    end
+
+    event :mark_ok do
+      transition all => :ok
+    end
+
+    event :mark_prepared do
+      transition all => :prepared
+    end
+
+    event :mark_pending do
+      transition all => :pending
+    end
+
+    event :mark_error do
+      transition all => :error
+    end
+
+  end
+# ------------------------------------------------------------------------------
+
   
 
   # Обновленные
@@ -68,8 +81,12 @@ class Result < ActiveRecord::Base
   
   
     # для typus
+  def self.importer_state
+    ['none','prepared','ok','pending','error']
+  end
+
   def self.state
-    ['updated','pending','imported','partly_imported']
+    ['updated','imported']
   end
 
   
@@ -90,10 +107,10 @@ class Result < ActiveRecord::Base
   def import_new_company
     # TODO Лочить запись results при 
     self.create_company(self.company_fields)
-    self.company.update_phones(self.normalized_phones)
+    self.company.update_phones(self.phones_to_import)
     self.company.tag_list << self.result_category.tag_list.map { |t| t.name }
  #   self.company.save_tags
-    self.set_imported
+    self.mark_ok
     self.save!
   end
   
@@ -102,12 +119,12 @@ class Result < ActiveRecord::Base
     # TODO Лочить запись results при 
     self.company=company if company
     # TODO Обновление и других параметров, помимо телефонов
-    self.company.update_phones(self.normalized_phones)
+    self.company.update_phones(self.phones_to_import)
 #    p "tag_list #{self.company.id}, #{self.result_category}", self.company.tag_list=self.result_category.tag_list
 
     self.company.tag_list.add(self.result_category.tag_list.map { |t| t.to_s })
     self.company.save_tags
-    self.set_partly_imported
+    self.mark_ok
 #    p "tag_list #{self.company.id}",self.company.tag_list
     self.save!
  #   raise 'test'    
@@ -153,6 +170,10 @@ class Result < ActiveRecord::Base
   
   # Собственно импорт компании
   
+  def parse_address
+    AddressParser.instance.parse(self.address)
+  end
+  
   def import
     if self.company
       self.update_company()
@@ -166,14 +187,16 @@ class Result < ActiveRecord::Base
     end
   end
   
-  def normalized_phones
-    return if self.phones.blank?
-    np=[]
-    self.phones.split(/,|;/).each { |x| 
-      p=parse_phone(x,lookup_city_in_address || get_current_city)
-      np << p if p
-    }
-    np
+  def phones_to_import
+    prefix = (lookup_city_in_address || get_current_city).prefix
+    
+    phones = (PhoneParser.instance.parse(self.other_info) +
+              PhoneParser.instance.parse(self.phones)).each { |p| p.phone=normalize_phone(p.phone,prefix)}
+
+    # return if phones.blank?
+    # self.phones.split(/,|;/).map { |x| 
+    #   parse_phone(x,prefix)
+    # }
   end
   
 end

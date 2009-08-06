@@ -11,11 +11,6 @@
 </p>
 
 <p>
-  <b>Полное название:</b>
-  <%=h @company.full_name %>
-</p>
-
-<p>
   <b>ИНН:</b>
   <%=h @company.inn %>
 </p>
@@ -47,14 +42,14 @@
 
 <p>
   <b>Источники:</b>
-  <%=h @company.sources %>
+  <%=h @company.sources.map(&:target_url).join(',') %>
 </p>
 
 <% if @company.phones.size > 0 %>
 <p>
   <b>Телефоны:</b>
 	<% @company.phones.each do |phone| %>
-		<%= render :partial => "common/phone", :locals => { :phone => phone }%>
+<%= h_phone phone %>
 	<% end %>
 </p>
 <% end %>
@@ -76,3 +71,8 @@
 	<% end %>
 </p>
 <% end %>
+
+<h2>На карте</h2>
+<a href="#" onclick="showCompanyAddress('<%= @company.address %>');return false;">смотреть на карте</a>
+<div id="YMapsID" style="width:400px;height:300px"></div>
+

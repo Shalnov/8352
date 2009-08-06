@@ -10,7 +10,7 @@
 
 <% for company in companies %>
   <tr>
-    <td><%=h company.name %></td>
+    <td><%= link_to company.name, company_path(company) %></td>
     <td><%=h company.address %></td>
     <td><%=h company.tag_list %></td>
     <td><%= link_to 'Edit', '/admin/companies/edit/' + company.id.to_s %></td>
