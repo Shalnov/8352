@@ -58,9 +58,9 @@ class Source < ActiveRecord::Base
       res.import
 #       p res
 #       raise "raise"
-      if res.imported? 
+      if res.fine? 
         new_companies_count+=1
-      elsif res.partly_imported?
+      elsif res.partly?
         updated_companies_count+=1
       end
     }

@@ -2,10 +2,12 @@
 #require 'acts_as_taggable'
 
 class Company < ActiveRecord::Base
+
   
-  acts_as_taggable
+  serialize  :ymaps
   
- # set_cached_tag_list_column_name "my_caching_column_name"
+  serialize  :parsed_address # разобранный адрес от яндекса, см result.rb
+
 
 #  serialize :dump, Hash
   
@@ -29,21 +31,16 @@ class Company < ActiveRecord::Base
   belongs_to :city, :counter_cache => true
 
   has_many :phones,   :dependent => :destroy
-  has_many :emails,   :dependent => :destroy
+#  has_many :emails,   :dependent => :destroy
   has_many :results
   has_many :sources,  :through=> :results
   
   
-#  has_many :taggings, :as => :taggable, :dependent => :destroy
-#  has_many :tags,     :through => :taggings
-
-
-
   validates_presence_of :name, :category_id #, :full_name
   
   accepts_nested_attributes_for :phones, :allow_destroy => true,
                                 :reject_if => proc { |phone| phone['number'].blank? }
-  accepts_nested_attributes_for :emails, :allow_destroy => true
+#  accepts_nested_attributes_for :emails, :allow_destroy => true
   
 
   class << self    
@@ -74,7 +71,7 @@ class Company < ActiveRecord::Base
   
   def update_phone(h)
     
-    if phone=Phone.find_by_number(h[:number])
+    if phone=self.phones.find_by_number(h[:number])
       # TODO Поискать чего обновлять в телефонах
       # TODO Устанавливать необходимость ручной замены, если изменился is_fax или department
 
@@ -88,11 +85,32 @@ class Company < ActiveRecord::Base
   end
   
   
+  def update_emails(email)
+    return unless email
+    email.strip!
+    if self.emails.blank?
+      self.emails=email
+    elsif self.emails!=email
+      self.emails="#{self.emails}, #{email}"
+    end
+  end
+  
+  
   def update_phones(phones)
     # TODO сохранять порядок телефонов (position)
     phones.andand.each{ |x| self.update_phone(x)  }
   end
   
+  def update_address
+    # TODO Проверять не закрыт ли
+    results.andand.map { |r|
+      if r.parsed_address[:precision]=='exact'
+        self.address=r.parsed_address[:addr]
+        self.parsed_address=r.parsed_address
+        self.ymaps=r.ymaps
+      end
+    }
+  end
   
   def update_description
     # TODO Проверять не закрыт ли
@@ -100,15 +118,4 @@ class Company < ActiveRecord::Base
   end
 
   
-#    RESULTS_FIELDS.each_pair {|k,v| update_attribute_w_check(k, res[v]) if res[v] != self[k] }
-  
-#   def dump_attributes
-#     self.dump ||= {}
-#     self.dump[Time.now.strftime('%Y%m%d%H%M%S')] = 
-#                 { :company => Marshal.dump(self),
-#                   :phones => Marshal.dump(self.phones),
-#                   :emails => Marshal.dump(self.emails),
-#                   :tags => Marshal.dump(self.tags) }
-#     self.write_attribute(:dump, self.dump)
-#   end
 end

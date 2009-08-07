@@ -7,7 +7,25 @@ class Result < ActiveRecord::Base
   self.establish_connection :grabber
   
   serialize  :ymaps
-  serialize  :parsed_address
+  
+  serialize  :parsed_address # разобранный адрес от яндекса
+    # parsed_address:
+    # index
+    # ctype
+    # office
+    # addr => 'GeocoderMetaData/text',
+    # country => 'Country/CountryName',
+    # locality => 'Locality/LocalityName', город
+    # thoroughfare => 'Thoroughfare/ThoroughfareName', улица
+    # premise => 'Premise/PremiseNumber', дом
+    # lower_corner => 'boundedBy/Envelope/lowerCorner',
+    # upper_corner => 'boundedBy/Envelope/upperCorner',
+    # precision => 'GeocoderMetaData/precision', exact, near, other, :number
+    # kind => 'GeocoderMetaData/kind',
+    # pos => 'Point/pos',
+    # found - количество найденных адресов
+  
+  
   serialize  :parsed_phones
   serialize  :import_errors
   
@@ -125,8 +143,10 @@ class Result < ActiveRecord::Base
     prepare
     
     unless self.result_category
-      import_error="No result category"
+      self.import_errors="No result category"
       mark_error
+      self.save!
+      raise self.import_errors
       return nil
     end
     
@@ -137,7 +157,7 @@ class Result < ActiveRecord::Base
       update_company(self.company)
       return 0
     else
-      self.company=import_new_company
+      import_new_company
       return 1
     end
     
@@ -150,8 +170,7 @@ class Result < ActiveRecord::Base
     # TODO Лочить запись results при 
     self.create_company(self.company_fields)
     self.company.update_phones(self.parsed_phones)
-#    self.company.tag_list << self.result_category.tag_list.map { |t| t.name }
-
+    #    self.company=
     self.mark_fine
     self.save!
   end
@@ -162,14 +181,16 @@ class Result < ActiveRecord::Base
     # TODO Лочить запись results при 
     self.company=company if company
     self.save!
+    
     # TODO Обновление и других параметров, помимо телефонов
     self.company.update_phones(self.parsed_phones)
+    self.company.update_emails(self.email)
     
+    self.company.update_address
     self.company.update_description
-#    self.company.update_address(self.parsed_address)
+    self.company.save!
 
-#    self.company.tag_list.add(self.result_category.tag_list.map { |t| t.to_s })
-#    self.company.save_tags
+
     self.mark_partly
     self.save!
     
@@ -182,13 +203,16 @@ class Result < ActiveRecord::Base
   
   def company_fields
     { 
-      :name=> self.name,
-      :site=> self.site_url,
-      :working_time => self.work_time,
-      :address => parsed_address[:precision]=='exact' ? parsed_address[:addr] : self.address.andand.sub("\n",'').sub(/\s+/,' '),
-      :description => self.other_info,
+      :name=> self.normalized_name,
+      :site=> self.site_url.andand.strip,
+      :working_time => self.work_time.andand.strip,
+      :address => parsed_address[:precision]=='exact' ? parsed_address[:addr] : self.address.andand.sub("\n",'').sub(/\s+/,' ').strip,
+      :description => self.other_info.andand.strip,
+      :emails        => self.email.andand.strip,
       :city_id     => self.city_id,
-      :category_id => self.result_category.category_id 
+      :category_id => self.result_category.category_id,
+      :ymaps       => self.ymaps,
+      :parsed_address => self.parsed_address
     }
   end
   
@@ -270,23 +294,15 @@ class Result < ActiveRecord::Base
       return
     end
 
-    # parsed_address:
-    # index
-    # ctype
-    # office
-    # addr => 'GeocoderMetaData/text',
-    # country => 'Country/CountryName',
-    # locality => 'Locality/LocalityName', город
-    # thoroughfare => 'Thoroughfare/ThoroughfareName', улица
-    # premise => 'Premise/PremiseNumber', дом
-    # lower_corner => 'boundedBy/Envelope/lowerCorner',
-    # upper_corner => 'boundedBy/Envelope/upperCorner',
-    # precision => 'GeocoderMetaData/precision', exact, near, other
-    # kind => 'GeocoderMetaData/kind',
-    # pos => 'Point/pos',
-    # found - количество найденных адресов
     
-    self.city = City.find_by_name(parsed_address[:locality])
+    if parsed_address[:extact] || parsed_address[:number] || parsed_address[:near]  || parsed_address[:street] 
+      self.city = City.find_by_name(parsed_address[:locality]) || raise("Не могу найти населенный пункт #{parsed_address[:locality]}")
+    else
+      
+      # TOFIX Грязный хак
+      self.city = City.find_by_name("Чебоксары")
+    end
+
     
   end
     
@@ -298,11 +314,12 @@ class Result < ActiveRecord::Base
   end
   
   def parse_phones
+    default_prefix=8352
     pp = PhoneParser.instance.parse(phones || '') + PhoneParser.instance.parse(other_info || '')
     found = { }
     phones = []
     pp.each { |p| 
-      p[:number]=normalize_phone(p[:number],city.prefix)
+      p[:number]=normalize_phone(p[:number],self.city.prefix || default_prefix)
       if found[p[:number]]
         found[p[:number]][:department]=p.department
         found[p[:number]][:is_fax]=p.department
