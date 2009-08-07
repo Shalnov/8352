@@ -6,15 +6,21 @@ class Result < ActiveRecord::Base
   
   self.establish_connection :grabber
   
+  serialize  :ymaps
+  serialize  :parsed_address
+  serialize  :parsed_phones
+  serialize  :import_errors
+  
   belongs_to :company, :counter_cache => true
   
   belongs_to :source
+  belongs_to :city
 
   belongs_to :result_category
   has_one :category, :through=>:result_category
 
   include PhoneHelper
-  extend ActiveSupport::Memoizable
+#  extend ActiveSupport::Memoizable
   
   
     
@@ -34,29 +40,29 @@ class Result < ActiveRecord::Base
   # ------------------------------------------------------------------------------
   # Эти статусы имеют значение только если state=imported
   #
-  
-  state_machine :importer_state, :initial => :none do
+  # , :initial => nil
+  state_machine :importer_state do
     
-    before_transition :do => :mark_imported
+    before_transition [:fine,:pending]=>any,  :do => :mark_imported
     
     event :mark_none do
       transition all => :none
     end
 
-    event :mark_ok do
-      transition all => :ok
+    event :mark_fine do
+      transition :prepared => :fine
     end
 
     event :mark_prepared do
-      transition all => :prepared
+      transition :none => :prepared
     end
 
     event :mark_pending do
-      transition all => :pending
+      transition :prepared => :pending
     end
 
     event :mark_error do
-      transition all => :error
+      transition :prepared => :error
     end
 
   end
@@ -73,16 +79,17 @@ class Result < ActiveRecord::Base
   # Готовые к имортированую (все для кого установлены категории
   named_scope :importable, lambda  { |source_id|
     { 
-    :include => :result_category,
-    :conditions => ["state='updated' and results.source_id=? and result_category_id is not null",
-                    source_id]
+      :include => :result_category,
+      :conditions => ["state='updated' and results.source_id=? and result_category_id is not null",
+                      source_id]
     }
   }
   
   
-    # для typus
+  # для typus
+  
   def self.importer_state
-    ['none','prepared','ok','pending','error']
+    ['none','prepared','fine','pending','error']
   end
 
   def self.state
@@ -90,113 +97,230 @@ class Result < ActiveRecord::Base
   end
 
   
+  def prepare
+    mark_none if updated?
+    if none?
+      parse_address
+      parse_phones
+      
+#      shorting_name
+      
+      normalize_name
+      
+      mark_prepared
+      
+      self.save!    
+    end
+  end
+
+  
+  # Собственно импорт компании
+  
+  def import
+
+    prepare
+    
+    unless self.result_category
+      import_error="No result category"
+      mark_error
+      return nil
+    end
+    
+    if self.company
+      update_company()
+      return 0
+    elsif self.company = Company.find_by_result(self)
+      update_company(self.company)
+      return 0
+    else
+      self.company=import_new_company
+      return 1
+    end
+    
+  end
+
+
+  
+  def import_new_company
+    
+    # TODO Лочить запись results при 
+    self.create_company(self.company_fields)
+    self.company.update_phones(self.parsed_phones)
+#    self.company.tag_list << self.result_category.tag_list.map { |t| t.name }
+
+    self.mark_fine
+    self.save!
+  end
+  
+  
+  def update_company(company=nil)
+    
+    # TODO Лочить запись results при 
+    self.company=company if company
+    
+    # TODO Обновление и других параметров, помимо телефонов
+    self.company.update_phones(self.parsed_phones)
+
+#    self.company.tag_list.add(self.result_category.tag_list.map { |t| t.to_s })
+#    self.company.save_tags
+    self.mark_fine
+    self.save!
+    
+  end
+  
+  
+
+  
+  ### Помошники
   
   def company_fields
     { 
       :name=> self.name,
       :site=> self.site_url,
       :working_time => self.work_time,
-      :address => self.address,
+      :address => parsed_address[:precision]=='exact' ? parsed_address[:addr] : self.address.andand.sub("\n",'').sub(/\s+/,' '),
       :description => self.other_info,
-      :city_id     => self.lookup_city.id,
+      :city_id     => self.city_id,
       :category_id => self.result_category.category_id 
     }
   end
+  
+  
+  
+  # Убираем всякие ООО, ЗАО, кавычки и прочую лабуду, дабы получить настоящее имя компании
+  
+  SHORTING_WORDS = %w(ФИРМА ООО ЗАО ОАО ЧП ИП РА СА)
+  
+  def normalize_name
+    sn=''
+    
+    quotes_reg=Regexp.new('\"([^"]+)\"')
+    # Если есть кавычки, берем то, что в них лежит и все
+    if sn=self.name.scan(quotes_reg)[0]
 
-  
-  def import_new_company
-    # TODO Лочить запись results при 
-    self.create_company(self.company_fields)
-    self.company.update_phones(self.phones_to_import)
-    self.company.tag_list << self.result_category.tag_list.map { |t| t.name }
- #   self.company.save_tags
-    self.mark_ok
-    self.save!
-  end
-  
-  
-  def update_company(company=nil)
-    # TODO Лочить запись results при 
-    self.company=company if company
-    # TODO Обновление и других параметров, помимо телефонов
-    self.company.update_phones(self.phones_to_import)
-#    p "tag_list #{self.company.id}, #{self.result_category}", self.company.tag_list=self.result_category.tag_list
-
-    self.company.tag_list.add(self.result_category.tag_list.map { |t| t.to_s })
-    self.company.save_tags
-    self.mark_ok
-#    p "tag_list #{self.company.id}",self.company.tag_list
-    self.save!
- #   raise 'test'    
-  end
-  
-  
-  # Искать город везьде
-  def lookup_city
-    lookup_city_in_address || lookup_city_in_phones || get_current_city
-  end
-  
-  memoize :lookup_city
-  
-  
-  def lookup_city_in_phones
-    return unless self.phones
-    city=nil
-    self.phones.split(/,|;/).each { |x| 
-      x=x.to_s.gsub(/[^0-9]/,'')
-      if x.size>=10
-        x="7"+x if x.size==10
-        city=City.find_by_prefix(x[1..4]) || City.find_by_prefix(x[1..5])
-        return if city
+      # Проверяем на дурацкий upcase всей строки
+      if self.name.mb_chars.upcase.to_s==self.name
+        self.short_name=sn[0].mb_chars.capitalize.to_s
+        
+        # TODO Делать capitelize отдельно для того, что в скобках
+        self.normalized_name=self.name.mb_chars.capitalize.to_s
+        self.normalized_name.sub(quotes_reg,'"%s"' % self.short_name)
+        #
+      else
+        self.short_name=sn[0]
+        self.normalized_name=self.name
       end
-    }
-    city
-  end
-  
-  def lookup_city_in_address
-    return if self.address.blank?
-    city=nil
-    self.address.split(/\W+/).each { |e| 
-      
-      # TODO Искать case insensetive city
-      city=City.find_by_name(e.mb_chars.capitalize.to_s)
-      return city if city
-    }
-    city
-  end
-  
-  memoize :lookup_city_in_address
-  
-  
-  # Собственно импорт компании
-  
-  def parse_address
-    AddressParser.instance.parse(self.address)
-  end
-  
-  def import
-    if self.company
-      self.update_company()
-      return 0
-    elsif company = Company.find_by_result(self)
-      self.update_company(company)
-      return 0
+
     else
-      company=self.import_new_company
-      return 1
+      r=Regexp.new('\b('+SHORTING_WORDS.join('|')+')\b',true)
+      
+      sn=self.name.sub(r,'').strip
+      
+      if self.name.mb_chars.upcase.to_s==self.name
+        self.short_name=sn=sn.mb_chars.capitalize.to_s
+      end
+      
+      forms=self.name.match(r)[0]
+      is_firm=false
+      forms.reject! { |f| f=="ФИРМА" ? is_firm=true : false }
+      forms=forms.join(' ') + is_firm ? ' Фирма' : ''
+      self.normalized_name=forms.blank? ? '' : "#{forms} " + self.short_name
+    end
+
+    
+  end
+
+  def normalize_name2
+    tmp=self.name.mb_chars.downcase.to_s
+
+    # Если есть кавычки, разбираем по ним
+    if names = tmp.scan(/(.*)\s*\"([^"])\"\s*(.*)/)[0]
+      forma=names[0].strip.mb_chars.upcase.to_s.sub('ФИРМА','Фирма')
+      sn=names[1].strip.mb_chars.capitalize.to_s
+      ext=names[2].strip.mb_chars.capitalize.to_s
+      
+      self.short_name=sn
+      
+      p "forma=#{forma}, #{sn}"
+      nn=forma.blanked? ? sn : "#{forma} \"#{sn}\""
+      nn=nn+" #{ext}" unless ext.blanked?
+
+      self.normalized_name=nn
+      
+    else
+      r=Regexp.new('\b('+SHORTING_WORDS.join('|')+')\b')
+      is_firm=false
+      form=''
+      forms=tmp.scan(r)[0]
+      forms.andand.each { |f|
+        f=f.mb_chars.upcase.to_s
+        if f=='ФИРМА'
+          is_firm=true
+        else
+          form=form.blank? ? f : "#{form} #{f}"
+        end
+      }
+      form=form.blank? ? "Фирма" : "#{form} Фирма" if is_firm
+      #.sub(/[^\w|\s|\-]/,'')
+      sn=tmp.sub(r,'').sub(/\s+/,' ').strip.mb_chars.capitalize.to_s
+      self.short_name=sn
+      self.normalized_name=forms.blank? ? sn : "#{form} \"#{sn}\""
     end
   end
-  
-  def phones_to_import
-    prefix = (lookup_city_in_address || get_current_city).prefix
-    
-    phones = (PhoneParser.instance.parse(self.other_info) +
-              PhoneParser.instance.parse(self.phones)).each { |p| p.phone=normalize_phone(p.phone,prefix)}
 
-    # return if phones.blank?
-    # self.phones.split(/,|;/).map { |x| 
-    #   parse_phone(x,prefix)
-    # }
+  
+  def parse_address
+    
+    self.parsed_address,self.ymaps=AddressParser.instance.parse(self.address)
+    
+    unless parsed_address
+      self.parsed_address={}
+      self.city=get_city_from_phones || get_current_city
+      return
+    end
+
+    # parsed_address:
+    # index
+    # ctype
+    # office
+    # addr => 'GeocoderMetaData/text',
+    # country => 'Country/CountryName',
+    # locality => 'Locality/LocalityName', город
+    # thoroughfare => 'Thoroughfare/ThoroughfareName', улица
+    # premise => 'Premise/PremiseNumber', дом
+    # lower_corner => 'boundedBy/Envelope/lowerCorner',
+    # upper_corner => 'boundedBy/Envelope/upperCorner',
+    # precision => 'GeocoderMetaData/precision', exact, near, other
+    # kind => 'GeocoderMetaData/kind',
+    # pos => 'Point/pos',
+    # found - количество найденных адресов
+    
+    self.city = City.find_by_name(parsed_address[:locality])
+    
+  end
+    
+  
+  def get_city_from_phones
+    p=phones.scan(/\((\d{3,4})\)/)[0]
+    return nil unless p
+    City.find_by_prefix(p[0])
+  end
+  
+  def parse_phones
+    pp = PhoneParser.instance.parse(phones || '') + PhoneParser.instance.parse(other_info || '')
+    found = { }
+    phones = []
+    pp.each { |p| 
+      p[:number]=normalize_phone(p[:number],city.prefix)
+      if found[p[:number]]
+        found[p[:number]][:department]=p.department
+        found[p[:number]][:is_fax]=p.department
+      else
+        phones << p
+        found[p[:number]]=p
+      end
+    }
+    self.parsed_phones=phones
   end
   
 end

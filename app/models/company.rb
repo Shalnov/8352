@@ -55,7 +55,7 @@ class Company < ActiveRecord::Base
       
       phones.andand.each { |h|
         unless h[:number].blank?
-          phone=Phone.find_by_number(h[:number])        
+          phone=Phone.find_by_number(h[:number])
           return phone.company if phone
         end
       }
@@ -63,7 +63,10 @@ class Company < ActiveRecord::Base
     end
     
     def find_by_result(res)
-      self.find_by_phones(res.normalized_phones) || self.find_by_name(res.name)
+      self.find_by_phones(res.parsed_phones) || self.find_by_name(res.normalized_name)
+      
+      # NOTE Слишком опасно искать по короткому имени, могут находиться похожие компании
+      #|| self.find_by_short_name(res.short_name)
     end
       
   end
@@ -74,6 +77,7 @@ class Company < ActiveRecord::Base
     if phone=Phone.find_by_number(h[:number])
       # TODO Поискать чего обновлять в телефонах
       # TODO Устанавливать необходимость ручной замены, если изменился is_fax или department
+
       phone.update_attribute(:department,h[:department]) if phone.department.blank? && !h[:department].blank?
       phone.save!
     else
@@ -85,6 +89,7 @@ class Company < ActiveRecord::Base
   
   
   def update_phones(phones)
+    # TODO сохранять порядок телефонов (position)
     phones.andand.each{ |x| self.update_phone(x)  }
   end
 

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'singleton'
 require 'unicode'
 
@@ -16,11 +17,11 @@ class PhoneParser
     # Выделяем потенциальные телефоны из строки. Unicode::downcase нужен потому что модифаер /i
     # раби регеэкспа несовместим с юникодом.
     parsed = line.scan(PHONE_EXTRACT_REGEXP).map do |m|
-      phone = m[0]      
+      phone = m[0]   
       is_phone = EXTRACTED_PHONE_CONDITIONS.map { |c| c.call(phone.dup) }.any?
       if is_phone
         cutting_line, is_fax = is_fax?(cutting_line, phone)
-        { :phone => phone, :is_fax => is_fax }
+        { :number => phone, :is_fax => is_fax }
       end
     end
     parsed.compact
