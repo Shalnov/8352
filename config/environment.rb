@@ -93,7 +93,7 @@ end
 
 require 'configatron'
 require 'lib/tags'
-require "will_paginate"
+#require "will_paginate"
 
 configatron.site_url    = '8352.info'
 configatron.admin_email = 'admin@orionet.ru'

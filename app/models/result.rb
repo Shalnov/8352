@@ -43,7 +43,7 @@ class Result < ActiveRecord::Base
   # , :initial => nil
   state_machine :importer_state do
     
-    before_transition [:fine,:pending]=>any,  :do => :mark_imported
+    before_transition [:fine,:partly,:pending]=>any,  :do => :mark_imported
     
     event :mark_none do
       transition all => :none
@@ -51,6 +51,10 @@ class Result < ActiveRecord::Base
 
     event :mark_fine do
       transition :prepared => :fine
+    end
+
+    event :mark_partly do
+      transition :prepared => :partly
     end
 
     event :mark_prepared do
@@ -89,7 +93,7 @@ class Result < ActiveRecord::Base
   # для typus
   
   def self.importer_state
-    ['none','prepared','fine','pending','error']
+    ['none','prepared','fine','partly','pending','error']
   end
 
   def self.state
@@ -157,13 +161,16 @@ class Result < ActiveRecord::Base
     
     # TODO Лочить запись results при 
     self.company=company if company
-    
+    self.save!
     # TODO Обновление и других параметров, помимо телефонов
     self.company.update_phones(self.parsed_phones)
+    
+    self.company.update_description
+#    self.company.update_address(self.parsed_address)
 
 #    self.company.tag_list.add(self.result_category.tag_list.map { |t| t.to_s })
 #    self.company.save_tags
-    self.mark_fine
+    self.mark_partly
     self.save!
     
   end
@@ -189,7 +196,12 @@ class Result < ActiveRecord::Base
   
   # Убираем всякие ООО, ЗАО, кавычки и прочую лабуду, дабы получить настоящее имя компании
   
-  SHORTING_WORDS = %w(ФИРМА ООО ЗАО ОАО ЧП ИП РА СА)
+  SHORTING_WORDS = %w(ФИРМА фирма Фирма ООО ЗАО ОАО ЧП ИП РА СА ТЦ НПФ)
+  
+  def capitalize_first(str)
+    str.mb_chars[0]=str.mb_chars[0].upcase
+    str
+  end
   
   def normalize_name
     sn=''
@@ -202,13 +214,15 @@ class Result < ActiveRecord::Base
       if self.name.mb_chars.upcase.to_s==self.name
         self.short_name=sn[0].mb_chars.capitalize.to_s
         
-        # TODO Делать capitelize отдельно для того, что в скобках
         self.normalized_name=self.name.mb_chars.capitalize.to_s
         self.normalized_name.sub(quotes_reg,'"%s"' % self.short_name)
         #
       else
         self.short_name=sn[0]
+        
         self.normalized_name=self.name
+        capitalize_first(self.normalized_name)
+        self.normalized_name
       end
 
     else
@@ -216,58 +230,35 @@ class Result < ActiveRecord::Base
       
       sn=self.name.sub(r,'').strip
       
+
+      
       if self.name.mb_chars.upcase.to_s==self.name
-        self.short_name=sn=sn.mb_chars.capitalize.to_s
+        name=self.name.mb_chars.capitalize.to_s.strip
+        self.short_name=sn.mb_chars.capitalize.to_s || name
+      else
+        name=capitalize_first(self.name).strip
+        self.short_name=name if self.short_name.blank?
       end
       
-      forms=self.name.match(r)[0]
-      is_firm=false
-      forms.reject! { |f| f=="ФИРМА" ? is_firm=true : false }
-      forms=forms.join(' ') + is_firm ? ' Фирма' : ''
-      self.normalized_name=forms.blank? ? '' : "#{forms} " + self.short_name
-    end
 
+      
+      forms=self.name.scan(r)
+      if forms.blank?
+        self.normalized_name=name
+      else
+        is_firm=false
+        forms.reject! { |f| f=="ФИРМА" ? is_firm=true : false }
+        forms=forms.join(' ') + (is_firm ? ' Фирма' : '')
+        if forms.blank?
+          self.normalized_name=name
+        else
+          self.normalized_name=(forms.include?('ИП') || forms.include?('ЧП')) ? "#{forms} #{self.short_name}" : "#{forms} " + '"%s"' % self.short_name
+        end
+
+      end
+    end
     
   end
-
-  def normalize_name2
-    tmp=self.name.mb_chars.downcase.to_s
-
-    # Если есть кавычки, разбираем по ним
-    if names = tmp.scan(/(.*)\s*\"([^"])\"\s*(.*)/)[0]
-      forma=names[0].strip.mb_chars.upcase.to_s.sub('ФИРМА','Фирма')
-      sn=names[1].strip.mb_chars.capitalize.to_s
-      ext=names[2].strip.mb_chars.capitalize.to_s
-      
-      self.short_name=sn
-      
-      p "forma=#{forma}, #{sn}"
-      nn=forma.blanked? ? sn : "#{forma} \"#{sn}\""
-      nn=nn+" #{ext}" unless ext.blanked?
-
-      self.normalized_name=nn
-      
-    else
-      r=Regexp.new('\b('+SHORTING_WORDS.join('|')+')\b')
-      is_firm=false
-      form=''
-      forms=tmp.scan(r)[0]
-      forms.andand.each { |f|
-        f=f.mb_chars.upcase.to_s
-        if f=='ФИРМА'
-          is_firm=true
-        else
-          form=form.blank? ? f : "#{form} #{f}"
-        end
-      }
-      form=form.blank? ? "Фирма" : "#{form} Фирма" if is_firm
-      #.sub(/[^\w|\s|\-]/,'')
-      sn=tmp.sub(r,'').sub(/\s+/,' ').strip.mb_chars.capitalize.to_s
-      self.short_name=sn
-      self.normalized_name=forms.blank? ? sn : "#{form} \"#{sn}\""
-    end
-  end
-
   
   def parse_address
     

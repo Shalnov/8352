@@ -92,6 +92,12 @@ class Company < ActiveRecord::Base
     # TODO сохранять порядок телефонов (position)
     phones.andand.each{ |x| self.update_phone(x)  }
   end
+  
+  
+  def update_description
+    # TODO Проверять не закрыт ли
+    self.description=results.andand.map(&:other_info).join("\n------------------------\n")
+  end
 
   
 #    RESULTS_FIELDS.each_pair {|k,v| update_attribute_w_check(k, res[v]) if res[v] != self[k] }
