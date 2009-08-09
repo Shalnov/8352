@@ -15,7 +15,7 @@ class AddressParser
   #  - Выделяется индекс и тип поселения (это легко), и номер офиса (чуть сложнее).
   #  - Далее, пытаемся отпарсить недостающие части адреса по простым правилам типа "ул. {улица}", "д. {дом}" и так далее.
   def parse(addr)    
-    yandex_response = yandex_parse(addr)
+    yandex_response,doc = yandex_parse(addr)
     return if yandex_response.nil?
     
     response = {
@@ -34,17 +34,19 @@ class AddressParser
     street, house = try_to_parse_street_and_house(addr_stripped, response) if response[:thoroughfare].nil? || response[:premise].nil?
     response[:thoroughfare] ||= street
     response[:premise] ||= house
+
+    [response,doc]
     
-    [response, yandex_response]
   end
 
 protected
+  
   # Пытается пропустить адрес через Яндекс, выделить то что удалось.
   def yandex_parse(addr)
     escaped_addr = CGI.escape(addr)
     response = Net::HTTP.get(URI.parse(YANDEX_MAPS_URI % escaped_addr))
     doc = Hpricot.XML(response)
-    parse_yandex_response(doc)    
+    [parse_yandex_response(doc),response]
   end
 
   # Ищет индекс.

@@ -140,37 +140,36 @@ Category:
 Company:
   fields:
     list: name, results_count, category
-    form: name, inn, address, emails, parsed_address, site, director, description, working_time
-    show: id, results_count, emails, name, address, site, director, description, working_time, sources, created_at, updated_at, pending, dump, category
+    form: name, inn, emails, parsed_address, site, director, description, working_time
+    show: id, results_count, emails, name, site, director, description, working_time, sources, created_at, updated_at, pending, dump, category
   actions:
     index:
     edit:
   order_by:
-  relationships: category, phones, results #, tags
+  relationships: category, addresses, phones, results #, tags
   filters: category, tag
   options:
     per_page: 50
-  search: name, address
+  search: name
   application: Company catalog
   description: Каталог компаний
 
-Email:
+Address:
   fields:
-    list: id, email, person, department, company
-    form: email, person, department, company
-    show: id, email, person, department, company
+    list: address, city, company, post_index
+    show: address, city, company, post_index, parsed_address, ymaps
+    form: address, city, company, post_index, parsed_address, ymaps
   actions:
     index:
     edit:
   order_by:
-  relationships: company
+  relationships: company, city
   filters:
+  search: address, post_index
   options:
-    per_page: 30
-  search:
+    per_page: 50
   application: Company catalog
   description:
-
 
 Phone:
   fields:

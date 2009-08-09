@@ -170,6 +170,7 @@ class Result < ActiveRecord::Base
     # TODO Лочить запись results при 
     self.create_company(self.company_fields)
     self.company.update_phones(self.parsed_phones)
+    self.company.update_addresses(self)
     #    self.company=
     self.mark_fine
     self.save!
@@ -186,7 +187,7 @@ class Result < ActiveRecord::Base
     self.company.update_phones(self.parsed_phones)
     self.company.update_emails(self.email)
     
-    self.company.update_address
+    self.company.update_addresses(self)
     self.company.update_description
     self.company.save!
 
@@ -206,13 +207,10 @@ class Result < ActiveRecord::Base
       :name=> self.normalized_name,
       :site=> self.site_url.andand.strip,
       :working_time => self.work_time.andand.strip,
-      :address => parsed_address[:precision]=='exact' ? parsed_address[:addr] : self.address.andand.sub("\n",'').sub(/\s+/,' ').strip,
       :description => self.other_info.andand.strip,
       :emails        => self.email.andand.strip,
       :city_id     => self.city_id,
       :category_id => self.result_category.category_id,
-      :ymaps       => self.ymaps,
-      :parsed_address => self.parsed_address
     }
   end
   

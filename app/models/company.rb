@@ -31,10 +31,10 @@ class Company < ActiveRecord::Base
   belongs_to :city, :counter_cache => true
 
   has_many :phones,   :dependent => :destroy
+  has_many :addresses, :dependent => :destroy
 #  has_many :emails,   :dependent => :destroy
   has_many :results
   has_many :sources,  :through=> :results
-  
   
   validates_presence_of :name, :category_id #, :full_name
   
@@ -69,6 +69,23 @@ class Company < ActiveRecord::Base
   end
   
   
+  def address
+    addresses.map(&:address).join('; ')
+  end
+
+  
+  def update_emails(email)
+    return unless email
+    email.strip!
+    if self.emails.blank?
+      self.emails=email
+    elsif self.emails!=email
+      self.emails="#{self.emails}, #{email}"
+    end
+  end
+  
+  
+  
   def update_phone(h)
     
     if phone=self.phones.find_by_number(h[:number])
@@ -85,36 +102,29 @@ class Company < ActiveRecord::Base
   end
   
   
-  def update_emails(email)
-    return unless email
-    email.strip!
-    if self.emails.blank?
-      self.emails=email
-    elsif self.emails!=email
-      self.emails="#{self.emails}, #{email}"
-    end
-  end
-  
-  
   def update_phones(phones)
     # TODO сохранять порядок телефонов (position)
     phones.andand.each{ |x| self.update_phone(x)  }
   end
   
-  def update_address
-    # TODO Проверять не закрыт ли
-    results.andand.map { |r|
-      if r.parsed_address[:precision]=='exact'
-        self.address=r.parsed_address[:addr]
-        self.parsed_address=r.parsed_address
-        self.ymaps=r.ymaps
-      end
-    }
+  def update_addresses(result)
+    # if r.parsed_address[:precision]=='exact'    
+    
+    address = result.parsed_address[:precision]=='exact' ? result.parsed_address[:addr] : result.address.andand.sub("\n",'').sub(/\s+/,' ').strip
+    
+    self.addresses.create({
+                            :address=>address,
+                            :post_index=>result.parsed_address[:index].andand.stip,
+                            :city_id=>result.city_id,
+                            :parsed_address=>result.parsed_address,
+                            :ymaps=>result.ymaps
+                            
+                          }) unless self.addresses.find_by_address(address)
   end
   
   def update_description
     # TODO Проверять не закрыт ли
-    self.description=results.andand.map(&:other_info).join("\n------------------------\n")
+    self.description=results.andand.map(&:other_info).compact.uniq.join("\n------------------------\n")
   end
 
   

@@ -20,6 +20,7 @@
 #
 
 admin:
+  Address: create, read, update, delete
   Category: create, read, update, delete
   City: create, read, update, delete
   Company: create, read, update, delete
