@@ -79,8 +79,8 @@ Rails::Initializer.run do |config|
   config.gem 'redgreen', :version=>"1.2.2"
   config.gem 'ya2yaml', :version=>"0.26"
   config.gem 'andand', :version=>"1.3.1"
-  config.gem 'rubyist-aasm', :lib =>"aasm", :version=>"2.0.5"
-  config.gem 'authlogic'
+#  config.gem 'rubyist-aasm', :lib =>"aasm", :version=>"2.0.5"
+#  config.gem 'authlogic'
   
   config.gem 'mislav-will_paginate', :lib => 'will_paginate', 
   :source => 'http://gems.github.com'
@@ -92,7 +92,7 @@ Rails::Initializer.run do |config|
 end
 
 require 'configatron'
-require 'lib/tags'
+#require 'lib/tags'
 #require "will_paginate"
 
 configatron.site_url    = '8352.info'

@@ -4,7 +4,7 @@ class Category < ActiveRecord::Base
   extend ActiveSupport::Memoizable 
   
   
-  acts_as_taggable
+#  acts_as_taggable
 
   # TODO Попытаться отключить обновление разных параметров при каждом добавлении категории
   

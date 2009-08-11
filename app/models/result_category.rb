@@ -3,7 +3,7 @@ class ResultCategory < ActiveRecord::Base
   
   self.establish_connection :grabber
   
-  acts_as_taggable
+#  acts_as_taggable
   
   belongs_to :category
   belongs_to :source

@@ -120,9 +120,9 @@ Tagging:
 
 Category:
   fields:
-    list: name, parent, position, tag_list #companies_count, position, hidden
-    form: parent, name, position, tag_list, description
-    show: id, name, description, tag_list, companies_count, position, children_count, ancestors_count, descendants_count, hidden, parent
+    list: name, parent, position,  #companies_count, position, hidden
+    form: parent, name, position, description
+    show: id, name, description, companies_count, position, children_count, ancestors_count, descendants_count, hidden, parent
   actions:
     index:
     edit: show
@@ -216,9 +216,9 @@ Link:
 
 ResultCategory:
   fields:
-    list: category_name, category, tag_list, source_id
-    show: id, category_name, category, tag_list, source_id
-    form: category_name, category, tag_list, source
+    list: category_name, category, source_id
+    show: id, category_name, category, source_id
+    form: category_name, category, source
 #    options: 
 #      templates:
 #        category_id: category

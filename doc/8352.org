@@ -85,9 +85,9 @@
 * Обьявления [0/0]
 ** Граббинг
 *** DONE 21b.ru
-*** cheboksary.irr.ru
+*** DONE cheboksary.irr.ru
+*** DONE cheb.ru
 *** prilavok21.ru
-*** cheb.ru
 *** webzabor.ru
 ** Импорт
 ** Поиск
