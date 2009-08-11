@@ -54,23 +54,13 @@
 </p>
 <% end %>
 
-<% if @company.emails.size > 0 %>
+
+
 <p>
   <b>E-mail:</b>
-	<% @company.emails.each do |email| %>
-		<%= render :partial => "common/email", :locals => { :email => email }%>
-	<% end %>
+	<%= @company.emails %>
 </p>
-<% end %>
 
-<% if @company.tag_list.size > 0 %>
-<p>
-  <b>Тэги:</b>
-	<% @company.tag_list.each do |tag| %>
-		<%= link_to tag, { :controller => :tags, :action => :show, :id => tag } %> 
-	<% end %>
-</p>
-<% end %>
 
 <h2>На карте</h2>
 <a href="#" onclick="showCompanyAddress('<%= @company.address %>');return false;">смотреть на карте</a>

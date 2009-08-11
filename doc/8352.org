@@ -118,11 +118,12 @@
 *** Множественные категории
 		http://github.com/funkensturm/acts_as_category/tree/master
 
-    1. acts_as_multiple_category_content (для модели Item)
-			 1. Установка нескольких категорий
-			 2. Валидация на присутсвие хотябы в одной категории
-			 3. categories возвращает список категорий
-    2. acts_as_multiple_category (для модели Category)
+    1) acts_as_multiple_category_content или acts_as_multiple_categorable (для модели Item)
+			 1. has_category?(id,string), categories, add_category, remove_category
+			 2. Установка нескольких категорий
+			 3. Отключаемая валидация на присутсвие хотябы в одной категории
+			 4. Выбор категорий при создании/редактировании
+    2) acts_as_multiple_category (для модели Category)
      1. метод класса roots
      2. методы объекта parents, siblings, children, ancestors, descendants
      3. кешировалось количество children-ов, parent-ов, descendants и
@@ -134,7 +135,7 @@
 				def typus_tree_field(attribute, items = @resource[:class].roots, attribute_virtual = 'parent_id')
 				def expand_tree_into_select_field(items, attribute)
 				end
-    3. Хелпер для отрисовки дерева и его AJAX редактировния
+    3) Хелпер для отрисовки дерева и его AJAX редактировния
 			 1. Перемещать категории вместе с детками
 			 2. Переименовывать, создавать новые в любом месте
 			 3. Копировать категорию вместе с детками к другому папочке
