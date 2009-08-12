@@ -85,7 +85,7 @@ module PhoneHelper
     City.find_by_name("Чебоксары")
   end
 
-  memoize :get_current_city
+  #memoize :get_current_city
 
 
 end

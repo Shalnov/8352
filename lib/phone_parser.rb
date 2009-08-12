@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 require 'singleton'
 require 'unicode'
 
@@ -17,11 +16,15 @@ class PhoneParser
     # Выделяем потенциальные телефоны из строки. Unicode::downcase нужен потому что модифаер /i
     # раби регеэкспа несовместим с юникодом.
     parsed = line.scan(PHONE_EXTRACT_REGEXP).map do |m|
-      phone = m[0]   
+      phone = m[0]      
+      department = unless m[1].nil?
+        m[1] = m[1].match(DEPARTMENT_REGEXP)
+        $1
+      end
       is_phone = EXTRACTED_PHONE_CONDITIONS.map { |c| c.call(phone.dup) }.any?
       if is_phone
         cutting_line, is_fax = is_fax?(cutting_line, phone)
-        { :number => phone, :is_fax => is_fax }
+        { :phone => phone, :is_fax => is_fax, :department => department }
       end
     end
     parsed.compact
@@ -46,7 +49,11 @@ protected
   #   - Телефон не может содержать буквы, но может - цифры, пробелы, скобки, тире.
   #   - Перед телефоном может идти факс.
   #   - Между факсом и телефоном не должно быть ворд-символов.
-  PHONE_EXTRACT_REGEXP = /([\d\(\+]{1}[\d\-\(\)\s]+\d{1})[\b|\w]*/ui
+  #   - После телефона идёт нечто в скобках - описание.
+  PHONE_EXTRACT_REGEXP = /([\d\(\+]{1}[\d\-\(\)\s]+\d{1})(\s+?\(([\w\s\d\.\,]+)\))?[\b|\w]*/ui
+
+  # Регулярное выражение для вырезания описания.
+  DEPARTMENT_REGEXP = /[\s\(]+(.*)\)/
   
   # Регулярное выражение для выделения факса.
   FAX_REGEXP = /(ф.|факс|fax)/ui
