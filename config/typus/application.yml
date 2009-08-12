@@ -190,6 +190,50 @@ Phone:
   description:
 
 
+ResultCategory:
+  fields:
+    list: category_name, category, source_id
+    show: id, category_name, category, source_id
+    form: category_name, category, source
+#    options: 
+#      templates:
+#        category_id: category
+  actions:
+    index:
+    show: 
+    exit:
+  order_by: category_name
+  filters:
+  options:
+    per_page: 30
+  relationships: tags
+  search: category_name
+  application: Company catalog
+  description:
+
+
+
+Result:
+  fields:
+    list: name, category_name, address, state, importer_state, import_errors
+    form: name, address, phones, email, site_url, result_category, category_name, work_time, other_info, raw_html, company, is_checked, state, importer_state
+#, link
+    show: id, name, address, phones, email, site_url, category_name, work_time, other_info, raw_html, is_checked, state, importer_state, created_at, updated_at, link, company, source, import_errors, parsed_address, parsed_phones
+    options:
+      selectors: state
+  actions:
+    index:
+    edit:
+  order_by: category_name, name
+  options:
+    selectors: state
+    per_page: 50
+#  relationships: company, link
+  filters: state, importer_state, source
+  search: category_name, name, address, phones, email, site_url
+  application: Company catalog
+  description: Результаты поиска бьявлений
+
 
 
 
@@ -210,30 +254,10 @@ Link:
   relationships: children, parent, results, source
   filters:
   search:
-  application: Company grabber
+  application: Grabber
   description:
 
 
-ResultCategory:
-  fields:
-    list: category_name, category, source_id
-    show: id, category_name, category, source_id
-    form: category_name, category, source
-#    options: 
-#      templates:
-#        category_id: category
-  actions:
-    index:
-    show: 
-    exit:
-  order_by: category_name
-  filters:
-  options:
-    per_page: 30
-  relationships: tags
-  search: category_name
-  application: Company grabber
-  description:
 
 Source:
   fields:
@@ -245,35 +269,13 @@ Source:
     show: import_results
 #, reset_imported_categories, reset_imported_companies
   order_by:
-  relationships: result_categories #, results #links, results
+  relationships: result_categories, ad_result_categories #, results #links, results
   filters:
   search:
   options:
     default_action_on_item: show
-  application: Company grabber
+  application: Grabber
   description:
-
-Result:
-  fields:
-    list: name, category_name, address, state, importer_state, import_errors
-    form: name, address, phones, email, site_url, result_category, category_name, work_time, other_info, raw_html, company, is_checked, state, importer_state
-#, link
-    show: id, name, address, phones, email, site_url, category_name, work_time, other_info, raw_html, is_checked, state, importer_state, created_at, updated_at, link, company, source, import_errors, parsed_address, parsed_phones
-    options:
-      selectors: state
-  actions:
-    index:
-    edit:
-  order_by: category_name, name
-  options:
-    selectors: state
-    per_page: 50
-#  relationships: company, link
-  filters: state, importer_state, source
-  search: category_name, name, address, phones, email, site_url
-  application: Company grabber
-  description: Результаты поиска бьявлений
-
 
 
 # APPLICATION:
@@ -324,7 +326,9 @@ AdResultCategory:
 
 AdResult:
   fields:
-    list: source, category_name, state, price, contacts
+    list: category_name, source, fields, state, price
+    form: source, category_name, fields, state, price, contacts
+    show: source, category_name, fields, state, price, contacts
 #address, state, importer_state, import_errors
 #    form: name, address, phones, email, site_url, result_category, category_name, work_time, other_info, raw_html, company, is_checked, state, importer_state
 #, link

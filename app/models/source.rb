@@ -9,6 +9,7 @@ class Source < ActiveRecord::Base
 
 #  has_many :companies, :through => :results
   has_many :result_categories
+  has_many :ad_result_categories
   
 #  has_many :jobs
 

@@ -15,50 +15,6 @@ class AdResult < ActiveRecord::Base
 
   serialize :fields, Hash
 
-  def fields
-    value = super
-    if value.is_a?(Hash)
-      value
-    else
-      self.fields = Hash.new
-    end
-  end
-
-  def fields_names
-    self.fields.keys
-  end
-
-  def field_exist? field
-    fields_names.include?(field.to_sym)
-  end
-  
-  
-  # ---
-
-  class << self
-    public :define_method
-  end
-
-  def method_missing *args
-    method = args.shift
-    value  = args.shift
-    return super if method.nil?
-    return super method unless method.to_s =~ /^field_/
-
-    if method.to_s =~ /=/
-      self.class.define_method(method) do
-        self.fields.merge! method.to_s.gsub!('=','').to_sym => value
-      end
-    else
-      self.class.define_method(method) do
-        self.fields[method]
-      end
-    end
-
-    self.send method, value
-  end
-
-# ------------------------------------------------------------------------------
 
   
     
