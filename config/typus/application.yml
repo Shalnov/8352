@@ -324,7 +324,7 @@ AdResultCategory:
 
 AdResult:
   fields:
-    list: source, category_name, ad_text, state, price, contacts
+    list: source, category_name, state, price, contacts
 #address, state, importer_state, import_errors
 #    form: name, address, phones, email, site_url, result_category, category_name, work_time, other_info, raw_html, company, is_checked, state, importer_state
 #, link
@@ -336,7 +336,7 @@ AdResult:
     edit:
   order_by: category_name, ad_text
   options:
-    selectors: state
+    selectors: state, source
     per_page: 50
 #  relationships: company, link
 #  filters: state, importer_state, source
