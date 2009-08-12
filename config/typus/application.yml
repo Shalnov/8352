@@ -272,5 +272,75 @@ Result:
   filters: state, importer_state, source
   search: category_name, name, address, phones, email, site_url
   application: Company grabber
+  description: Результаты поиска бьявлений
+
+
+
+# APPLICATION:
+#
+# Advert catalog
+#
+
+
+AdCategory:
+  fields:
+    list: name#, parent, position,  #companies_count, position, hidden
+    form: name #parent, , position, description
+#    show: id, name, description, companies_count, position, children_count, ancestors_count, descendants_count, hidden, parent
+  actions:
+    index:
+    edit: show
+#  order_by: parent_id, position
+#  relationships: children #companies #, parent, children #, 
+  options:
+    per_page: 30
+  filters:
+#  relationships: tags
+  search: name
+  application: Advert catalog
+  description: Категории обьявлений
+
+
+AdResultCategory:
+  fields:
+    list: category_name, ad_category, source_id
+    show: id, category_name, ad_category, source_id
+    form: category_name, ad_category, source
+#    options: 
+#      templates:
+#        category_id: category
+  actions:
+    index:
+    show: 
+    exit:
+  order_by: category_name
+  filters:
+  options:
+    per_page: 30
+  relationships: tags
+  search: category_name
+  application: Advert catalog
+  description:
+
+AdResult:
+  fields:
+    list: source, category_name, ad_text, state, price, contacts
+#address, state, importer_state, import_errors
+#    form: name, address, phones, email, site_url, result_category, category_name, work_time, other_info, raw_html, company, is_checked, state, importer_state
+#, link
+#    show: id, name, address, phones, email, site_url, category_name, work_time, other_info, raw_html, is_checked, state, importer_state, created_at, updated_at, link, company, source, import_errors, parsed_address, parsed_phones
+    options:
+      selectors: state
+  actions:
+    index:
+    edit:
+  order_by: category_name, ad_text
+  options:
+    selectors: state
+    per_page: 50
+#  relationships: company, link
+#  filters: state, importer_state, source
+  search: category_name, name #, address, phones, email, site_url
+  application: Advert catalog
   description:
 

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 module PhoneHelper
-  extend ActiveSupport::Memoizable
+#  extend ActiveSupport::Memoizable
   
   def h_phone(phone)
     return '' unless phone    

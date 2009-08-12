@@ -22,15 +22,18 @@
 admin:
   Address: create, read, update, delete
   Category: create, read, update, delete
+  AdCategory: create, read, update, delete
   City: create, read, update, delete
   Company: create, read, update, delete
   Email: create, read, update, delete
   Link: create, read, update, delete
   Phone: create, read, update, delete
   Result: create, read, update, delete
+  AdResult: create, read, update, delete
   Role: create, read, update, delete
   Source: create, read, update, delete, set_categories, import_results, reset_imported_companies, reset_imported_categories
   ResultCategory: create, read, update, delete
+  AdResultCategory: create, read, update, delete
   Tag: create, read, update, delete
   Tagging: create, read, update, delete
   TagsSynonym: create, read, update, delete

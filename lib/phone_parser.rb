@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'singleton'
 require 'unicode'
 
@@ -30,7 +31,7 @@ class PhoneParser
     parsed.compact
   end
 
-protected
+  protected
   # Проверяет, факс это или нет.
   # Для этого, в строке до телефона ищется слово "факс".
   # Сюда можно добавить проверку расстояния между словом "факс" и, собственно, телефоном.
