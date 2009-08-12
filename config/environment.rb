@@ -79,11 +79,18 @@ Rails::Initializer.run do |config|
 #  config.gem 'redgreen', :version=>"1.2.2"
   config.gem 'ya2yaml', :version=>"0.26"
   config.gem 'andand', :version=>"1.3.1"
-  config.gem 'acts_as_taggable', :version=>"2.0.2"
+  # config.gem 'acts_as_taggable_on_steroids', 
+  #  :lib => "acts_as_taggable_on_steroids"
+#  ,  
+  # :version=>"2.0.2"
+  
+
+  
 #  config.gem 'rubyist-aasm', :lib =>"aasm", :version=>"2.0.5"
 #  config.gem 'authlogic'
 #
   config.gem 'test-unit', :lib => 'test/unit'
+
 
   
   config.gem 'mislav-will_paginate', :lib => 'will_paginate', 
