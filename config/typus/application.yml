@@ -120,18 +120,18 @@ Tagging:
 
 Category:
   fields:
-    list: name, parent, position,  #companies_count, position, hidden
-    form: parent, name, position, description
-    show: id, name, description, companies_count, position, children_count, ancestors_count, descendants_count, hidden, parent
+    list: name, paths, position,  #companies_count, position, hidden
+    form: name, paths, position, description
+    show: id,  paths, name, description, companies_count, position
   actions:
     index:
     edit: show
-  order_by: parent_id, position
+  order_by: name, position
 #  relationships: children #companies #, parent, children #, 
   options:
     per_page: 30
   filters:
-  relationships: tags
+  relationships: parents, children
   search: name
   application: Company catalog
   description: Основные категории компаний

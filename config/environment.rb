@@ -103,8 +103,8 @@ Rails::Initializer.run do |config|
 end
 
 require 'configatron'
-#require 'lib/tags'
-#require "will_paginate"
+
+require "acts_as_multiply_category"
 
 configatron.site_url    = '8352.info'
 configatron.admin_email = 'admin@orionet.ru'

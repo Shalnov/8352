@@ -9,7 +9,7 @@ class Source < ActiveRecord::Base
 
 #  has_many :companies, :through => :results
   has_many :result_categories
-  has_many :ad_result_categories
+
   
 #  has_many :jobs
 
@@ -27,11 +27,12 @@ class Source < ActiveRecord::Base
     cats.each_value do |cat|
             
       if cat[:id]=="all"
-        # TODO поискать уже в результатах
-        category=Category.find_or_create_from_string(cat[:title])
-        ResultCategory.create!(:category_id=>category.id,
-                               :category_name=>cat[:title],
-                               :source_id=>self.id)
+        raise "Not implemented"
+        # # TODO поискать уже в результатах
+        # category=Category.find_or_create_from_string(cat[:title])
+        # ResultCategory.create!(:category_id=>category.id,
+        #                        :category_name=>cat[:title],
+        #                        :source_id=>self.id)
       elsif cat[:id].blank? || cat[:id]==""
         # ничего не устанавливаем
       elsif cat[:id].to_i>0
