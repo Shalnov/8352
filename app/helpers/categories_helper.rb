@@ -21,7 +21,7 @@ module CategoriesHelper
     anchor = "aac_tree_#{category.id.to_s}"
     
     result = tag('a', {:name => anchor}) + tag('/a')
-    result += "<li id='#{anchor}'>"
+    result += "<li>"
     result += '<b>' if @category == category.id
 
     result += link_to h(category.name),category_path(category)
@@ -32,19 +32,20 @@ module CategoriesHelper
     end
     result += '</b>' if @category == category.id
     result += '</li>'
-    result += sortable_element("#{anchor}", :update => 'aac_sortable_tree_response', :url => "ajaxurl")
+
     
     if category.children_count > 0
       #      addon = (category.parents_count == 0 or category.children_ids.include?(@category) or (category.self_and_siblings_ids.include?(@category) and category.children_count == 0)) ? '' : ' style="display: none;"'
       addon=''
       # id='#{anchor}'
-      result += "<ul #{addon}>"
+      result += "<ul  id='#{anchor}' #{addon}>"
       category.children.each { |child| result += _tree_category(child) }
       result += '</ul>'
-      
+      result += sortable_element("#{anchor}", :update => 'aac_sortable_tree_response', :url => "ajaxurl")      
     end
     result
   end
+  
   private :_tree_category
 
 end
