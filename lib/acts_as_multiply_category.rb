@@ -47,6 +47,7 @@ module ActsAsMultiplyCategory
       }
       
       # TODO parents_count и children_count устанавливать в 0, если nil
+      # TODO Проверять зацикливания
       
       
       #   extend ClassMethodsMixin
