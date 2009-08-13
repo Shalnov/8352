@@ -46,7 +46,7 @@ module ActsAsMultiplyCategory
         :order => :position
       }
       
-      # TODO parents_count устанавливать в 0, если nil
+      # TODO parents_count и children_count устанавливать в 0, если nil
       
       
       #   extend ClassMethodsMixin
