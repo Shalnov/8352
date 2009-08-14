@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Filters added to this controller apply to all controllers in the application.
 # Likewise, all the methods added will be available for all controllers.
 
@@ -35,5 +36,14 @@ class ApplicationController < ActionController::Base
 #       block.call
 #     end
 #   end
+  
+    
+  
+  # TODO Вынести эту заплатку куда следует
+  
+  def get_current_city
+    City.find_by_name("Чебоксары")
+  end
+
   
 end

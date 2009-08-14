@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'test_helper'
 #require 'phone_parser'
 
@@ -65,6 +66,14 @@ protected
     'Phones are: (904)11-22-33 (dumb ass), +7 (905) 123456 (department of хеад cutting, room 55)' => [
       {:phone => '(904)11-22-33', :is_fax => false, :department => "dumb ass" },
       {:phone => '+7 (905) 123456', :is_fax => false, :department => "department of хеад cutting, room 55"}
-    ]
+    ],
+    "Телефоны: (8352) 61-21-25, 61-21-00, 63-80-47, 28-71-91
+Факс: 28-74-55" => [
+                    {:department=>nil, :number=>"(8352) 61-21-25", :is_fax=>false},
+                    {:department=>nil, :number=>"61-21-00", :is_fax=>false},
+                    {:department=>nil, :number=>"63-80-47", :is_fax=>false},
+                    {:department=>nil, :number=>"28-71-91", :is_fax=>false},
+                    {:department=>nil, :number=>"28-74-55", :is_fax=>true}
+                   ]
   }
 end

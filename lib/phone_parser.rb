@@ -5,7 +5,7 @@ require 'unicode'
 class PhoneParser
   include Singleton
 
-  # Выделяет телефоны из строки. Возвращает массив хешей [{ :phone => "телефон", :is_fax => true/false}]
+  # Выделяет телефоны из строки. Возвращает массив хешей [{ :phone => "телефон", :is_fax => true/false, :departmens=>'директор' }]
   # Работает так:
   #   - В строке ищуся все потенциальные телефоны. Правила поиска описаны ниже, в комментарии к PHONE_EXTRACT_REGEXP.
   #   - Каждый найденный телефон прогоняется через список исключений (EXTRACT_PHONE_CONDITIONS), и отметается если сработало
@@ -25,7 +25,7 @@ class PhoneParser
       is_phone = EXTRACTED_PHONE_CONDITIONS.map { |c| c.call(phone.dup) }.any?
       if is_phone
         cutting_line, is_fax = is_fax?(cutting_line, phone)
-        { :phone => phone, :is_fax => is_fax, :department => department }
+        { :number => phone, :is_fax => is_fax, :department => department }
       end
     end
     parsed.compact

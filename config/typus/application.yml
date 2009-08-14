@@ -214,11 +214,11 @@ ResultCategory:
 
 
 Result:
-  fields:
-    list: name, category_name, address, state, importer_state, import_errors
-    form: name, address, phones, email, site_url, result_category, category_name, work_time, other_info, raw_html, company, is_checked, state, importer_state
+  fields: #category_name, 
+    list: name, normalized_name, parsed_phones_str, state #address, state, importer_state, import_errors
+    form: name, normalized_name, short_name, address, phones, parsed_phones, parsed_phones_str, email, site_url, result_category, category_name, work_time, other_info, raw_html, company, is_checked, state, importer_state
 #, link
-    show: id, name, address, phones, email, site_url, category_name, work_time, other_info, raw_html, is_checked, state, importer_state, created_at, updated_at, link, company, source, import_errors, parsed_address, parsed_phones
+    show: id, name, address, phones, parsed_phones, email, site_url, category_name, work_time, other_info, raw_html, is_checked, state, importer_state, created_at, updated_at, link, company, source, import_errors, parsed_address, parsed_phones
     options:
       selectors: state
   actions:

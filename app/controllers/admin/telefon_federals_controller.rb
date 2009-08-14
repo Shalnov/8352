@@ -3,7 +3,7 @@ class Admin::TelefonFederalsController < Admin::MasterController
   include PhoneHelper
   
   def check_number
-    @newnumber = normalize_phone(params[:number])
+    @newnumber = Phone.normalize(params[:number])
   end
 
 =begin

@@ -10,6 +10,8 @@ RAILS_GEM_VERSION = '2.3.3' unless defined? RAILS_GEM_VERSION
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
 
+
+
 Rails::Initializer.run do |config|
   # Settings in config/environments/* take precedence over those specified here.
   # Application configuration should go into files in config/initializers
@@ -84,13 +86,11 @@ Rails::Initializer.run do |config|
 #  ,  
   # :version=>"2.0.2"
   
-
   
-#  config.gem 'rubyist-aasm', :lib =>"aasm", :version=>"2.0.5"
-#  config.gem 'authlogic'
+  config.gem 'rubyist-aasm', :lib =>"aasm", :version=>"2.0.5"
+  config.gem 'authlogic'
 #
   config.gem 'test-unit', :lib => 'test/unit'
-
 
   
   config.gem 'mislav-will_paginate', :lib => 'will_paginate', 
@@ -104,7 +104,7 @@ end
 
 require 'configatron'
 
-require "acts_as_multiply_category"
+
 
 configatron.site_url    = '8352.info'
 configatron.admin_email = 'admin@orionet.ru'

@@ -64,7 +64,7 @@ namespace :deploy do
     apache_config = <<-EOF
     <VirtualHost #{domain}:3002>
       ServerName 8352.info
-      ServerAlias 8352.info www.8352.info chuvashia.ru www.chuvashia.ru *.chuvashia.ru
+      ServerAlias 8352.info www.8352.info chuvashia.ru www.chuvashia.ru *.chuvashia.ru *.chuvashya.ru chuvashya.ru
       DocumentRoot #{deploy_to}/current/public
       RailsEnv #{rails_env}
 

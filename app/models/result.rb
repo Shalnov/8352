@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
-require "phone_parser"
-require "address_parser"
+#require "phone_parser"
+#require "address_parser"
 
-class Result < ActiveRecord::Base
+class Result < ResultBase
   
-  self.establish_connection :grabber
+  include PhoneHelper
+  
+  set_table_name "results"
   
   serialize  :ymaps
   
@@ -27,23 +29,16 @@ class Result < ActiveRecord::Base
   
   
   serialize  :parsed_phones
-  serialize  :import_errors
   
   belongs_to :company, :counter_cache => true
-  
-  belongs_to :source
-  belongs_to :city
 
   belongs_to :result_category
-  has_one :category, :through=>:result_category
-
-  include PhoneHelper
-#  extend ActiveSupport::Memoizable
   
+  has_one :category, :through=>:result_category
   
     
 # ------------------------------------------------------------------------------
-    state_machine :state, :initial => :updated do
+  state_machine :state, :initial => :updated do
 
     event :mark_imported do
       transition :updated => :imported
@@ -117,10 +112,26 @@ class Result < ActiveRecord::Base
   def self.state
     ['updated','imported']
   end
-
   
-  def prepare
-    mark_none if updated?
+  def parsed_phones_str
+    return '' unless parsed_phones
+    phones=[]
+    parsed_phones.map { |p| 
+      str=h_phone(p[:number])
+
+      a=[]
+      a << "факс" if p[:is_fax]
+      a << p[:department] unless p[:department].blank?
+      str+=" (#{a.join(', ')})" if a.size>0
+
+      phones << str 
+    }
+    phones.join('; ')
+  end
+
+   
+  def prepare(force=false)
+    mark_none if updated? || force
     if none?
       parse_address
       parse_phones
@@ -227,6 +238,8 @@ class Result < ActiveRecord::Base
   
   def normalize_name
     sn=''
+
+    # TODO если имя #123 и категория Аптеки то писать Аптека N123
     
     quotes_reg=Regexp.new('\"([^"]+)\"')
     # Если есть кавычки, берем то, что в них лежит и все
@@ -282,11 +295,16 @@ class Result < ActiveRecord::Base
     
   end
   
+  # FIX Вынести куда следует
+  def get_current_city
+    City.find_by_name("Чебоксары")
+  end
+  
   def parse_address
     
-    self.parsed_address,self.ymaps=AddressParser.instance.parse(self.address)
+    self.parsed_address,self.ymaps=AddressParser.instance.parse(self.address) unless self.address.blank?
     
-    unless parsed_address
+    unless self.parsed_address
       self.parsed_address={}
       self.city=get_city_from_phones || get_current_city
       return
@@ -297,7 +315,7 @@ class Result < ActiveRecord::Base
       self.city = City.find_by_name(parsed_address[:locality]) || raise("Не могу найти населенный пункт #{parsed_address[:locality]}")
     else
       
-      # TOFIX Грязный хак
+      # FIX Грязный хак
       self.city = City.find_by_name("Чебоксары")
     end
 
@@ -306,21 +324,23 @@ class Result < ActiveRecord::Base
     
   
   def get_city_from_phones
+    return nil unless phones
     p=phones.scan(/\((\d{3,4})\)/)[0]
     return nil unless p
     City.find_by_prefix(p[0])
   end
   
   def parse_phones
-    default_prefix=8352
-    pp = PhoneParser.instance.parse(phones || '') + PhoneParser.instance.parse(other_info || '')
+    self.parsed_phones=[] unless self.phones and self.other_info
+    pi=PhoneParser.instance
+    pp = pi.parse(phones || '') + pi.parse(other_info || '')
     found = { }
     phones = []
     pp.each { |p| 
-      p[:number]=normalize_phone(p[:number],self.city.prefix || default_prefix)
+      p[:number]=Phone.normalize(p[:number],self.city.prefix || get_current_city.prefix)
       if found[p[:number]]
-        found[p[:number]][:department]=p.department
-        found[p[:number]][:is_fax]=p.department
+        found[p[:number]][:department]=p[:department] unless p[:department].blank?
+        found[p[:number]][:is_fax]=p[:is_fax] if p[:is_fax]
       else
         phones << p
         found[p[:number]]=p
