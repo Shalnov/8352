@@ -37,10 +37,8 @@ class PhoneParser
   def is_fax?(line, phone)
     phone_index = line.mb_chars.index(phone)
     fax_slice = line.mb_chars[0, phone_index].downcase
-    puts "phone: #{phone} phone_index: #{phone_index} slice: #{fax_slice}"    
     line = line.mb_chars[phone_index..-1]
     is_fax = !(fax_slice =~ FAX_REGEXP).nil?    
-    puts is_fax
     [line, is_fax]
   end
 
