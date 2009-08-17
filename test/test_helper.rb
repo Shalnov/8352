@@ -2,6 +2,7 @@ ENV["RAILS_ENV"] = "test"
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require 'test_help'
 #require 'redgreen'
+#require "acts_as_multiply_category"  
 
 require 'factory_girl'
 
