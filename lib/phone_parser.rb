@@ -1,11 +1,10 @@
-# -*- coding: utf-8 -*-
 require 'singleton'
-require 'unicode'
+require 'active_support'
 
 class PhoneParser
   include Singleton
 
-  # Выделяет телефоны из строки. Возвращает массив хешей [{ :phone => "телефон", :is_fax => true/false, :departmens=>'директор' }]
+  # Выделяет телефоны из строки. Возвращает массив хешей [{ :phone => "телефон", :is_fax => true/false}]
   # Работает так:
   #   - В строке ищуся все потенциальные телефоны. Правила поиска описаны ниже, в комментарии к PHONE_EXTRACT_REGEXP.
   #   - Каждый найденный телефон прогоняется через список исключений (EXTRACT_PHONE_CONDITIONS), и отметается если сработало
@@ -25,7 +24,7 @@ class PhoneParser
       is_phone = EXTRACTED_PHONE_CONDITIONS.map { |c| c.call(phone.dup) }.any?
       if is_phone
         cutting_line, is_fax = is_fax?(cutting_line, phone)
-        { :number => phone, :is_fax => is_fax, :department => department }
+        { :phone => phone, :is_fax => is_fax, :department => department }
       end
     end
     parsed.compact
@@ -36,10 +35,12 @@ class PhoneParser
   # Для этого, в строке до телефона ищется слово "факс".
   # Сюда можно добавить проверку расстояния между словом "факс" и, собственно, телефоном.
   def is_fax?(line, phone)
-    phone_index = line.index(phone)
-    fax_slice = Unicode::downcase(line[0, phone_index])
-    line = line[phone_index..-1]
+    phone_index = line.mb_chars.index(phone)
+    fax_slice = line.mb_chars[0, phone_index].downcase
+    puts "phone: #{phone} phone_index: #{phone_index} slice: #{fax_slice}"    
+    line = line.mb_chars[phone_index..-1]
     is_fax = !(fax_slice =~ FAX_REGEXP).nil?    
+    puts is_fax
     [line, is_fax]
   end
 
@@ -57,7 +58,7 @@ class PhoneParser
   DEPARTMENT_REGEXP = /[\s\(]+(.*)\)/
   
   # Регулярное выражение для выделения факса.
-  FAX_REGEXP = /(ф.|факс|fax)/ui
+  FAX_REGEXP = /(ф\.|факс|fax)/ui
   
   # Условия, по которым проверяется телефон после выделения.
   # Сюда будем добавлять условия, которые найдём.
