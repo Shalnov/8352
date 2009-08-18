@@ -48,6 +48,7 @@ module ActsAsMultiplyCategory
       
       # TODO parents_count и children_count устанавливать в 0, если nil
       # TODO Проверять зацикливания
+      # TODO ancestors - список предков
       
       
       #   extend ClassMethodsMixin
@@ -62,15 +63,29 @@ module ActsAsMultiplyCategory
   
   module InstanceMethods
     
-    
+    def ancestors
+      node, nodes = self, []
+      nodes << node = node.parent while node.parent
+      nodes
+    end
+
+    # Returns the root node of the tree.
+    def root
+      node = self
+      node = node.parent while node.parent
+      node
+    end
+
     def paths
       #    p=[]
       parent_paths.map { |p| p.join(' / ') }.join(' ; ')
     end
-    
+
+    def parent
+      parents.size>0 ? parents[0] : nil
+    end
     
     def parent_paths(self_name=false)
-      debugger
       pa=[]
       parents.map { |parent|
         p = parent.parent_paths(true)

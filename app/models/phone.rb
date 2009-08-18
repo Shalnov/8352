@@ -6,7 +6,7 @@ class Phone < ActiveRecord::Base
   before_save :normalize
 
   validates_presence_of :number
-  validates_numericality_of :number, :greater_than => 70000000000, :less_than => 80000000000
+  validates_numericality_of :number #, :greater_than => 70000000000, :less_than => 80000000000
   
     
   #=get_current_city.prefix
@@ -49,9 +49,14 @@ class Phone < ActiveRecord::Base
   end
 
   def normalize
-    self.number=Phone.normalize(self.number)
+    self.number=Phone.normalize(self.number,get_current_city.prefix)
   end
   
+  # FIX убрать куда следует
+  def get_current_city
+    City.find_by_name("Чебоксары")
+  end
+
 
   
 end

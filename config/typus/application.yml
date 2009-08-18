@@ -269,7 +269,7 @@ Source:
     show: import_results
 #, reset_imported_categories, reset_imported_companies
   order_by:
-  relationships: result_categories, ad_result_categories #, results #links, results
+  relationships: result_categories #, ad_result_categories #, results #links, results
   filters:
   search:
   options:
