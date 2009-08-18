@@ -69,11 +69,11 @@ protected
     ],
     "Телефоны: (8352) 61-21-25, 61-21-00, 63-80-47, 28-71-91
 Факс: 28-74-55" => [
-                    {:department=>nil, :number=>"(8352) 61-21-25", :is_fax=>false},
-                    {:department=>nil, :number=>"61-21-00", :is_fax=>false},
-                    {:department=>nil, :number=>"63-80-47", :is_fax=>false},
-                    {:department=>nil, :number=>"28-71-91", :is_fax=>false},
-                    {:department=>nil, :number=>"28-74-55", :is_fax=>true}
+                    {:department=>nil, :phone=>"(8352) 61-21-25", :is_fax=>false},
+                    {:department=>nil, :phone=>"61-21-00", :is_fax=>false},
+                    {:department=>nil, :phone=>"63-80-47", :is_fax=>false},
+                    {:department=>nil, :phone=>"28-71-91", :is_fax=>false},
+                    {:department=>nil, :phone=>"28-74-55", :is_fax=>true}
                    ]
   }
 end
