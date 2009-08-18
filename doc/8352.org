@@ -81,7 +81,7 @@
 *** DONE 21b.ru
 *** DONE cheboksary.irr.ru
 *** DONE cheb.ru
-*** STARTED prilavok21.ru
+*** DONE prilavok21.ru
 *** STARTED webzabor.ru
 ** Импорт
 ** Поиск

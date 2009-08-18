@@ -84,13 +84,10 @@ protected
 
   # Пытается вручную вытащить улицу.
   def try_to_parse_street_and_house(addr)
+    a=nil
     STREET_REGEXP.each do |r|
-      if a=addr.match(/#{r}#{STREET_NAME_REGEXP}#{HOUSE_REGEXP}/iu)
-        return a[1], a[3] 
-      end
-      if a=addr.match(/#{STREET_NAME_REGEXP}#{r}#{HOUSE_REGEXP}/iu)
-        return a[1], a[3] 
-      end
+      return a[1], a[3] if a=addr.match(/#{r}#{STREET_NAME_REGEXP}#{HOUSE_REGEXP}/iu)
+      return a[1], a[3] if a=addr.match(/#{STREET_NAME_REGEXP}#{r}#{HOUSE_REGEXP}/iu)
     end
     nil    
   end
