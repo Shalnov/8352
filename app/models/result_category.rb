@@ -26,7 +26,6 @@ class ResultCategory < ActiveRecord::Base
     Result.
       update_all({
                    :result_category_id=>self.id,
-                   :state=>'updated'
                  },
                  {
                    :category_name=>self.category_name

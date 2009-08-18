@@ -114,7 +114,7 @@ class Result < ResultBase
   
   def update_company(company=nil)
     
-    # TODO Лочить запись results при 
+    # TODO Лочить запись results  и делать все в транзакции
     self.company=company if company
     self.save!
     

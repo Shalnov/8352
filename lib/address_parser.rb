@@ -15,6 +15,7 @@ class AddressParser
   #  - Выделяется индекс и тип поселения (это легко), и номер офиса (чуть сложнее).
   #  - Далее, пытаемся отпарсить недостающие части адреса по простым правилам типа "ул. {улица}", "д. {дом}" и так далее.
   def parse(addr)    
+    
     yandex_response,doc = yandex_parse(addr)
     return if yandex_response.nil?
     
@@ -31,7 +32,8 @@ class AddressParser
     return nil if response[:locality].to_s.empty?
     
     addr_stripped = strip_all_before_city(addr, response)    
-    street, house = try_to_parse_street_and_house(addr_stripped, response) if response[:thoroughfare].nil? || response[:premise].nil?
+    street, house = try_to_parse_street_and_house(addr_stripped) if response[:thoroughfare].nil? || response[:premise].nil?
+
     response[:thoroughfare] ||= street
     response[:premise] ||= house
 
@@ -81,10 +83,11 @@ protected
   end    
 
   # Пытается вручную вытащить улицу.
-  def try_to_parse_street_and_house(addr, response)
+  def try_to_parse_street_and_house(addr)
+    a=nil
     STREET_REGEXP.each do |r|
-      return $1, $3 if addr.match(/#{r}#{STREET_NAME_REGEXP}#{HOUSE_REGEXP}/iu)
-      return $1, $3 if addr.match(/#{STREET_NAME_REGEXP}#{r}#{HOUSE_REGEXP}/iu)
+      return a[1], a[3] if a=addr.match(/#{r}#{STREET_NAME_REGEXP}#{HOUSE_REGEXP}/iu)
+      return a[1], a[3] if a=addr.match(/#{STREET_NAME_REGEXP}#{r}#{HOUSE_REGEXP}/iu)
     end
     nil    
   end

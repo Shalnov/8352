@@ -109,9 +109,14 @@ class Company < ActiveRecord::Base
   end
   
   def update_addresses(result)
-    # if r.parsed_address[:precision]=='exact'    
     
-    address = result.parsed_address[:precision]=='exact' ? result.parsed_address[:addr] : result.address.andand.sub("\n",'').sub(/\s+/,' ').strip
+    if result.parsed_address[:precision]=='exact'
+      address = result.parsed_address[:addr] 
+    elsif not result.address.blank?
+      address = result.address.sub("\n",' ').sub(/\s+/,' ').strip
+    else
+      return nil
+    end
     
     self.addresses.create({
                             :address=>address,

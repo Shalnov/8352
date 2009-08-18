@@ -77,7 +77,8 @@ class ResultBase < ActiveRecord::Base
     { 
       :include => :result_category,
       :conditions => ["state='updated' and results.source_id=? and result_category_id is not null",
-                      source_id]
+                      source_id],
+      :order => :id
     }
   }
   

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'singleton'
 require 'active_support'
 
@@ -24,7 +25,7 @@ class PhoneParser
       is_phone = EXTRACTED_PHONE_CONDITIONS.map { |c| c.call(phone.dup) }.any?
       if is_phone
         cutting_line, is_fax = is_fax?(cutting_line, phone)
-        { :phone => phone, :is_fax => is_fax, :department => department }
+        { :number => phone, :is_fax => is_fax, :department => department }
       end
     end
     parsed.compact
