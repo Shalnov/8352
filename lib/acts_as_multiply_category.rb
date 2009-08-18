@@ -70,7 +70,7 @@ module ActsAsMultiplyCategory
     
     
     def parent_paths(self_name=false)
-      debugger
+#      debugger
       pa=[]
       parents.map { |parent|
         p = parent.parent_paths(true)
