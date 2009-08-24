@@ -2,7 +2,7 @@
 #require 'acts_as_taggable'
 
 class Company < ActiveRecord::Base
-
+  belongs_to :group, :class_name => "CompanyGroup"
   
   serialize  :ymaps
   

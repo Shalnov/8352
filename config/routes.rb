@@ -1,7 +1,10 @@
 ActionController::Routing::Routes.draw do |map|
-
-  
   map.root :controller => "home"
+  
+  map.namespace :admin do |admin|
+    admin.resources :company_groups, :collection => { :companies => :get }
+    admin.resources :branches
+  end
 
 #   map.namespace :admin do |admin|
 #     admin.resources :users
