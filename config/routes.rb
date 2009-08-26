@@ -2,8 +2,8 @@ ActionController::Routing::Routes.draw do |map|
   map.root :controller => "home"
   
   map.namespace :admin do |admin|
-    admin.resources :company_groups, :collection => { :companies => :get }
-    admin.resources :branches
+    admin.resources :company_groups
+    admin.resources :branches, :collection => { :move => :post }
   end
 
 #   map.namespace :admin do |admin|
