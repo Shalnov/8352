@@ -1,0 +1,17 @@
+%h1 Категории
+
+%table.list
+  %thead
+    %th{:width => 30}
+    %th{:width => 60} ID
+    %th{:width => 300} Наименование
+    %th{:width => 100}    
+    %th{:width => "%"}
+    %th{:width => 30}    
+  %tbody#branches
+    = render @branches
+
+:javascript
+  $(document).ready(function() {
+    branches();
+  });

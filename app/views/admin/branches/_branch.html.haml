@@ -1,0 +1,11 @@
+%tr{:id => "branch_#{branch.id}", :rel => "#{branch.name}"}
+  %td= icon(:move, :class => "_move")
+  %td= branch.id
+  %td{:class => "level_#{branch.level}"}= branch.name
+  %td._branch= icon(:branch)  
+  %td &nbsp;
+  %td= link_to icon(:edit), edit_admin_branch_url(branch)
+
+- unless branch.children.empty?
+  = render branch.children
+  
