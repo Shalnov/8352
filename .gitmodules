@@ -37,3 +37,6 @@
 [submodule "vendor/plugins/searchlogic"]
 	path = vendor/plugins/searchlogic
 	url = git://github.com/binarylogic/searchlogic.git
+[submodule "vendor/plugins/awesome_nested_set"]
+	path = vendor/plugins/awesome_nested_set
+	url = git://github.com/retoo/awesome_nested_set.git

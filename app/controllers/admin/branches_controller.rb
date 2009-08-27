@@ -5,7 +5,7 @@ class Admin::BranchesController < ApplicationController
   # BASE CONTROLLER >
   
   def index
-    @branches = Branch.with_groups.roots
+    @branches = Branch.with_groups.all
   end
   
   def new
@@ -33,6 +33,11 @@ class Admin::BranchesController < ApplicationController
       render :edit
     end
   end
+
+  def destroy
+    Branch.find(params[:id]).destroy
+    redirect_to :action => :index
+  end
   
   def move
     source_id = params[:source].gsub('branch_', '')
@@ -40,17 +45,13 @@ class Admin::BranchesController < ApplicationController
     if params[:target]
       target_id = params[:target].gsub('branch_', '')
       target = Branch.find(target_id)
-      if source.left > target.right
-        source.move_to_left_of(target_id)
-      else
-        source.move_to_right_of(target_id)
-      end
+      source.move_to_left_or_right(target)
     elsif params[:target_parent]
       target_id = params[:target_parent].gsub('branch_', '')      
       source.move_to_child_of(target_id)
     end
     
-    @branches = Branch.with_groups.roots
+    @branches = Branch.with_groups.all
     render :layout => false
   end
 end
