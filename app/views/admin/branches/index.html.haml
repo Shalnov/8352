@@ -4,12 +4,13 @@
   %thead
     %th{:width => 30}
     %th{:width => 60} ID
-    %th{:width => 300} Наименование
-    %th{:width => 100}    
-    %th{:width => "%"}
-    %th{:width => 30}    
+    %th{:width => "%"} Наименование
+    %th{:width => 200} Добавить группу
+    %th{:width => 120} Сделать ребёнком
+    %th{:width => 30}
+    %th{:width => 30}
   %tbody#branches
-    = render @branches
+    = render "branches"
 
 :javascript
   $(document).ready(function() {

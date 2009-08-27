@@ -3,7 +3,9 @@ ActionController::Routing::Routes.draw do |map|
   
   map.namespace :admin do |admin|
     admin.resources :company_groups
-    admin.resources :branches, :collection => { :move => :post }
+    admin.resources :branches, 
+                    :collection => { :move => :post }, 
+                    :member => { :attach_group => :post, :detach_group => :get }
   end
 
 #   map.namespace :admin do |admin|

@@ -1,0 +1,2 @@
+- Branch.each_with_level(@branches) do |branch, level|
+  = render :partial => "branch", :object => branch, :locals => { :level => level }

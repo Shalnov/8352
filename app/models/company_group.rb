@@ -3,4 +3,6 @@ class CompanyGroup < ActiveRecord::Base
   has_and_belongs_to_many :branches
   
   validates_presence_of :name
+
+  named_scope :ordered, { :order => "name ASC" }
 end
