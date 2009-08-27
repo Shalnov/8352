@@ -1,7 +1,12 @@
-%tr{:id => "branch_#{branch.id}", :rel => "#{branch.name}"}
-  %td= icon(:move, :class => "_move")
+%tr{:id => "branch_#{branch.id}", :rel => "#{branch.name}", :class => "_branch with_form"}
+  %td= icon(:move, :class => "_move _branch")
   %td= branch.id
   %td{:class => "level_#{level}"}= branch.name
+  %td
+    - if level == 2
+      = render :partial => "add_group_to_branch", :locals => { :branch => branch }
   %td._branch= icon(:branch)  
   %td= link_to icon(:edit), edit_admin_branch_url(branch)
   %td= link_to icon(:delete), admin_branch_url(branch), :confirm => "Вы уверены?", :method => :delete
+- unless branch.groups.empty?
+  = render :partial => "group", :collection => branch.groups, :locals => { :branch => branch, :level => level + 1 }

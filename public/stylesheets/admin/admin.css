@@ -246,6 +246,8 @@ form {
   padding: 1em 0 1em 0;
 }
 
+table.list .with_form form { padding: 0; margin: 0; }
+
 form.bordered {
   padding: 1em;
   border: 4px solid #ddd;

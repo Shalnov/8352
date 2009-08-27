@@ -1,7 +1,7 @@
 class Branch < ActiveRecord::Base
   acts_as_nested_set
 
-  has_and_belongs_to_many :groups, :class_name => "CompanyGroup"
+  has_and_belongs_to_many :groups, :class_name => "CompanyGroup", :order => "name ASC"
 
   named_scope :with_groups, { :include => :groups }
   default_scope :order => "lft"

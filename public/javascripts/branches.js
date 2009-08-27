@@ -3,7 +3,7 @@ function branches() {
   $('#branches tr').droppable('destroy');
   $('#branches tr ._branch').droppable('destroy');
 
-  $('#branches tr').draggable({
+  $('#branches tr._branch').draggable({
     revert: 'invalid',
     handle: '._move',
     helper: 'clone',
@@ -12,7 +12,7 @@ function branches() {
     }
   })
 
-  $('#branches tr').droppable({
+  $('#branches tr._branch').droppable({
     accept: 'tr',
     hoverClass: 'hover',
     drop: function(event, ui) {
@@ -32,8 +32,8 @@ function branches() {
     greedy: true
   });
   
-  $('#branches tr ._branch').droppable({
-    accept: 'tr',
+  $('#branches tr td._branch').droppable({
+    accept: 'tr._branch',
     hoverClass: 'hover',
     drop: function(event, ui) {
       $.ajax({      

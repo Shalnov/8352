@@ -54,4 +54,20 @@ class Admin::BranchesController < ApplicationController
     @branches = Branch.with_groups.all
     render :layout => false
   end
+  
+  def attach_group
+    @branch = Branch.find(params[:id])
+    @group = CompanyGroup.find(params[:group_id])
+    @branch.groups << @group
+    @branches = Branch.with_groups.all
+    render :layout => false
+  end        
+  
+  def detach_group
+    @branch = Branch.find(params[:id])
+    @group = CompanyGroup.find(params[:group_id])
+    @branch.groups.delete(@group)
+    @branches = Branch.with_groups.all
+    redirect_to :action => :index
+  end
 end
