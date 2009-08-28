@@ -27,7 +27,7 @@ rake db:make_admin_by_login login=admin
 4. Разкомментируешь acts_as_taggable
 5. rake thinking_sphinx:start
 
-
+haml --rails .
 
 
 

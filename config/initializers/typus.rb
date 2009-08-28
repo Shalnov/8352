@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Be sure to restart your server when you modify this file.
 
 # System wide options
@@ -7,7 +8,7 @@ Typus::Configuration.options[:app_name] = '8352'
 # Typus::Configuration.options[:email] = 'admin@example.com'
 # Typus::Configuration.options[:locales] = [ [ "English", :en ], [ "Español", :es ] ]
 # Typus::Configuration.options[:recover_password] = true
-# Typus::Configuration.options[:root] = 'admin'
+Typus::Configuration.options[:root] = 'admin'
 # Typus::Configuration.options[:ssl] = false
 # Typus::Configuration.options[:templates_folder] = 'admin/templates'
 # Typus::Configuration.options[:user_class_name] = 'TypusUser'
