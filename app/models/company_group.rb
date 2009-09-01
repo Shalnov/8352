@@ -5,4 +5,5 @@ class CompanyGroup < ActiveRecord::Base
   validates_presence_of :name
 
   named_scope :ordered, { :order => "name ASC" }
+  named_scope :with_branches, { :include => :branches }
 end
