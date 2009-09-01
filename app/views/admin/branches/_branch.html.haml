@@ -2,9 +2,6 @@
   %td= icon(:move, :class => "_move _branch")
   %td= branch.id
   %td{:class => "level_#{level}"}= branch.name
-  %td
-    = render :partial => "add_group_to_branch", :locals => { :branch => branch }
-  %td._branch= icon(:branch)  
   %td= link_to icon(:edit), edit_admin_branch_url(branch)
   %td= link_to icon(:delete), admin_branch_url(branch), :confirm => "Вы уверены?", :method => :delete
 - unless branch.groups.empty?
