@@ -1,5 +1,10 @@
-%tr{:id => "branch_#{branch.id}", :rel => "#{branch.name}", :class => "_branch with_form"}
-  %td= icon(:move, :class => "_move _branch")
+%tr{:id => "branch_#{branch.id}", :rel => "#{branch.name}", :class => "_branch with_form _parent_#{branch.parent_id}"}
+  %td= icon(:move, :class => "_move")
+  %td
+  %td
+    - unless branch.groups.empty?  
+      = icon(:close, :class => "_close", :rel => "_parent_#{branch.id}")  
+      = icon(:open, :class => "_open", :rel => "_parent_#{branch.id}", :style => "display: none;")
   %td= branch.id
   %td{:class => "level_#{level}"}= branch.name
   %td= link_to icon(:edit), edit_admin_branch_url(branch)

@@ -1,6 +1,8 @@
-%tr{:id => "group_#{group.id}_parent_#{branch.id}", :rel => "#{group.name}", :class => "_group"}
-  %td= icon(:move, :class => "_move _group")
+%tr{:id => "group_#{group.id}_parent_#{branch.id}", :rel => "#{group.name}", :class => "_group _parent_#{branch.id}"}
+  %td= icon(:move, :class => "_move")
+  %td= icon(:clone, :class => "_clone")
+  %td  
   %td
   %td{:class => "level_#{level}"}= group.name
   %td= link_to icon(:edit), edit_admin_company_group_url(group)
-  %td= link_to_remote icon(:delete), :url => detach_group_admin_branch_url(branch, :group_id => group.id), :update => "branches", :method => :get
+  %td= link_to_remote icon(:delete), :url => detach_group_admin_branch_url(branch, :group_id => group.id), :method => :get

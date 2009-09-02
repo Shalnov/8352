@@ -5,6 +5,7 @@ table td.level_3 { padding-left: 8em; }
 table td.level_4 { padding-left: 10em; }
 table td.level_5 { padding-left: 12em; }
 
+table.list tr._branch td { background-color: #E3E3E3; }
 table.list tr.hover td { background-color: #CCCCFF; }
 
 .helper {
@@ -38,4 +39,16 @@ table.list tbody#branches tr td {
     right: 3%;
     width: 35%;
     overflow: scroll-x;
+}
+
+._clone {
+  cursor: move;
+}
+
+._open { 
+  cursor: pointer;
+}
+
+._close { 
+  cursor: pointer;
 }

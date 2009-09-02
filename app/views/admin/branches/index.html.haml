@@ -2,24 +2,26 @@
 
 %table.list#branches_list
   %thead
-    %th{:width => 30}
-    %th{:width => 60} ID
+    %th{:width => 16}
+    %th{:width => 16}
+    %th{:width => 16}    
+    %th{:width => 16} ID
     %th{:width => "%"} Наименование
-    %th{:width => 30}
-    %th{:width => 30}
+    %th{:width => 16}
+    %th{:width => 16}
   %tbody#branches
     = render "branches"
 
 #groups_container
   %table.list
     %thead
-      %th{:width => 30}
-      %th{:width => 30} ID
+      %th{:width => 16}
+      %th{:width => 16} ID
       %th{:width => "%"} Наименование
       %th{:width => "%"} ID Веток
       %th{:width => "30"}      
     %tbody#groups
-      = render :partial => "source_group", :collection => @groups
+      = render "groups"
 
 :javascript
   $(document).ready(function() {
