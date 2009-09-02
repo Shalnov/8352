@@ -5,8 +5,7 @@ class Admin::BranchesController < ApplicationController
   # BASE CONTROLLER >
   
   def index
-    get_branches
-    @groups = CompanyGroup.with_branches.ordered.all
+    get_branches_and_groups
   end
   
   def new
@@ -57,6 +56,7 @@ class Admin::BranchesController < ApplicationController
         source.move_to_child_of(target)
       else
         source.move_to_root
+        source.move_to_right_of(Branch.last)        
       end
     elsif params[:source] =~ /group/
       target = Branch.find(target_id)
@@ -74,8 +74,7 @@ class Admin::BranchesController < ApplicationController
       source.save!
     end
     
-    get_branches
-    render :layout => false
+    get_branches_and_groups
   end
   
   def detach_group
@@ -84,12 +83,12 @@ class Admin::BranchesController < ApplicationController
     @branch.groups.delete(@group)
     @branches = Branch.with_groups.all
     
-    get_branches
-    render :layout => false
+    get_branches_and_groups
   end
   
 protected
-  def get_branches
+  def get_branches_and_groups
     @branches = Branch.with_groups.all
+    @groups = CompanyGroup.with_branches.ordered.find_all { |g| g.branches.size == 0 }
   end
 end

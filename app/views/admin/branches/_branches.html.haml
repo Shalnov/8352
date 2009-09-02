@@ -1,9 +1,11 @@
 %tr{:id => "branch_root", :class => "_branch"}
   %td
   %td 
-  %td /
+  %td   
+  %td     
+  %td= icon(:root)
   %td
-  %td
+  %td  
 
 - Branch.each_with_level(@branches) do |branch, level|
   = render :partial => "branch", :object => branch, :locals => { :level => level }
