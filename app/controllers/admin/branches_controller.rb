@@ -46,6 +46,9 @@ class Admin::BranchesController < ApplicationController
   #   - Группа может быть дропнута на бранч.
   #   - Группа может быть склонирована - передаётся params[:clone]
   def move
+    @visible = params[:visible]
+    @open_icons_visible = params[:open_icons_visible]
+    
     target_id = params[:target].gsub('branch_', '')
     
     if params[:source] =~ /branch/
@@ -72,12 +75,12 @@ class Admin::BranchesController < ApplicationController
 
       source.branches << target unless source.branches.include?(target)      
       source.save!
+      
+      # Сомнительно! Видимо, это нужно разруливать на уровне JS.
+      @visible << "group_#{source.id}_parent_#{target.id}"
     end
     
     get_branches_and_groups
-
-    @visible = params[:visible]
-    @open_icons_visible = params[:open_icons_visible]
   end
   
   def detach_group
