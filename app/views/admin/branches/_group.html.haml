@@ -6,6 +6,8 @@
   %td= icon(:clone, :class => "_clone")
   %td  
   %td
-  %td{:class => "level_#{level}"}= group.name
+  %td{:class => "level_#{level}"}
+    = icon(:group)
+    = group.name
   %td= link_to icon(:edit), edit_admin_company_group_url(group)
   %td= link_to_remote icon(:delete), :url => detach_group_admin_branch_url(branch, :group_id => group.id), :method => :get
