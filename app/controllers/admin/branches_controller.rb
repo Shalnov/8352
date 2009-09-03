@@ -75,6 +75,9 @@ class Admin::BranchesController < ApplicationController
     end
     
     get_branches_and_groups
+
+    @visible = params[:visible]
+    @open_icons_visible = params[:open_icons_visible]
   end
   
   def detach_group

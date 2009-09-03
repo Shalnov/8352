@@ -1,10 +1,13 @@
-%tr{:id => "branch_#{branch.id}", :rel => "#{branch.name}", :class => "_branch with_form _parent_#{branch.parent_id}", :style => ("display: none;" unless level == 0)}
+- id = "branch_#{branch.id}"
+- hidden = @visible.nil? ? !(level == 0) : !@visible.include?(id)
+- open_icon_visible = @open_icons_visible.nil? ? false : @open_icons_visible.include?("open_#{branch.id}")
+
+%tr{:id => id, :rel => "#{branch.name}", :class => "_branch with_form _parent_#{branch.parent_id}", :style => ("display: none" if hidden)}
   %td= icon(:move, :class => "_move")
   %td
   %td
-    - unless branch.groups.empty?  
-      = icon(:close, :class => "_close", :rel => "_parent_#{branch.id}", :style => "display: none;")  
-      = icon(:open, :class => "_open", :rel => "_parent_#{branch.id}")
+    = icon(:close, :id => "close_#{branch.id}", :class => "_close", :rel => "_parent_#{branch.id}", :style => ("display: none;" unless open_icon_visible))
+    = icon(:open, :id => "open_#{branch.id}", :class => "_open", :rel => "_parent_#{branch.id}", :style => ("display: none;" if open_icon_visible))
   %td= branch.id
   %td{:class => "level_#{level}"}= branch.name
   %td= link_to icon(:edit), edit_admin_branch_url(branch)

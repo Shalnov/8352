@@ -9,6 +9,8 @@
     <!--[if gte IE 7]><link href="/stylesheets/admin/ie.css" media="screen" rel="stylesheet" type="text/css" /><![endif]-->
     <!--[if lte IE 6]><link href="/stylesheets/admin/ie6.css" media="screen" rel="stylesheet" type="text/css" /><script src="/ie6/warning.js"></script><script>window.onload=function(){e("/ie6/")}</script><![endif]-->
   %body
+    #loader{:style => "display: none;"}
+      %img{:src => "/images/ajax-loader3.gif", :width => 16, :height => 16, :title => "Загрузка..." }
     .navigation1
       %ul
         = render :partial => "layouts/admin/nav"

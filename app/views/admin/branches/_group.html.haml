@@ -1,4 +1,7 @@
-%tr{:id => "group_#{group.id}_parent_#{branch.id}", :rel => "#{group.name}", :class => "_group _parent_#{branch.id}", :style => "display: none;"}
+- id = "group_#{group.id}_parent_#{branch.id}"
+- hidden = @visible.nil? ? "display: none;" : ("display: none;" unless @visible.include?(id))
+
+%tr{:id => id, :rel => "#{group.name}", :class => "_group _parent_#{branch.id}", :style => hidden}
   %td= icon(:move, :class => "_move")
   %td= icon(:clone, :class => "_clone")
   %td  
