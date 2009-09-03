@@ -55,10 +55,11 @@ function branches() {
   });
   
   $('#branches ._close').live('click', function() {
-    var cls = $(this).attr('rel');
-    $('.'+cls).hide();
+    var cls = '.' + $(this).attr('rel');
+    $(cls).hide();
     $(this).hide();
     $(this).parent().find('._open').show();
+    $(cls).find('._close').click();
   });
   
   $('#branches ._open').live('click', function() {
