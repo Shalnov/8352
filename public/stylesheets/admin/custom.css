@@ -52,3 +52,12 @@ table.list tbody#branches tr td {
 ._close { 
   cursor: pointer;
 }
+
+#loader {
+  background-color: white;
+  padding: 1em;
+  border: 1px solid gray;
+  position: fixed;
+  top: 49%;
+  left: 49%;
+}
