@@ -1,6 +1,6 @@
 %tr{:class => "_group", :id => "group_#{source_group.id}", :rel => "#{source_group.name}"}
   %td= icon(:move, :class => "_move")
-  %td= source_group.id
   %td= source_group.name
   %td= source_group.branches.collect { |b| b.id }.join(", ")
   %td= link_to icon(:edit), edit_admin_company_group_path(source_group)
+  %td= link_to icon(:delete), admin_company_group_path(source_group), :method => "delete", :confirm => "Вы уверены?"
