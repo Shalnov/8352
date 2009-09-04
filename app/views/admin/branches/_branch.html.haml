@@ -5,10 +5,8 @@
 %tr{:id => id, :rel => "#{branch.name}", :class => "_branch with_form _parent_#{branch.parent_id}", :style => ("display: none" if hidden)}
   %td= icon(:move, :class => "_move")
   %td
-  %td
     = icon(:close, :id => "close_#{branch.id}", :class => "_close", :rel => "_parent_#{branch.id}", :style => ("display: none;" unless open_icon_visible))
     = icon(:open, :id => "open_#{branch.id}", :class => "_open", :rel => "_parent_#{branch.id}", :style => ("display: none;" if open_icon_visible))
-  %td= branch.id
   %td{:class => "level_#{level}"}= branch.name
   %td= link_to icon(:edit), edit_admin_branch_url(branch)
   %td= link_to icon(:delete), admin_branch_url(branch), :confirm => "Вы уверены?", :method => :delete

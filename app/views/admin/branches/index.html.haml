@@ -4,11 +4,9 @@
   %thead
     %th{:width => 16}
     %th{:width => 16}
-    %th{:width => 16}    
-    %th{:width => 16} ID
     %th{:width => "%"} Наименование
     %th{:width => 16}
-    %th{:width => 16}
+    %th{:width => 16}    
   %tbody#branches
     = render "branches"
 
@@ -16,10 +14,10 @@
   %table.list
     %thead
       %th{:width => 16}
-      %th{:width => 16} ID
       %th{:width => "%"} Наименование
-      %th{:width => "%"} ID Веток
       %th{:width => "30"}      
+      %th{:width => "30"}      
+      %th{:width => "30"}            
     %tbody#groups
       = render "groups"
 
