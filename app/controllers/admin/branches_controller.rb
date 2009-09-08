@@ -84,6 +84,9 @@ class Admin::BranchesController < ApplicationController
   end
   
   def detach_group
+    @visible = params[:visible]
+    @open_icons_visible = params[:open_icons_visible]
+
     @branch = Branch.find(params[:id])
     @group = CompanyGroup.find(params[:group_id])
     @branch.groups.delete(@group)

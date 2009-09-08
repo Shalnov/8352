@@ -5,8 +5,17 @@ table td.level_3 { padding-left: 8em; }
 table td.level_4 { padding-left: 10em; }
 table td.level_5 { padding-left: 12em; }
 
+/*
 table.list tr._branch td { background-color: #E3E3E3; }
+table.list tr._group td { background-color: #E3E3E3; }*/
+
+table.list tr.odd td { background-color: #F3F3F3; }
+table.list tr.even td { background-color: #E3E3E3; }
 table.list tr.hover td { background-color: #CCCCFF; }
+a._edit img { height: 12px; }
+
+#branch_root { background-color: #C3C3C3; }
+
 
 .helper {
     background-color: #AACCFF;
