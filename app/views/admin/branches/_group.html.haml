@@ -2,10 +2,12 @@
 - hidden = @visible.nil? ? "display: none;" : ("display: none;" unless @visible.include?(id))
 
 %tr{:id => id, :rel => "#{group.name}", :class => "_group _parent_#{branch.id}", :style => hidden}
-  %td= icon(:move, :class => "_move")
-  %td
   %td{:class => "level_#{level}"}
+    = icon(:move, :class => "_move")
+    &nbsp;
     = icon(:clone, :class => "_clone")
+    &nbsp;
     = group.name
-  %td= link_to icon(:edit), edit_admin_company_group_url(group)
-  %td= link_to_remote icon(:delete), :url => detach_group_admin_branch_url(branch, :group_id => group.id), :method => :get
+    &nbsp;
+    = link_to icon(:edit), edit_admin_company_group_url(group), :class => "_edit", :style => "display: none;"
+    = link_to icon(:delete), detach_group_admin_branch_url(branch, :group_id => group.id), :class => "_edit _delete", :style => "display: none;"
