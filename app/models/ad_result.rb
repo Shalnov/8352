@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-require "phone_parser"
-require "address_parser"
+#require "phone_parser"
+#require "address_parser"
 
 class AdResult < ResultBase
   

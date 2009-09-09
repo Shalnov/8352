@@ -5,6 +5,8 @@ require "address_parser"
 class ResultBase < ActiveRecord::Base
   
   self.establish_connection :grabber
+  set_table_name "results"
+
   serialize  :import_errors
   
   belongs_to :company, :counter_cache => true
