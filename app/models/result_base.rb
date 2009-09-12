@@ -11,8 +11,8 @@ class ResultBase < ActiveRecord::Base
   
   belongs_to :company, :counter_cache => true
   
-  belongs_to :result_category
-  has_one :category, :through=>:result_category
+  # belongs_to :result_category
+  # has_one :category, :through=>:result_category
 
   belongs_to :source
   belongs_to :city
@@ -77,8 +77,8 @@ class ResultBase < ActiveRecord::Base
   # Готовые к имортированую (все для кого установлены категории
   named_scope :importable, lambda  { |source_id|
     { 
-      :include => :result_category,
-      :conditions => ["state='updated' and results.source_id=? and result_category_id is not null",
+#      :include => :result_category,
+      :conditions => ["state='updated' and results.source_id=? and company_group_id is not null",
                       source_id],
       :order => :id
     }

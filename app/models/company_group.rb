@@ -6,4 +6,8 @@ class CompanyGroup < ActiveRecord::Base
 
   named_scope :ordered, { :order => "name ASC" }
   named_scope :with_branches, { :include => :branches }
+  
+  def long_name
+    name + '(' + branches.map(&:name).join(',') +')'
+  end
 end

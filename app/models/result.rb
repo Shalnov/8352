@@ -31,10 +31,9 @@ class Result < ResultBase
   serialize  :parsed_phones
   
   belongs_to :company, :counter_cache => true
-
-  belongs_to :result_category
   
-  has_one :category, :through=>:result_category
+  belongs_to :results_to_company_group, :foreign_key=>'company_group_id'
+  has_one :company_group, :through=>:results_to_company_group
   
   
   def parsed_phones_str
@@ -77,7 +76,7 @@ class Result < ResultBase
 
     prepare
     
-    unless self.result_category
+    unless self.company_group
       self.import_errors="No result category"
       mark_error
       self.save!
@@ -145,7 +144,7 @@ class Result < ResultBase
       :description => self.other_info.andand.strip,
       :emails        => self.email.andand.strip,
       :city_id     => self.city_id,
-      :category_id => self.result_category.category_id,
+      :company_group_id => self.company_group.id,
     }
   end
   

@@ -5,14 +5,20 @@ require 'pp'
 Branch.destroy_all
 CompanyGroup.destroy_all
 
+pp "Destroied"
+
+pp "Make branches and groups"
 Category.all.map { |c|
  if c.children.size>0 
-	 Branch.create({:name=>c.name})
+	 b=Branch.create({:name=>c.name})
+   g=CompanyGroup.create({:name=>c.name})
+   g.branches << b
   else 
 	 CompanyGroup.create({:name=>c.name})
   end
 }
 
+pp "Create relationships"
 Category.all.map { |c|
 	if c.parent_id
 		parent=Branch.find_by_name(c.parent.name) # || raise "No parent #{c.parent_id}"
