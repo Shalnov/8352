@@ -33,7 +33,7 @@ class Result < ResultBase
   belongs_to :company, :counter_cache => true
   
   belongs_to :results_to_company_group, :foreign_key=>'company_group_id'
-  has_one :company_group, :through=>:results_to_company_group
+#  has_one :company_group, :through=>:results_to_company_group
   
   
   def parsed_phones_str
@@ -59,8 +59,6 @@ class Result < ResultBase
       parse_address
       parse_phones
       
-#      shorting_name
-      
       normalize_name
       
       mark_prepared
@@ -76,8 +74,8 @@ class Result < ResultBase
 
     prepare
     
-    unless self.company_group
-      self.import_errors="No result category"
+    unless self.company_group_id
+      self.import_errors="Result has no company_group_id"
       mark_error
       self.save!
       raise self.import_errors
@@ -85,12 +83,15 @@ class Result < ResultBase
     end
     
     if self.company
+      p "Company exists, update"
       update_company()
       return 0
     elsif self.company = Company.find_by_result(self)
+      p "Company found, update"
       update_company(self.company)
       return 0
     else
+      p "Import new company"
       import_new_company
       return 1
     end
@@ -102,10 +103,16 @@ class Result < ResultBase
   def import_new_company
     
     # TODO Лочить запись results при 
-    self.create_company(self.company_fields)
+    self.create_company(self.company_fields)# || raise(RecordNotSaved)
+    if self.company.errors.count>0
+      p "Can't create company: "+self.company.errors.full_messages.join(', ')
+      self.mark_error
+      self.save!
+    end
+
+    
     self.company.update_phones(self.parsed_phones)
     self.company.update_addresses(self)
-    #    self.company=
     self.mark_fine
     self.save!
   end
@@ -144,7 +151,7 @@ class Result < ResultBase
       :description => self.other_info.andand.strip,
       :emails        => self.email.andand.strip,
       :city_id     => self.city_id,
-      :company_group_id => self.company_group.id,
+      :company_group_id => self.company_group_id,
     }
   end
   

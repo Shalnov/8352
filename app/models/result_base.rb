@@ -83,7 +83,14 @@ class ResultBase < ActiveRecord::Base
       :order => :id
     }
   }
-  
+
+  named_scope :imported, lambda  { |source_id|
+    { 
+      
+      :conditions => ["state='imported' and results.source_id=?",source_id],
+    }
+  }
+
   
   # для typus
   

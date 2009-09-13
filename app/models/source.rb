@@ -28,7 +28,20 @@ class Source < ActiveRecord::Base
   end
   
   def results_importable_count # для typus
-    results.importable.count
+    results.importable(self.id).count
+  end
+  
+  def results_imported_count # для typus
+    results.imported(self.id).count
+  end
+  
+  def results_noimportable_count # для typus
+    Result.find_by_sql(["select * from results where state='updated' and results.source_id=? and category_name is not null and category_name not in (select category_name from results_to_company_groups where source_id=?)",
+                        self.id,self.id]).count
+  end
+  
+  def unprocessed_categories_count
+    unprocessed_categories.count
   end
 
   def set_company_groups(cats)
@@ -75,8 +88,7 @@ class Source < ActiveRecord::Base
   end
   
   def unprocessed_categories
-#    Result.find_by_sql(["select results.category_name, count(*) as count from results left join result_categories on result_categories.category_name=results.category_name where state='updated' and category_id IS NULL and results.source_id=? group by results.category_name",
-    Result.find_by_sql(["select results.category_name, count(*) as count from results  where state='updated'  and results.source_id=? and category_name is not null and category_name not in (select category_name from results_to_company_groups where source_id=?) group by results.category_name",
+    Result.find_by_sql(["select results.category_name, count(*) as count from results  where state='updated' and results.source_id=? and category_name is not null and category_name not in (select category_name from results_to_company_groups where source_id=?) group by results.category_name",
                         self.id, self.id]).
       sort { |x,y| x.category_name<=>y.category_name }
   end

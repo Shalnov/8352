@@ -139,15 +139,15 @@ CompanyGroup:
 
 Company:
   fields:
-    list: name, results_count, category
+    list: name, results_count, company_group
     form: name, inn, emails, parsed_address, site, director, description, working_time
-    show: id, results_count, emails, name, site, director, description, working_time, sources, created_at, updated_at, pending, dump, category
+    show: id, results_count, emails, name, site, director, description, working_time, sources, created_at, updated_at, pending, dump, company_group
   actions:
     index:
     edit:
   order_by:
-  relationships: category, addresses, phones, results #, tags
-  filters: category, tag
+  relationships: addresses, phones, results #, tags
+  filters: company_group, tag
   options:
     per_page: 50
   search: name
@@ -258,10 +258,11 @@ Source:
   fields:
     list: target_url, grabber_name, results_count, ad_results_count
     form: target_url, grabber_name
-    show: target_url, id, results_count, ad_results_count, grabber_name, results_updated_count, results_importable_count, created_at, updated_at
+    show: target_url, id, results_count, ad_results_count, grabber_name, results_updated_count, results_importable_count, results_imported_count, results_noimportable_count, unprocessed_categories_count, created_at, updated_at
   actions:
     edit: show
     show: company_groups, import_results
+    company_groups: show, import_results
   order_by:
   relationships: results_to_company_groups # result_categories #, ad_result_categories #, results #links, results
   filters:
@@ -277,46 +278,6 @@ Source:
 # Advert catalog
 #
 
-
-AdCategory:
-  fields:
-    list: name#, parent, position,  #companies_count, position, hidden
-    form: name #parent, , position, description
-#    show: id, name, description, companies_count, position, children_count, ancestors_count, descendants_count, hidden, parent
-  actions:
-    index:
-    edit: show
-#  order_by: parent_id, position
-#  relationships: children #companies #, parent, children #, 
-  options:
-    per_page: 30
-  filters:
-#  relationships: tags
-  search: name
-  application: Advert catalog
-  description: Категории обьявлений
-
-
-AdResultCategory:
-  fields:
-    list: category_name, ad_category, source_id
-    show: id, category_name, ad_category, source_id
-    form: category_name, ad_category, source
-#    options: 
-#      templates:
-#        category_id: category
-  actions:
-    index:
-    show: 
-    exit:
-  order_by: category_name
-  filters:
-  options:
-    per_page: 30
-  relationships: tags
-  search: category_name
-  application: Advert catalog
-  description:
 
 AdResult:
   fields:

@@ -722,3 +722,6 @@ input#search {
 }
 
 /* @end */
+
+
+optgroup > option { padding-left: 10px; font-size: 9px }
