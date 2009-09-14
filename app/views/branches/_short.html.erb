@@ -1,5 +1,6 @@
+<h2>Предприятия</h2>
 <ul>
 <% @company_branches.map do |branch| %>
-<li><%= branch.name %></li>
+<li><%= link_to branch.name, branch_path(branch) %></li>
 <% end %>
 </ul>
