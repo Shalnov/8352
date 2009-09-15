@@ -5,7 +5,7 @@ class Branch < ActiveRecord::Base
 
   named_scope :with_groups, { :include => :groups }
   default_scope :order => "lft"
-  
+    
   def move_to_left_or_right(target)
     target = target.is_a?(Fixnum) ? self.class.find(target) : target
     if left > target.right
@@ -14,4 +14,17 @@ class Branch < ActiveRecord::Base
       move_to_right_of(target)
     end
   end    
+  
+  def companies
+    c=[]
+    gs=groups
+    descendants.map { |d| 
+      gs=gs+d.groups
+    }
+    gs.map { |g| 
+      c=c+g.companies
+    }
+    c
+  end
+  
 end

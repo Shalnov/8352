@@ -131,7 +131,7 @@ CompanyGroup:
    options:
      per_page: 30
    filters:
-#   relationships: parents, children
+   relationships: results_to_company_groups, companies #, parents, children
    search: name
    application: Company catalog
    description: Группы компаний
@@ -140,7 +140,7 @@ CompanyGroup:
 Company:
   fields:
     list: name, results_count, company_group
-    form: name, inn, emails, parsed_address, site, director, description, working_time
+    form: name, inn, emails, site, director, description, working_time, company_group
     show: id, results_count, emails, name, site, director, description, working_time, sources, created_at, updated_at, pending, dump, company_group
   actions:
     index:
@@ -197,13 +197,13 @@ ResultsToCompanyGroup:
      form: category_name, company_group, source
    actions:
      index:
-     show: 
-     exit:
+     show: update_companies
+     edit: update_companies
    order_by: category_name
    filters:
    options:
      per_page: 30
-#   relationships: tags
+   relationships: results
    search: category_name
    application: Company catalog
    description:
@@ -212,7 +212,7 @@ ResultsToCompanyGroup:
 
 Result:
   fields: #category_name, 
-    list: name, normalized_name, parsed_phones_str, state #address, state, importer_state, import_errors
+    list: normalized_name, company, parsed_phones_str, state #address, state, importer_state, import_errors
     form: name, normalized_name, short_name, address, phones, parsed_phones, parsed_phones_str, email, site_url, category_name, work_time, other_info, raw_html, company, is_checked, state, importer_state
 #, link
     show: id, name, address, phones, parsed_phones, email, site_url, category_name, work_time, other_info, raw_html, is_checked, state, importer_state, created_at, updated_at, link, company, source, import_errors, parsed_address, parsed_phones

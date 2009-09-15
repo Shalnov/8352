@@ -1,6 +1,8 @@
 class CompanyGroup < ActiveRecord::Base
-  has_many :companies, :dependent => :nullify
+  has_many :companies, :dependent => :nullify, :include=>:company_group
   has_and_belongs_to_many :branches
+  
+  has_many :results_to_company_groups
   
   validates_presence_of :name
 

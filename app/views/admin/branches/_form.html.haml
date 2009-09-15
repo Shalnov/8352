@@ -3,8 +3,4 @@
     = f.label :name, "Название:"
     = f.text_field :name
     = f.error_message_on :name
-  .row
-    = f.label :is_main, "На главной:"
-    = f.radio_button :is_main, true
-    = f.error_message_on :is_main
   = f.submit "Сохранить", :class => "submit"

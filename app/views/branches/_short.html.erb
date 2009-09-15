@@ -1,6 +1,17 @@
 <h2>Предприятия</h2>
-<ul>
-<% @company_branches.map do |branch| %>
-<li><%= link_to branch.name, branch_path(branch) %></li>
+
+<% columns = 3 %>
+<% rows = (Branch.roots.size/columns).round + (Branch.roots.size % columns > 0 ? 1 : 0) %>
+
+<% column=0 %>
+<% index=0 %>
+<div class="ccol">
+<% Branch.roots.each do |branch| %>
+<% if (index/rows).round>column %>
+<% column = column + 1 %></div><div class="ccol"><% end %>
+<div><%= link_to branch.name, branch_path(branch) %></div>
+<% index=index + 1 %>
 <% end %>
-</ul>
+</div>
+<br class="clearer"/>
+<%= link_to "Все категории..", branches_path %>

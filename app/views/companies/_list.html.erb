@@ -3,6 +3,7 @@
 <% if companies.size > 0 %>
 <table>
   <tr>
+    <th>Группа</th>
     <th>Name</th>
     <th>Address</th>
     <th>Tag list</th>
@@ -10,6 +11,7 @@
 
 <% for company in companies %>
   <tr>
+    <td><%= link_to company.company_group.name, company_group_path(company.company_group) %></td>
     <td><%= link_to company.name, company_path(company) %></td>
     <td><%=h company.address %></td>
 <!--    <td><%#h company.tag_list %></td> -->

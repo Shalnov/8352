@@ -2,7 +2,7 @@
 #require 'acts_as_taggable'
 
 class Company < ActiveRecord::Base
-  belongs_to :group, :class_name => "CompanyGroup", :counter_cache=>true
+  belongs_to :company_group, :counter_cache=>true
   
   serialize  :ymaps
   
@@ -41,6 +41,7 @@ class Company < ActiveRecord::Base
   
   accepts_nested_attributes_for :phones, :allow_destroy => true,
                                 :reject_if => proc { |phone| phone['number'].blank? }
+  
 #  accepts_nested_attributes_for :emails, :allow_destroy => true
   
 

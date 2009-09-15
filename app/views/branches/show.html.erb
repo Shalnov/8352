@@ -1,2 +1,14 @@
-<h1>Branch#show</h1>
-<p>Find me in app/views/branch/show.html.erb</p>
+<%= link_to 'Все категории', branches_path() %>
+
+<h1><%=h @branch.name %></h1>
+
+
+<% if @branch.children.size > 0 %>
+<ul>
+	<%# render_categories_front_end(@category) %>
+</ul>
+<% end %>
+
+<%= render :partial => "companies/list", :locals => { :companies => @companies }%>
+
+

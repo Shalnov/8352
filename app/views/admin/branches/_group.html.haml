@@ -8,7 +8,7 @@
     &nbsp;
     = icon(:clone, :class => "_clone")
     &nbsp;
-    = group.name
+    = link_to group.name, company_group_path(group)
     &nbsp;(
     = group.companies_count
     )&nbsp;
