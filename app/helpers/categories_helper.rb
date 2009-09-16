@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-0# -*- coding: utf-8 -*-
 module CategoriesHelper
   
   extend ActiveSupport::Memoizable
