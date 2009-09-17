@@ -134,5 +134,10 @@ class Company < ActiveRecord::Base
     self.description=results.andand.map(&:other_info).compact.uniq.join("\n------------------------\n")
   end
 
-  
+  def breadcrumb
+    self.company_group.breadcrumb.collect do |arr|
+      arr + [self]
+    end
+  end
+
 end

@@ -12,4 +12,11 @@ class CompanyGroup < ActiveRecord::Base
   def long_name
     name + '(' + branches.map(&:name).join(',') +')'
   end
+
+  def breadcrumb
+    self.branches.collect do |branch|
+      branch.breadcrumb + [self]
+    end
+  end
+  
 end

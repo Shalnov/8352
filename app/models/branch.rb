@@ -26,5 +26,9 @@ class Branch < ActiveRecord::Base
     }
     c
   end
-  
+
+  def breadcrumb
+    self.root? ? [self] : self.parent.breadcrumb + [self]
+  end
+
 end

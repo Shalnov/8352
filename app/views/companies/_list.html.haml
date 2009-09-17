@@ -1,0 +1,19 @@
+%h2 Компании (#{companies.size})
+- unless companies.empty?
+  %table
+    %tr
+      %th Группа
+      %th Name
+      %th Address
+      %th Tag list
+    - for company in companies
+      %tr
+        %td
+          = link_to company.company_group.name, company.company_group
+        %td
+          = link_to company.name, company
+        %td
+          = h company.address
+        %td
+          = link_to 'Edit', "/admin/companies/edit/#{company.id}"
+  = will_paginate companies

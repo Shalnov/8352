@@ -50,5 +50,22 @@ module ApplicationHelper
     end
     messages
   end  
+
+  def breadcrumb objects, delimiter = ' / '
+    objects = [objects] unless objects.first.is_a?(Array)
+
+    objects.collect! do |arr|
+      last = arr.pop
+      arr.collect! do |obj|
+        link_to(obj.has_attribute?(:name) ? obj.name : obj.id, obj)
+      end
+      arr.push last.name
+      arr.unshift link_to("Все категории", branches_path)
+      arr.join delimiter
+    end
+
+    content_tag :div, objects.join('<br />'), :class => "breadcrumb"
+  end
   
+
 end

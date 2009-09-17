@@ -12,11 +12,9 @@ class CompanyGroupsController < ApplicationController
     # end
   end
 
-  # GET /companies/1
-  # GET /companies/1.xml
   def show
-    @company_group = CompanyGroup.find(params[:id])
-    @companies=@company_group.companies
+    @company_group = CompanyGroup.find params[:id]
+    @companies = @company_group.companies.paginate :page => params[:page], :per_page => configatron.companies_per_page
   end
   
   # def search
