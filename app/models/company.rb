@@ -2,33 +2,7 @@
 #require 'acts_as_taggable'
 
 class Company < ActiveRecord::Base
-  belongs_to :company_group, :counter_cache=>true
-  
-  serialize  :ymaps
-  
-  serialize  :parsed_address # разобранный адрес от яндекса, см result.rb
-
-
-#  serialize :dump, Hash
-  
-   define_index do
-     indexes :name, :sortable => true
- #    indexes full_name, :sortable => true
-     indexes description
-     indexes address
-     indexes category.name, :as => :category
-     indexes [
-       phones.number, phones.person
-     ], :as => :phone
-     indexes emails.email, :as => :emails
-
-     # необходимо для поиска '*ксары*' => Чебоксары
-     set_property :enable_star => 1
-     set_property :min_infix_len => 1
-   end
-  
   belongs_to :company_group, :counter_cache => true
-  
   belongs_to :city, :counter_cache => true
 
   has_many :phones,   :dependent => :destroy
@@ -36,13 +10,41 @@ class Company < ActiveRecord::Base
 #  has_many :emails,   :dependent => :destroy
   has_many :results
   has_many :sources,  :through=> :results
-  
+
+  serialize  :ymaps
+  serialize  :parsed_address # разобранный адрес от яндекса, см result.rb
+#  serialize :dump, Hash
+ 
   validates_presence_of :name, :company_group_id #, :full_name
   
   accepts_nested_attributes_for :phones, :allow_destroy => true,
                                 :reject_if => proc { |phone| phone['number'].blank? }
   
 #  accepts_nested_attributes_for :emails, :allow_destroy => true
+
+
+# ------------------------------------------------------------------------------
+#  Искать по полям: Наименование, описане, адрес, телефоны (телефоны перед поиском нормализовать).
+   define_index do
+     indexes :name, :sortable => true
+     indexes :description
+     indexes addresses.address
+     indexes phones.number
+
+#     indexes [
+#       phones.number, phones.person
+#     ], :as => :phone
+     
+ #    indexes full_name, :sortable => true
+#     indexes category.name, :as => :category
+#     indexes emails.email, :as => :emails
+#
+#     # необходимо для поиска '*ксары*' => Чебоксары
+     set_property :enable_star => 1
+#     set_property :min_infix_len => 1 <- it's default value
+   end
+# ------------------------------------------------------------------------------
+
   
 
   class << self    

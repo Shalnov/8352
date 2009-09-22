@@ -25,7 +25,7 @@
 # config/sphinx.yml with settings for each environment, in a similar
 # fashion to database.yml - using the following keys: 
 #
-#development:
+development:
 #  config_file:
 #  searchd_log_file:
 #  query_log_file:
@@ -33,12 +33,12 @@
 #  searchd_file_path:
 #  port:
 #  allow_star:
-#  enable_star:
+  enable_star: true
 #  min_prefix_len:
-#  min_infix_len:
+  min_infix_len: 1
 #  mem_limit:
 #  max_matches:
-#  morphology:
+  morphology: stem_enru
 #  charset_type:
 #  charset_table:
 #  ignore_chars:

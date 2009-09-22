@@ -71,10 +71,11 @@ class CompaniesController < ApplicationController
   
   def search
 #    @tags = Tag.search params[:search]
-    @categories = Category.search params[:search]
+#    @categories = Category.search params[:search]
 #    @companies = Company.search("*#{params[:search]}*")
-#    @companies = Company.search("*#{params[:search]}*")
-@tags = @categories = @companies = []
+    @companies = Company.search "*#{params[:search]}*"
+    @tags = @categories = []
+    
     render :layout => false
   end
   
