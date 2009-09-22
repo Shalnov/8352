@@ -1,0 +1,32 @@
+%h2 Результаты поиска
+%p
+  %b
+    Категории (
+    = categories.size
+    ) :
+  - for category in categories
+    = link_to category.name, category
+%p
+  %b
+    Ключевые слова (
+    = tags.size
+    ) :
+  - for tag in tags
+    = link_to tag.name, tag_url(tag.name)
+%table
+  - for company in companies
+    %tr
+      %td
+        = link_to company.name, category_company_url(company.category, company)
+      %td
+        = h company.address
+      %td
+        = h company.site
+      %td
+        = h company.description
+      %td
+        = h company.working_time
+      %td
+        - company.phones.each do |phone|
+          = h_phone phone
+          %br

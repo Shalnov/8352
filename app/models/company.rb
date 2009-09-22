@@ -11,21 +11,21 @@ class Company < ActiveRecord::Base
 
 #  serialize :dump, Hash
   
-#   define_index do
-#     indexes :name, :sortable => true
-# #    indexes full_name, :sortable => true
-#     indexes description
-#     indexes address
-#     indexes category.name, :as => :category
-#     indexes [
-#       phones.number, phones.person
-#     ], :as => :phone
-#     indexes emails.email, :as => :emails
+   define_index do
+     indexes :name, :sortable => true
+ #    indexes full_name, :sortable => true
+     indexes description
+     indexes address
+     indexes category.name, :as => :category
+     indexes [
+       phones.number, phones.person
+     ], :as => :phone
+     indexes emails.email, :as => :emails
 
-#     # необходимо для поиска '*ксары*' => Чебоксары
-#     set_property :enable_star => 1
-#     set_property :min_infix_len => 1
-#   end
+     # необходимо для поиска '*ксары*' => Чебоксары
+     set_property :enable_star => 1
+     set_property :min_infix_len => 1
+   end
   
   belongs_to :company_group, :counter_cache => true
   

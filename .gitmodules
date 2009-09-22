@@ -52,3 +52,6 @@
 [submodule "vendor/plugins/rails-widgets"]
 	path = vendor/plugins/rails-widgets
 	url = git://github.com/paolodona/rails-widgets.git
+[submodule "vendor/plugins/dump"]
+	path = vendor/plugins/dump
+	url = git://github.com/toy/dump.git

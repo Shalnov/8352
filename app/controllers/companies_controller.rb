@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
 class CompaniesController < ApplicationController
-  # GET /companies
-  # GET /companies.xml
+
   def index
     @companies = params[:category_id] ? 
     Company.find_all_by_category_id(params[:category_id]) : 
@@ -13,8 +11,6 @@ class CompaniesController < ApplicationController
     end
   end
 
-  # GET /companies/1
-  # GET /companies/1.xml
   def show
     @company = Company.find(params[:id])
 
@@ -24,8 +20,6 @@ class CompaniesController < ApplicationController
     end
   end
   
-  # GET /companies/new
-  # GET /companies/new.xml
   def new
     @company = Company.new
     @company.phones.build
@@ -39,8 +33,6 @@ class CompaniesController < ApplicationController
     end
   end
   
-  # POST /companies
-  # POST /companies.xml
   def create
     @company = Company.new(params[:company])
     @company.category_id = params[:category_id]
@@ -57,13 +49,10 @@ class CompaniesController < ApplicationController
     end
   end
   
-  # GET /companies/1/edit
   def edit
     @company = Company.find(params[:id])
   end
   
-  # PUT /companies/1
-  # PUT /companies/1.xml
   def update
     @company = Company.find(params[:id])
     @company.dump_attributes
@@ -81,9 +70,12 @@ class CompaniesController < ApplicationController
   end
   
   def search
-    @tags = Tag.search(params[:search])
-    @categories = Category.search("*#{params[:search]}*")
-    @companies = Company.search("*#{params[:search]}*")
+#    @tags = Tag.search params[:search]
+    @categories = Category.search params[:search]
+#    @companies = Company.search("*#{params[:search]}*")
+#    @companies = Company.search("*#{params[:search]}*")
+@tags = @categories = @companies = []
     render :layout => false
-  end  
+  end
+  
 end
