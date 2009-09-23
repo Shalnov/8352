@@ -1,5 +1,4 @@
-= render :partial => "companies/search_results", :locals => { |
-                                                 :categories => @categories, |
-                                                 :tags => @tags, |
+%h2 Результаты поиска
+= render :partial => "companies/list", :locals => { |
                                                  :companies => @companies } |
 %hr
