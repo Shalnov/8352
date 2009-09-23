@@ -18,7 +18,7 @@ default_run_options[:pty] = false
 ssh_options[:forward_agent] = true
 #ssh_options[:verbose] = :debug
 #ssh_options[:config] = "~/.ssh/config"
-ssh_options[:keys] = [File.join(ENV["HOME"], ".ssh",  "identity")] 
+#ssh_options[:keys] = [File.join(ENV["HOME"], ".ssh",  "identity")] 
 #ssh_options[:keys] = ["~/.ssh/identity"]
 set :use_sudo, false
 set :scm_verbose, true
@@ -41,25 +41,31 @@ role :db, domain, :primary => true
 #############################################################
 
 set :scm, :git
-set :branch, "master"
+
 set :repository, "git://github.com/dapi/8352.git"
 set :deploy_via, :remote_cache
+
+#set :branch, "master"
+# http://www.capify.org/index.php/SCM_Server_Non-Standard_Port
+#set :repository, "ssh://danil@dapi.orionet.ru/home/danil/projects/github/dapi/8352"
+#set :deploy_via, :copy
+
 set :git_enable_submodules, 1
 
 #############################################################
 namespace :deploy do
   
-  desc "Destroy daemons jobs"
-  task :destroy_jobs do
-    run "cd #{current_path}; echo \"Job.destroy_all\nLink.destroy_all\nSource.destroy_all\" | ./script/console production"
-  end
+#   desc "Destroy daemons jobs"
+#   task :destroy_jobs do
+#     run "cd #{current_path}; echo \"Job.destroy_all\nLink.destroy_all\nSource.destroy_all\" | ./script/console production"
+#   end
   
   desc "Create the apache config file"
   task :after_update_code do
     apache_config = <<-EOF
     <VirtualHost #{domain}:3002>
       ServerName 8352.info
-      ServerAlias 8352.info www.8352.info
+      ServerAlias 8352.info www.8352.info chuvashia.ru www.chuvashia.ru *.chuvashia.ru *.chuvashya.ru chuvashya.ru
       DocumentRoot #{deploy_to}/current/public
       RailsEnv #{rails_env}
 
@@ -96,7 +102,7 @@ namespace :deploy do
   desc "Restarting mod_rails with restart.txt"
   task :restart, :roles => :app, :except => { :no_release => true } do
     run "touch #{current_path}/tmp/restart.txt"
-    background_fu.restart
+#    background_fu.restart
   end
 
   # override the start and stop tasks because those don’t really do anything in the mod_rails
