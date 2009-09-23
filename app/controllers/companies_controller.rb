@@ -69,14 +69,4 @@ class CompaniesController < ApplicationController
     end
   end
   
-  def search
-#    @tags = Tag.search params[:search]
-#    @categories = Category.search params[:search]
-#    @companies = Company.search("*#{params[:search]}*")
-    @companies = Company.search "*#{params[:search]}*"
-    @tags = @categories = []
-    
-    render :layout => false
-  end
-  
 end
