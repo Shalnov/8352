@@ -100,6 +100,8 @@ Rails::Initializer.run do |config|
   :lib     => 'russian', 
   :source  => 'http://gems.github.com'
 
+  config.gem 'haml'
+
 end
 
 require 'configatron'
