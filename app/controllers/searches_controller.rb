@@ -4,9 +4,13 @@ class SearchesController < ApplicationController
     # TODO sanitize query !!!!!!!!!!!!
     @search_query = params[:q]
     unless @search_query.blank?
-      companies = Company.search "*#{@search_query}*", :limit => 1000
-      @companies_size = companies.size # общее кол-во вроде бы можно брать у will_paginate, надо см. документацию
-      @companies = companies.paginate :page => params[:page], :per_page => configatron.companies_per_page
+      #ThinkingSphinx::Search.search(@query, :page => params[:page]).compact
+      @companies = Company.search "*#{@search_query}*",
+                                 :order => :name,
+                                 :limit => 1000,
+                                 :page => params[:page],
+                                 :per_page => configatron.companies_per_page,
+                                 :excerpts => true
     end
   end
 
