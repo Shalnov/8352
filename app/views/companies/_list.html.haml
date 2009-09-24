@@ -1,6 +1,4 @@
-%h2 Компании (#{companies.size})
 - unless companies.empty?
   - for company in companies
     = render :partial => "companies/inline_show", :locals => { :company => company, :show_group=>true }
-    %br
   = will_paginate companies

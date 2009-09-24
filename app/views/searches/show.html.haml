@@ -1,0 +1,8 @@
+- if @search_query.blank?
+  Пустой запрос
+- else
+  %h2 Результаты поиска:
+  - if @companies.empty?
+    По Вашему запросу ничего не найдено.
+  - else
+    = render :partial => 'companies/list', :locals => { :companies => @companies }

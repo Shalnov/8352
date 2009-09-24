@@ -37,10 +37,11 @@ development:
 #  min_prefix_len:
   min_infix_len: 1
 #  mem_limit:
-#  max_matches:
+#  max_matches: 1000
   morphology: stem_enru
 #  charset_type:
 #  charset_table:
 #  ignore_chars:
 #  html_strip:
 #  html_remove_elements:
+  limit: 100
