@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-load 'vendor/plugins/thinking-sphinx/lib/thinking_sphinx/deploy/capistrano'
-# -*- coding: utf-8 -*-
+#
+#set :rails_root, "#{File.dirname(__FILE__)}/.."
+require 'vendor/plugins/thinking-sphinx/lib/thinking_sphinx/deploy/capistrano'
+
 #############################################################
 #       Application
 #############################################################
