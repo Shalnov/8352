@@ -7,4 +7,6 @@
     )&nbsp;
   %td= source_group.branches.collect { |b| b.id }.join(", ")
   %td= link_to icon(:edit), edit_admin_company_group_path(source_group)
-  %td= link_to icon(:delete), admin_company_group_path(source_group), :method => "delete", :confirm => "Вы уверены?"
+  %td
+    - unless source_group.companies_count.to_i == 0
+      = link_to icon(:delete), admin_company_group_path(source_group), :method => "delete", :confirm => "Вы уверены?"

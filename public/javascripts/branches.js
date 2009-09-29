@@ -134,4 +134,18 @@ $(document).ready(function() {
       url: $(this).attr('href')
     }); 
   });
+
+  $('a._move_up, a._move_down').live('click', function(e) {
+    e.preventDefault();
+    $.ajax({
+      type: 'post',
+      dataType: 'script',
+      data: {
+        authenticity_token: window._token,
+        "visible[]": get_visible(),
+        "open_icons_visible[]": get_open_icons_visible()
+      },
+      url: $(this).attr('href')
+    }); 
+  });
 });

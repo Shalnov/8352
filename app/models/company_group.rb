@@ -18,5 +18,4 @@ class CompanyGroup < ActiveRecord::Base
       branch.breadcrumb + [self]
     end
   end
-  
 end

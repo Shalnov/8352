@@ -4,6 +4,8 @@ class Admin::BranchesController < ApplicationController
   helper :action_link
   # BASE CONTROLLER >
   
+  before_filter :export_visible, :only => [:move, :move_left, :move_right]
+    
   def index
     get_branches_and_groups
   end
@@ -45,10 +47,7 @@ class Admin::BranchesController < ApplicationController
   #   - Бранч может быть дропнут на бранч.
   #   - Группа может быть дропнута на бранч.
   #   - Группа может быть склонирована - передаётся params[:clone]
-  def move
-    @visible = params[:visible]
-    @open_icons_visible = params[:open_icons_visible]
-    
+  def move    
     target_id = params[:target].gsub('branch_', '')
     
     if params[:source] =~ /branch/
@@ -77,7 +76,7 @@ class Admin::BranchesController < ApplicationController
       source.save!
       
       # Сомнительно! Видимо, это нужно разруливать на уровне JS.
-      @visible << "group_#{source.id}_parent_#{target.id}"
+#      @visible << "group_#{source.id}_parent_#{target.id}"
     end
     
     get_branches_and_groups
@@ -95,7 +94,27 @@ class Admin::BranchesController < ApplicationController
     get_branches_and_groups
   end
   
+  def move_left
+    @branch = Branch.find(params[:id])
+    @branch.move_left
+    
+    get_branches_and_groups
+  end
+
+  def move_right
+    @branch = Branch.find(params[:id])
+    @branch.move_right
+    
+    get_branches_and_groups
+  end
+  
 protected
+  # Нужно перекидывать параметры в переменные, т.к. в методе move видимость может меняться при обработке.
+  def export_visible
+    @visible = params[:visible]
+    @open_icons_visible = params[:open_icons_visible]
+  end    
+
   def get_branches_and_groups
     @branches = Branch.with_groups.all
     @groups = CompanyGroup.with_branches.ordered.find_all { |g| g.branches.size == 0 }

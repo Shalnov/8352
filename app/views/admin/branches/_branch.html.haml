@@ -12,5 +12,7 @@
     = branch.name
     = link_to icon(:edit), edit_admin_branch_url(branch), :class => "_edit", :style => "display: none;"
     = link_to icon(:delete), admin_branch_url(branch), :confirm => "Вы уверены?", :method => :delete, :class => "_edit", :style => "display: none;"
-- unless branch.groups.empty?
-  = render :partial => "group", :collection => branch.groups, :locals => { :branch => branch, :level => level + 1 }
+    = link_to icon(:arrow_up), move_left_admin_branch_url(branch), :style => "display: none;", :class => "_edit _move_up"
+    = link_to icon(:arrow_down), move_right_admin_branch_url(branch), :style => "display: none;", :class => "_edit _move_down"
+    
+        

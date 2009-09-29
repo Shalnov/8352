@@ -31,4 +31,19 @@ class Branch < ActiveRecord::Base
     self.root? ? [self] : self.parent.breadcrumb + [self]
   end
 
+  def self.each_with_level_and_groups(objects)
+    path = [nil]
+    objects.each do |o|
+      if o.parent_id != path.last
+        # we are on a new level, did we decent or ascent?
+        if path.include?(o.parent_id)
+          # remove wrong wrong tailing paths elements
+          path.pop while path.last != o.parent_id
+        else
+          path << o.parent_id
+        end
+      end
+      yield(o, path.length - 1)
+    end
+  end
 end
