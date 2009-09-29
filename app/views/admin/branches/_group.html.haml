@@ -1,3 +1,4 @@
+
 - id = "group_#{group.id}_parent_#{branch.id}"
 - hidden = @visible.nil? ? "display: none;" : ("display: none;" unless @visible.include?(id))
 
@@ -7,7 +8,9 @@
     &nbsp;
     = icon(:clone, :class => "_clone")
     &nbsp;
-    = group.name
-    &nbsp;
+    = link_to group.name, company_group_path(group)
+    &nbsp;(
+    = group.companies_count
+    )&nbsp;
     = link_to icon(:edit), edit_admin_company_group_url(group), :class => "_edit", :style => "display: none;"
     = link_to icon(:delete), detach_group_admin_branch_url(branch, :group_id => group.id), :class => "_edit _delete", :style => "display: none;"

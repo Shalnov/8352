@@ -2,33 +2,7 @@
 #require 'acts_as_taggable'
 
 class Company < ActiveRecord::Base
-  belongs_to :group, :class_name => "CompanyGroup"
-  
-  serialize  :ymaps
-  
-  serialize  :parsed_address # разобранный адрес от яндекса, см result.rb
-
-
-#  serialize :dump, Hash
-  
-#   define_index do
-#     indexes :name, :sortable => true
-# #    indexes full_name, :sortable => true
-#     indexes description
-#     indexes address
-#     indexes category.name, :as => :category
-#     indexes [
-#       phones.number, phones.person
-#     ], :as => :phone
-#     indexes emails.email, :as => :emails
-
-#     # необходимо для поиска '*ксары*' => Чебоксары
-#     set_property :enable_star => 1
-#     set_property :min_infix_len => 1
-#   end
-  
-  belongs_to :category, :counter_cache => true
-  
+  belongs_to :company_group, :counter_cache => true
   belongs_to :city, :counter_cache => true
 
   has_many :phones,   :dependent => :destroy
@@ -36,12 +10,41 @@ class Company < ActiveRecord::Base
 #  has_many :emails,   :dependent => :destroy
   has_many :results
   has_many :sources,  :through=> :results
-  
-  validates_presence_of :name, :category_id #, :full_name
+
+  serialize  :ymaps
+  serialize  :parsed_address # разобранный адрес от яндекса, см result.rb
+#  serialize :dump, Hash
+ 
+  validates_presence_of :name, :company_group_id #, :full_name
   
   accepts_nested_attributes_for :phones, :allow_destroy => true,
                                 :reject_if => proc { |phone| phone['number'].blank? }
+  
 #  accepts_nested_attributes_for :emails, :allow_destroy => true
+
+
+# ------------------------------------------------------------------------------
+#  Искать по полям: Наименование, описане, адрес, телефоны (телефоны перед поиском нормализовать).
+   define_index do
+     indexes :name, :sortable => true
+     indexes :description
+     indexes addresses.address
+     indexes phones.number
+
+#     indexes [
+#       phones.number, phones.person
+#     ], :as => :phone
+     
+ #    indexes full_name, :sortable => true
+#     indexes category.name, :as => :category
+#     indexes emails.email, :as => :emails
+#
+#     # необходимо для поиска '*ксары*' => Чебоксары
+     set_property :enable_star => 1
+#     set_property :min_infix_len => 1 <- it's default value
+   end
+# ------------------------------------------------------------------------------
+
   
 
   class << self    
@@ -120,7 +123,7 @@ class Company < ActiveRecord::Base
     
     self.addresses.create({
                             :address=>address,
-                            :post_index=>result.parsed_address[:index].andand.stip,
+                            :post_index=>result.parsed_address[:index].blank? ? nil : result.parsed_address[:index].to_s.strip.to_i,
                             :city_id=>result.city_id,
                             :parsed_address=>result.parsed_address,
                             :ymaps=>result.ymaps
@@ -133,5 +136,10 @@ class Company < ActiveRecord::Base
     self.description=results.andand.map(&:other_info).compact.uniq.join("\n------------------------\n")
   end
 
-  
+  def breadcrumb
+    self.company_group.breadcrumb.collect do |arr|
+      arr + [self]
+    end
+  end
+
 end

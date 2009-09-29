@@ -118,36 +118,36 @@ Tagging:
 # Company catalog
 #
 
-Category:
-  fields:
-    list: name, paths, position,  #companies_count, position, hidden
-    form: name, paths, position, description
-    show: id,  paths, name, description, companies_count, position
-  actions:
-    index:
-    edit: show
-  order_by: name, position
-#  relationships: children #companies #, parent, children #, 
-  options:
-    per_page: 30
-  filters:
-  relationships: parents, children
-  search: name
-  application: Company catalog
-  description: Основные категории компаний
+CompanyGroup:
+   fields:
+     list: name, branches # , companies_count  #companies_count, position, hidden
+     form: name #, branches
+     show: id,  name, branches
+   actions:
+     index:
+     edit: show
+   order_by: name
+# #  relationships: children #companies #, parent, children #, 
+   options:
+     per_page: 30
+   filters:
+   relationships: results_to_company_groups, companies #, parents, children
+   search: name
+   application: Company catalog
+   description: Группы компаний
 
 
 Company:
   fields:
-    list: name, results_count, category
-    form: name, inn, emails, parsed_address, site, director, description, working_time
-    show: id, results_count, emails, name, site, director, description, working_time, sources, created_at, updated_at, pending, dump, category
+    list: name, results_count, company_group
+    form: name, inn, emails, site, director, description, working_time, company_group
+    show: id, results_count, emails, name, site, director, description, working_time, sources, created_at, updated_at, pending, dump, company_group
   actions:
     index:
     edit:
   order_by:
-  relationships: category, addresses, phones, results #, tags
-  filters: category, tag
+  relationships: addresses, phones, results #, tags
+  filters: company_group, tag
   options:
     per_page: 50
   search: name
@@ -190,33 +190,30 @@ Phone:
   description:
 
 
-ResultCategory:
-  fields:
-    list: category_name, category, source_id
-    show: id, category_name, category, source_id
-    form: category_name, category, source
-#    options: 
-#      templates:
-#        category_id: category
-  actions:
-    index:
-    show: 
-    exit:
-  order_by: category_name
-  filters:
-  options:
-    per_page: 30
-  relationships: tags
-  search: category_name
-  application: Company catalog
-  description:
+ResultsToCompanyGroup:
+   fields:
+     list: category_name, company_group, source_id
+     show: id, category_name, company_group, source_id
+     form: category_name, company_group, source
+   actions:
+     index:
+     show: update_companies
+     edit: update_companies
+   order_by: category_name
+   filters:
+   options:
+     per_page: 30
+   relationships: results
+   search: category_name
+   application: Company catalog
+   description:
 
 
 
 Result:
   fields: #category_name, 
-    list: name, normalized_name, parsed_phones_str, state #address, state, importer_state, import_errors
-    form: name, normalized_name, short_name, address, phones, parsed_phones, parsed_phones_str, email, site_url, result_category, category_name, work_time, other_info, raw_html, company, is_checked, state, importer_state
+    list: normalized_name, company, parsed_phones_str, state #address, state, importer_state, import_errors
+    form: name, normalized_name, short_name, address, phones, parsed_phones, parsed_phones_str, email, site_url, category_name, work_time, other_info, raw_html, company, is_checked, state, importer_state
 #, link
     show: id, name, address, phones, parsed_phones, email, site_url, category_name, work_time, other_info, raw_html, is_checked, state, importer_state, created_at, updated_at, link, company, source, import_errors, parsed_address, parsed_phones
     options:
@@ -257,19 +254,17 @@ Link:
   application: Grabber
   description:
 
-
-
 Source:
   fields:
     list: target_url, grabber_name, results_count, ad_results_count
     form: target_url, grabber_name
-    show: target_url, id, results_count, ad_results_count, grabber_name, created_at, updated_at
+    show: target_url, id, results_count, ad_results_count, grabber_name, results_updated_count, results_importable_count, results_imported_count, results_noimportable_count, unprocessed_categories_count, created_at, updated_at
   actions:
     edit: show
-    show: import_results
-#, reset_imported_categories, reset_imported_companies
+    show: company_groups, import_results
+    company_groups: show, import_results
   order_by:
-  relationships: result_categories #, ad_result_categories #, results #links, results
+  relationships: results_to_company_groups # result_categories #, ad_result_categories #, results #links, results
   filters:
   search:
   options:
@@ -283,46 +278,6 @@ Source:
 # Advert catalog
 #
 
-
-AdCategory:
-  fields:
-    list: name#, parent, position,  #companies_count, position, hidden
-    form: name #parent, , position, description
-#    show: id, name, description, companies_count, position, children_count, ancestors_count, descendants_count, hidden, parent
-  actions:
-    index:
-    edit: show
-#  order_by: parent_id, position
-#  relationships: children #companies #, parent, children #, 
-  options:
-    per_page: 30
-  filters:
-#  relationships: tags
-  search: name
-  application: Advert catalog
-  description: Категории обьявлений
-
-
-AdResultCategory:
-  fields:
-    list: category_name, ad_category, source_id
-    show: id, category_name, ad_category, source_id
-    form: category_name, ad_category, source
-#    options: 
-#      templates:
-#        category_id: category
-  actions:
-    index:
-    show: 
-    exit:
-  order_by: category_name
-  filters:
-  options:
-    per_page: 30
-  relationships: tags
-  search: category_name
-  application: Advert catalog
-  description:
 
 AdResult:
   fields:

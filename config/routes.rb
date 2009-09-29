@@ -1,4 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
+
+  map.resource :search, :only => [:show, :create]
+
   map.root :controller => "home"
   
   map.namespace :admin do |admin|
@@ -39,8 +42,9 @@ ActionController::Routing::Routes.draw do |map|
   map.resource  :account, :controller => "users"
   map.resources :users
   
-  map.resources :companies,   :has_many => [:tags], :collection => { :search => :post }
-  map.resources :categories,  :has_many => [:companies]
+  map.resources :companies #,   :has_many => [:tags]
+  map.resources :branches #,  :has_many => [:companies]
+  map.resources :company_groups
   
   map.resources :tags
   

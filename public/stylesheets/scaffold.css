@@ -99,8 +99,9 @@ width: 15%;
 
 
 
-#main { background: #ccc; width: 70%;
-float: left; 
+#main { 
+ width: 70%;
+ float: left;
  position: relative;
  left: 0px;
  top: 0px; }

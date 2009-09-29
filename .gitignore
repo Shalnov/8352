@@ -10,12 +10,16 @@ doc/plugins
 config/deploy.rb
 log/*.log
 log/*.pid
+tmp
 tmp/**/*
 utils/*.sql
-vendor/*
 nbproject
+*.stackdump
 *~
 .#*
 *#
 .emacs*
 TAGS
+dump
+config/development.sphinx.conf
+config/production.sphinx.conf

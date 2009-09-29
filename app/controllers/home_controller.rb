@@ -1,6 +1,7 @@
 class HomeController < ApplicationController
+  
   def index
-    @categories = Category.roots
+    @company_branches = Branch.roots.all :order => :name
 #    render :file=>"public/500"
   end
 

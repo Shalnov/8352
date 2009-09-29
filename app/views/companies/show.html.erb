@@ -1,9 +1,7 @@
-<%= link_to "Изменить", edit_category_company_url(@company.category, @company) %>
+<%= breadcrumb @company.breadcrumb %>
+<h1><%=h @company.name %></h1>
 
-<p>
-  <b>Категория:</b>
-  <%= link_to @company.category.name, category_url(@company.category) %>
-</p>
+<%#= link_to "Изменить", edit_category_company_url(@company.category, @company) %>
 
 <p>
   <b>Название:</b>
