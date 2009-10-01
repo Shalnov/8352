@@ -1,9 +1,9 @@
 - id = "branch_#{branch.id}"
-- hidden = @visible.nil? ? !(level == 0) : !@visible.include?(id)
+- hidden = @visible.nil? ? !(branch.level == 0) : !@visible.include?(id)
 - open_icon_visible = @open_icons_visible.nil? ? false : @open_icons_visible.include?("open_#{branch.id}")
-
+  
 %tr{:id => id, :rel => "#{branch.name}", :class => "_branch with_form _parent_#{branch.parent_id}", :style => ("display: none" if hidden)}
-  %td{:class => "level_#{level}"}
+  %td{:class => "level_#{branch.level}"}
     = icon(:move, :class => "_move")
     &nbsp;
     = icon(:close, :id => "close_#{branch.id}", :class => "_close", :rel => "_parent_#{branch.id}", :style => ("display: none;" unless open_icon_visible))
@@ -14,5 +14,9 @@
     = link_to icon(:delete), admin_branch_url(branch), :confirm => "Вы уверены?", :method => :delete, :class => "_edit", :style => "display: none;"
     = link_to icon(:arrow_up), move_left_admin_branch_url(branch), :style => "display: none;", :class => "_edit _move_up"
     = link_to icon(:arrow_down), move_right_admin_branch_url(branch), :style => "display: none;", :class => "_edit _move_down"
-    
-        
+
+- unless branch.groups.empty?
+  = render :partial => "group", :collection => branch.groups, :locals => { :branch => branch, :level => branch.level + 1 }
+
+- branch.children.each do |b|
+  = render :partial => "branch", :object => b

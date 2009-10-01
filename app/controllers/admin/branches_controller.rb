@@ -58,7 +58,7 @@ class Admin::BranchesController < ApplicationController
         source.move_to_child_of(target)
       else
         source.move_to_root
-        source.move_to_right_of(Branch.last)        
+        source.move_to_right_of(Branch.roots.last)        
       end
     elsif params[:source] =~ /group/
       target = Branch.find(target_id)
@@ -76,7 +76,7 @@ class Admin::BranchesController < ApplicationController
       source.save!
       
       # Сомнительно! Видимо, это нужно разруливать на уровне JS.
-#      @visible << "group_#{source.id}_parent_#{target.id}"
+      @visible << "group_#{source.id}_parent_#{target.id}"
     end
     
     get_branches_and_groups
@@ -116,7 +116,8 @@ protected
   end    
 
   def get_branches_and_groups
-    @branches = Branch.with_groups.all
+    #@branches = Branch.with_groups.all
+    @branches = Branch.tree(Branch.with_groups.all)
     @groups = CompanyGroup.with_branches.ordered.find_all { |g| g.branches.size == 0 }
   end
 end
