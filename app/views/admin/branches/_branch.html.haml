@@ -18,5 +18,4 @@
 - unless branch.groups.empty?
   = render :partial => "group", :collection => branch.groups, :locals => { :branch => branch, :level => branch.level + 1 }
 
-- branch.children.each do |b|
-  = render :partial => "branch", :object => b
+= render :partial => "branch", :collection => branch.children  

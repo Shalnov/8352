@@ -1,10 +1,4 @@
 %tr{:id => "branch_root", :class => "_branch"}
   %td= icon(:root)
 
-/- Branch.each_with_level(@branches) do |branch, level|
-/  = render :partial => "branch", :object => branch, :locals => { :level => level }
-/  - unless branch.groups.empty?
-/    = render :partial => "group", :collection => branch.groups, :locals => { :branch => branch, :level => level + 1 }
-
-- @branches.each do |b|
-  = render :partial => "branch", :object => b
+= render :partial => "branch", :collection => @branches
