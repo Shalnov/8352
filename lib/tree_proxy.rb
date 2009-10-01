@@ -22,11 +22,6 @@ class TreeProxy < BlankState
     options.each { |key, value| instance_variable_set("@#{key}", value) }
   end
 
-  # Suspend warning
-  def id
-    @subject.send("id")
-  end
-
 private
   def method_missing(method, *args, &block)
     raise NotImplementedError, "This method: #{method} is not implemented on #{@subject.class_name}" unless @subject.respond_to?(method)

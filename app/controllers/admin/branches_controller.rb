@@ -116,7 +116,6 @@ protected
   end    
 
   def get_branches_and_groups
-    #@branches = Branch.with_groups.all
     @branches = Branch.tree(Branch.with_groups.all)
     @groups = CompanyGroup.with_branches.ordered.find_all { |g| g.branches.size == 0 }
   end
