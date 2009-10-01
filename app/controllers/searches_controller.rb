@@ -7,7 +7,7 @@ class SearchesController < ApplicationController
       #ThinkingSphinx::Search.search(@query, :page => params[:page]).compact
       @companies = Company.search "*#{@search_query}*",
                                  :order => :name,
-                                 :limit => 1000,
+#                                 :limit => 1000,
                                  :page => params[:page],
                                  :per_page => configatron.companies_per_page,
                                  :excerpts => true

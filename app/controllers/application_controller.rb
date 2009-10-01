@@ -3,6 +3,7 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
+#  include Clearance::Authentication
 #  include AuthenticatedSystem
 #  include RoleRequirementSystem
 
@@ -37,13 +38,26 @@ class ApplicationController < ActionController::Base
 #     end
 #   end
   
-    
-  
+#    ThinkingSphinx::ConnectionError
+
+
+
   # TODO Вынести эту заплатку куда следует
   
   def get_current_city
     City.find_by_name("Чебоксары")
   end
 
+  rescue_from ActiveRecord::RecordNotFound,
+              ActionController::RoutingError,
+              ActionController::UnknownAction,
+#              ThinkingSphinx::ConnectionError,
+              :with => :page_not_found
+
+  protected
+
+  def page_not_found
+    render 'home/page_not_found', :status => 404
+  end
   
 end
