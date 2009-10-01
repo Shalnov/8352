@@ -56,9 +56,11 @@
 
   </head>
   <body>
-    <div id="header"><a href="/"><h1 id="logo">chuvashya.ru</h1></a>
+    <div id="header">
+      <a href="/"><h1 id="logo">chuvashya.ru</h1></a>
       <p style="color: green"><%= flash[:notice] %></p>
       <p style="color: red"><%= flash[:error] %></p>
+      <%= render :partial => 'layouts/usernav' %>
     </div>
 
     <div id="main">

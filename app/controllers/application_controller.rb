@@ -3,7 +3,14 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
-#  include Clearance::Authentication
+  include AuthlogicUser
+  
+  filter_parameter_logging :password, :password_confirmation
+
+  helper_method :current_user_session, :current_user
+
+
+
 #  include AuthenticatedSystem
 #  include RoleRequirementSystem
 
@@ -54,10 +61,21 @@ class ApplicationController < ActionController::Base
 #              ThinkingSphinx::ConnectionError,
               :with => :page_not_found
 
+  rescue_from Acl9::AccessDenied, :with => :access_denied
+
   protected
 
   def page_not_found
     render 'home/page_not_found', :status => 404
   end
-  
+
+  def access_denied
+    if current_user
+      render :template => 'home/access_denied'
+    else
+      flash[:notice] = 'Access denied. Try to log in first.'
+      redirect_to login_path
+    end
+  end
+
 end
