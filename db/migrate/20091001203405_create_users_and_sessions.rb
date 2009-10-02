@@ -3,7 +3,7 @@ class CreateUsersAndSessions < ActiveRecord::Migration
     drop_table :users
     
     create_table :sessions do |t|
-      t.string :session_id, :null => false
+      t.text :session_id, :null => false
       t.text :data
       t.timestamps
     end

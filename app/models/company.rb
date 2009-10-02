@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-#require 'acts_as_taggable'
-
 class Company < ActiveRecord::Base
   belongs_to :company_group, :counter_cache => true
   belongs_to :city, :counter_cache => true

@@ -1,4 +1,9 @@
 class BranchesController < ApplicationController
+
+  access_control do
+     allow all
+  end
+  
   def show
     @branch = Branch.find params[:id]
     @company_groups = @branch.groups

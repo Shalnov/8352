@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
 class TagsController < ApplicationController
+
+  access_control do
+     allow all
+  end
+
   def index
     @tags = Company.tag_counts().sort { |a,b| a.name <=> b.name } #:conditions => {:pending => false}
 
@@ -8,7 +13,6 @@ class TagsController < ApplicationController
       format.xml  { render :xml => @tags }
     end
   end
-  
   
   def show
     @names = params[:id].split(',')

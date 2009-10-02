@@ -40,11 +40,11 @@ class ChangeRoles < ActiveRecord::Migration
     remove_index :roles, :name
     drop_table :roles
 
-    drop_foreign_key :roles_users, :users
-    drop_foreign_key :roles_users, :roles
+#    drop_foreign_key :roles_users, :users
+#    drop_foreign_key :roles_users, :roles
     remove_index :roles_users, :user_id
     remove_index :roles_users, :role_id
-    remove_index :roles_users, [:user_id, :role_id], :unique => true
+    remove_index :roles_users, [:user_id, :role_id]
     drop_table :roles_users
 
     # revert old

@@ -1,6 +1,9 @@
 class UserSessionsController < ApplicationController
-  before_filter :require_no_user, :only => [:new, :create]
-  before_filter :require_user, :only => :destroy
+  
+  access_control do
+     allow anonymous, :to => [:new, :create]
+     allow logged_in, :to => :destroy
+  end
 
   def new
     @user_session = UserSession.new
@@ -21,6 +24,6 @@ class UserSessionsController < ApplicationController
   def destroy
     current_user_session.destroy
     flash[:notice] = "Logout successful!"
-    redirect_back_or_default new_user_session_path
+    redirect_back_or_default root_url
   end
 end

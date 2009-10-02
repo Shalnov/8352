@@ -1,6 +1,9 @@
 class UsersController < ApplicationController
-  before_filter :require_no_user, :only => [:new, :create]
-  before_filter :require_user, :only => [:show, :edit, :update, :index]
+
+  access_control do
+     allow anonymous, :to => [:new, :create]
+     allow logged_in, :to => [:show, :edit, :update, :index]
+  end
 
   def new
     @user = User.new
