@@ -49,7 +49,7 @@ class Branch < ActiveRecord::Base
     # По факту, этот кусок разбивает дерево на хэш веток, где ключом является путь к ветке,
     # а значением - массив объектов.
     by_path = {}    
-    path = []    
+    path = [nil]    
     objects.each do |o|
       if o.parent_id != path.last
         if path.include?(o.parent_id)
@@ -58,7 +58,7 @@ class Branch < ActiveRecord::Base
           path << o.parent_id
         end
       end
-      (by_path[path.dup] ||= []) << o
+      (by_path[path.slice(1..-1)] ||= []) << o
     end    
     
     # Проводим вычисления для всех веток дерева. Пока во все места записываем ID
@@ -84,7 +84,7 @@ class Branch < ActiveRecord::Base
         end
       end
     end
-      
+         
     # Создаём прокси-объекты.
     proxy_index = {}
     flat_tree.each do |id, item|
@@ -92,7 +92,9 @@ class Branch < ActiveRecord::Base
       proxy_index[id] = proxy_item
     end    
     
+    #logger.info proxy_index.values.map { |item| [item.parent_id.to_i, item.root.to_s] }.inspect  
+    
     # Возвращаем корни
-    roots = proxy_index.find_all { |id, item| item.root.nil? }.map { |v| v[1] }
+    proxy_index.values.find_all { |item| item.root.nil? }
   end
 end
