@@ -48,7 +48,7 @@ ActionController::Routing::Routes.draw do |map|
 #  map.resources :users,       :collection => { :activate => :get }
   
   
-  map.resources :companies #,   :has_many => [:tags]
+  map.resources :companies, :has_many => :results# [:tags]
   map.resources :branches #,  :has_many => [:companies]
   map.resources :company_groups
   

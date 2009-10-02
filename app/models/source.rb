@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 class Source < ActiveRecord::Base
 
   self.establish_connection :grabber
