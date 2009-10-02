@@ -91,10 +91,8 @@ class Branch < ActiveRecord::Base
       proxy_item = TreeProxy.new(item[:object], proxy_index, item.except(:object))
       proxy_index[id] = proxy_item
     end    
-    
-    #logger.info proxy_index.values.map { |item| [item.parent_id.to_i, item.root.to_s] }.inspect  
-    
+      
     # Возвращаем корни
-    proxy_index.values.find_all { |item| item.root.nil? }
+    proxy_index.values.find_all { |item| item.root.nil? }.sort { |a, b| a.lft <=> b.lft }
   end
 end
