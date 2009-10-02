@@ -1,7 +1,8 @@
 class Branch < ActiveRecord::Base
   acts_as_nested_set
 
-  has_and_belongs_to_many :groups, :class_name => "CompanyGroup", :order => "name ASC"
+  has_many :branch_company_groups, :order => "position ASC"  
+  has_many :groups, :through => :branch_company_groups, :source => :company_group
 
   named_scope :with_groups, { :include => :groups }
   default_scope :order => "lft"
@@ -92,7 +93,9 @@ class Branch < ActiveRecord::Base
       proxy_index[id] = proxy_item
     end    
       
-    # Возвращаем корни
+    # Возвращаем корни.
+    # TODO Тут подумать как лучше реализовать позиционирование, Наверное, эту выборку нужно
+    # формировать на этапе proxy_index'а + его превратить в массив (????)
     proxy_index.values.find_all { |item| item.root.nil? }.sort { |a, b| a.lft <=> b.lft }
   end
 end

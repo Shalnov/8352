@@ -1,3 +1,0 @@
-page.replace_html "branches", :partial => "branches"
-page.replace_html "groups", :partial => "groups"
-page << "branches();"

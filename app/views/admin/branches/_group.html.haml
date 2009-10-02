@@ -14,3 +14,5 @@
     )&nbsp;
     = link_to icon(:edit), edit_admin_company_group_url(group), :class => "_edit", :style => "display: none;"
     = link_to icon(:delete), detach_group_admin_branch_url(branch, :group_id => group.id), :class => "_edit _delete", :style => "display: none;"
+    = link_to icon(:arrow_up), branch_left_admin_branch_url(group, :branch_id => branch.id), :style => "display: none;", :class => "_edit _move_up"
+    = link_to icon(:arrow_down), branch_right_admin_branch_url(group, :branch_id => branch.id), :style => "display: none;", :class => "_edit _move_down"

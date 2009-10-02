@@ -4,7 +4,7 @@ class Admin::BranchesController < ApplicationController
   helper :action_link
   # BASE CONTROLLER >
   
-  before_filter :export_visible, :only => [:move, :move_left, :move_right]
+  before_filter :export_visible, :only => [:detach_group, :move, :move_left, :move_right, :branch_left, :branch_right]
     
   def index
     get_branches_and_groups
@@ -83,15 +83,14 @@ class Admin::BranchesController < ApplicationController
   end
   
   def detach_group
-    @visible = params[:visible]
-    @open_icons_visible = params[:open_icons_visible]
-
     @branch = Branch.find(params[:id])
     @group = CompanyGroup.find(params[:group_id])
     @branch.groups.delete(@group)
     @branches = Branch.with_groups.all
     
     get_branches_and_groups
+    
+    render :action => :move
   end
   
   def move_left
@@ -99,6 +98,8 @@ class Admin::BranchesController < ApplicationController
     @branch.move_left
     
     get_branches_and_groups
+    
+    render :action => :move
   end
 
   def move_right
@@ -106,6 +107,26 @@ class Admin::BranchesController < ApplicationController
     @branch.move_right
     
     get_branches_and_groups
+    
+    render :action => :move
+  end
+  
+  def branch_left
+    @branch = BranchCompanyGroup.find_by_company_group_id_and_branch_id(params[:id], params[:branch_id])
+    @branch.move_higher
+    
+    get_branches_and_groups  
+    
+    render :action => :move
+  end
+  
+  def branch_right
+    @branch = BranchCompanyGroup.find_by_company_group_id_and_branch_id(params[:id], params[:branch_id])
+    @branch.move_lower
+    
+    get_branches_and_groups    
+    
+    render :action => :move
   end
   
 protected
