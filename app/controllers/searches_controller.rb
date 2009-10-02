@@ -1,8 +1,7 @@
 class SearchesController < ApplicationController
 
   def show
-    # TODO sanitize query !!!!!!!!!!!!
-    @search_query = params[:q]
+    @search_query = Sanitize.clean(params[:q])
     unless @search_query.blank?
       #ThinkingSphinx::Search.search(@query, :page => params[:page]).compact
       @companies = Company.search "*#{@search_query}*",

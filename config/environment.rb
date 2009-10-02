@@ -91,6 +91,8 @@ Rails::Initializer.run do |config|
 
   config.gem 'binarylogic-authlogic', :lib => 'authlogic', :source => 'http://gems.github.com'
   config.gem "be9-acl9", :lib => "acl9", :source => "http://gems.github.com"
+
+  config.gem "sanitize", :source => "http://gems.github.com"
 end
 
 require 'configatron'
