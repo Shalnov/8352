@@ -1,3 +1,8 @@
+# Remove old
+Role.delete_all
+RolesUser.delete_all
+User.delete_all
+
 # Add default roles
 Role.create [{ :name => 'admin' }, { :name => 'moderator' }, { :name => 'user' }]
 
