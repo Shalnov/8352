@@ -15,7 +15,7 @@
     = link_to icon(:arrow_up), move_left_admin_branch_url(branch), :style => "display: none;", :class => "_edit _move_up"
     = link_to icon(:arrow_down), move_right_admin_branch_url(branch), :style => "display: none;", :class => "_edit _move_down"
 
+= render :partial => "branch", :collection => branch.children  
+
 - unless branch.groups.empty?
   = render :partial => "group", :collection => branch.groups, :locals => { :branch => branch, :level => branch.level + 1 }
-
-= render :partial => "branch", :collection => branch.children  
