@@ -14,7 +14,12 @@ class Branch < ActiveRecord::Base
       move_to_right_of(target)
     end
   end    
-  
+
+  # TODO: А тут бы я сделал так: сначала выбрал бы все ID, а потом уже все объекты.
+  # Т.е. descendants -> массив ID, Group.find_by_branch_id(массив ID).collect id, Company.find_by_group_id.
+  # Получится три запроса вместо N.
+  # Всё-таки, парное программирование и ревизионирование рулит.
+  # Виктор.
   def companies
     c=[]
     gs=groups
@@ -31,19 +36,63 @@ class Branch < ActiveRecord::Base
     self.root? ? [self] : self.parent.breadcrumb + [self]
   end
 
-  def self.each_with_level_and_groups(objects)
-    path = [nil]
+  # Очень длинная функция для рекурсивного обхода плоского дерева.
+  # По-моему, можно её значительно упростить, но я не знаю как.
+  # Вернее, второй способ потребует многократного обхода плоского массива для поиска, например, 
+  # следующего парента (конец саблингов), и парентов до рута. Может, более простой код лучше?
+  # Требования: входной массив должен быть отсортирован по lft.
+  def self.tree(objects, &block)
+    # Справочный массив для дальнейших калькуляций
+    by_id = Hash[*(objects.map { |o| [o.id, o] }.flatten)]
+  
+    # Калькулейт материализед патчс!
+    # По факту, этот кусок разбивает дерево на хэш веток, где ключом является путь к ветке,
+    # а значением - массив объектов.
+    by_path = {}    
+    path = []    
     objects.each do |o|
       if o.parent_id != path.last
-        # we are on a new level, did we decent or ascent?
         if path.include?(o.parent_id)
-          # remove wrong wrong tailing paths elements
           path.pop while path.last != o.parent_id
         else
           path << o.parent_id
         end
       end
-      yield(o, path.length - 1)
+      (by_path[path.dup] ||= []) << o
+    end    
+    
+    # Проводим вычисления для всех веток дерева. Пока во все места записываем ID
+    flat_tree = {}
+    by_path.each do |path, branch|
+      branch.each do |o|
+        branch_index = branch.index(o)
+        tree_item = {
+          :object => o,
+          :root => path.first,
+          :parent => o.id,
+          :ancestors => path,
+          :children => [],
+          :descendants => branch.slice(branch_index..-1).map { |b| b.id },
+          :siblings => [],
+          :level => path.length
+        }
+        tree_item[:siblings] = branch.slice(0..branch_index-1).map { |b| b.id } if branch_index > 0        
+        flat_tree[o.id] = tree_item
+        
+        if flat_tree.key?(o.parent_id)
+          flat_tree[o.parent_id][:children] << o.id
+        end
+      end
     end
+      
+    # Создаём прокси-объекты.
+    proxy_index = {}
+    flat_tree.each do |id, item|
+      proxy_item = TreeProxy.new(item[:object], proxy_index, item.except(:object))
+      proxy_index[id] = proxy_item
+    end    
+    
+    # Возвращаем корни
+    roots = proxy_index.find_all { |id, item| item.root.nil? }.map { |v| v[1] }
   end
 end
