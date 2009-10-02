@@ -5,4 +5,6 @@
   - if @companies.empty?
     По Вашему запросу ничего не найдено.
   - else
-    = render :partial => 'companies/list', :locals => { :companies => @companies }
+    = render :partial => 'company', :collection => @companies
+    = will_paginate @companies
+    = page_entries_info @companies

@@ -68,7 +68,6 @@ class Company < ActiveRecord::Base
       
   end
   
-  
   def address
     addresses.map(&:address).join('; ')
   end
