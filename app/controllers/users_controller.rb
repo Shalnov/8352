@@ -17,6 +17,7 @@ class UsersController < ApplicationController
     else
       @user.attributes = params[:user] unless @user.new_record?
       if @user.save_without_session_maintenance
+        @user.has_role! :user
         @user.deliver_activation_instructions!
         flash[:notice] = "Your account has been created. Please check your e-mail for your account activation instructions!"
         redirect_to new_user_session_path
