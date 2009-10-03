@@ -42,13 +42,9 @@ class Branch < ActiveRecord::Base
   # Вернее, второй способ потребует многократного обхода плоского массива для поиска, например, 
   # следующего парента (конец саблингов), и парентов до рута. Может, более простой код лучше?
   # Требования: входной массив должен быть отсортирован по lft.
-  def self.tree(objects, &block)
-    # Справочный массив для дальнейших калькуляций
+  def self.tree(objects)
     by_id = Hash[*(objects.map { |o| [o.id, o] }.flatten)]
   
-    # Калькулейт материализед патчс!
-    # По факту, этот кусок разбивает дерево на хэш веток, где ключом является путь к ветке,
-    # а значением - массив объектов.
     by_path = {}    
     path = [nil]    
     objects.each do |o|
@@ -60,11 +56,11 @@ class Branch < ActiveRecord::Base
         end
       end
       (by_path[path.slice(1..-1)] ||= []) << o
-    end    
+    end
     
-    # Проводим вычисления для всех веток дерева. Пока во все места записываем ID
     flat_tree = {}
-    by_path.each do |path, branch|
+    by_path.sort { |a, b| a[0].length <=> b[0].length }.each do |value|
+      path, branch = value
       branch.each do |o|
         branch_index = branch.index(o)
         tree_item = {
@@ -86,16 +82,15 @@ class Branch < ActiveRecord::Base
       end
     end
          
-    # Создаём прокси-объекты.
     proxy_index = {}
     flat_tree.each do |id, item|
       proxy_item = TreeProxy.new(item[:object], proxy_index, item.except(:object))
       proxy_index[id] = proxy_item
     end    
-      
-    # Возвращаем корни.
-    # TODO Тут подумать как лучше реализовать позиционирование, Наверное, эту выборку нужно
-    # формировать на этапе proxy_index'а + его превратить в массив (????)
-    proxy_index.values.find_all { |item| item.root.nil? }.sort { |a, b| a.lft <=> b.lft }
+
+    # Returns proxies of a roots.
+    proxy_index.values.find_all { |item| item.root.nil? }.sort do |a, b| 
+      a[left_column_name] <=> b[left_column_name]          
+    end
   end
 end

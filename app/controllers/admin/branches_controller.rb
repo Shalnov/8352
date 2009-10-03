@@ -55,7 +55,7 @@ class Admin::BranchesController < ApplicationController
       source = Branch.find(source_id)    
       if target_id != 'root'
         target = Branch.find(target_id)
-        source.move_to_child_of(target)
+
       else
         source.move_to_root
         source.move_to_right_of(Branch.roots.last)        

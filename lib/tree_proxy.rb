@@ -1,5 +1,7 @@
 # Прокси-класс для элемента дерева, которое перевели в форму дерева из плоской.
 class TreeProxy < BlankState
+  blank_state :instance_variable_get, :instance_variable_set
+
   # Этот метод возвращает прокси-объект или массив прокси из индекса.
   %w{root parent ancestors children descendants siblings level}.each do |attr|
     define_method attr.to_sym do
