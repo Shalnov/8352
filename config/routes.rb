@@ -8,7 +8,10 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :company_groups
     admin.resources :branches, 
                     :collection => { :move => :post }, 
-                    :member => { :attach_group => :post, :detach_group => :get, :move_left => :post, :move_right => :post }
+                    :member => { 
+                      :attach_group => :post, :detach_group => :get, :move_left => :post, :move_right => :post,
+                      :branch_left => :post, :branch_right => :post
+                    }
   end
 
 #   map.namespace :admin do |admin|
