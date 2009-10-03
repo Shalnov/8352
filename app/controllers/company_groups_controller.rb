@@ -1,5 +1,8 @@
-# -*- coding: utf-8 -*-
 class CompanyGroupsController < ApplicationController
+
+  access_control do
+     allow anonymous
+  end
 
   def index
     # @companies = params[:category_id] ? 
@@ -16,11 +19,4 @@ class CompanyGroupsController < ApplicationController
     @company_group = CompanyGroup.find params[:id]
     @companies = @company_group.companies.paginate :page => params[:page], :per_page => configatron.companies_per_page
   end
-  
-  # def search
-  #   @tags = Tag.search(params[:search])
-  #   @categories = Category.search("*#{params[:search]}*")
-  #   @companies = Company.search("*#{params[:search]}*")
-  #   render :layout => false
-  # end  
 end

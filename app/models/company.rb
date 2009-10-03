@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-#require 'acts_as_taggable'
-
 class Company < ActiveRecord::Base
   belongs_to :company_group, :counter_cache => true
   belongs_to :city, :counter_cache => true
@@ -9,7 +6,7 @@ class Company < ActiveRecord::Base
   has_many :addresses, :dependent => :destroy
 #  has_many :emails,   :dependent => :destroy
   has_many :results
-  has_many :sources,  :through=> :results
+  has_many :sources,  :through => :results
 
   serialize  :ymaps
   serialize  :parsed_address # разобранный адрес от яндекса, см result.rb
@@ -49,7 +46,6 @@ class Company < ActiveRecord::Base
 
   class << self    
     
-    
     # Давайте мне хэш телефонов и я найду компанию
     def find_by_phones(phones)
       # TODO определить тип hash/array/string/number и делать поступать соответсвенно
@@ -72,11 +68,9 @@ class Company < ActiveRecord::Base
       
   end
   
-  
   def address
     addresses.map(&:address).join('; ')
   end
-
   
   def update_emails(email)
     return unless email
@@ -87,8 +81,6 @@ class Company < ActiveRecord::Base
       self.emails="#{self.emails}, #{email}"
     end
   end
-  
-  
   
   def update_phone(h)
     

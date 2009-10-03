@@ -1,4 +1,7 @@
 class CompaniesController < ApplicationController
+  access_control do
+     allow all
+  end
 
   def index
     @companies = params[:category_id] ? 

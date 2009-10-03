@@ -64,7 +64,7 @@ Rails::Initializer.run do |config|
   # Use the database for sessions instead of the cookie-based default,
   # which shouldn't be used to store highly confidential information
   # (create the session table with "rake db:sessions:create")
-  # config.action_controller.session_store = :active_record_store
+   config.action_controller.session_store = :active_record_store
 
   # Use SQL instead of Active Record's schema dumper when creating the test database.
   # This is necessary if your schema can't be completely dumped by the schema dumper,
@@ -73,7 +73,7 @@ Rails::Initializer.run do |config|
 
   # Activate observers that should always be running
   # Please note that observers generated using script/generate observer need to have an _observer suffix
-  config.active_record.observers = :user_observer
+#  config.active_record.observers = :user_observer
 
   config.gem "thoughtbot-shoulda", :lib => "shoulda", :source => "http://gems.github.com"
 #  config.gem 'webrat', :lib => "webrat", :source => "http://gems.github.com"
@@ -81,32 +81,21 @@ Rails::Initializer.run do |config|
 #  config.gem 'redgreen', :version=>"1.2.2"
   config.gem 'ya2yaml', :version=>"0.26"
   config.gem 'andand', :version=>"1.3.1"
-  # config.gem 'acts_as_taggable_on_steroids', 
-  #  :lib => "acts_as_taggable_on_steroids"
-#  ,  
-  # :version=>"2.0.2"
-  
+#  config.gem 'acts_as_taggable_on_steroids' #, :lib => "acts_as_taggable_on_steroids" #, :version=>"2.0.2"
   
   config.gem 'rubyist-aasm', :lib =>"aasm", :version=>"2.0.5"
-  config.gem 'authlogic'
-#
   config.gem 'test-unit', :lib => 'test/unit'
-
-  
-  config.gem 'mislav-will_paginate', :lib => 'will_paginate', 
-  :source => 'http://gems.github.com'
-
-  config.gem "yaroslav-russian",
-  :lib     => 'russian', 
-  :source  => 'http://gems.github.com'
-
+  config.gem 'mislav-will_paginate', :lib => 'will_paginate', :source => 'http://gems.github.com'
+  config.gem "yaroslav-russian", :lib => 'russian', :source  => 'http://gems.github.com'
   config.gem 'haml'
 
+  config.gem 'binarylogic-authlogic', :lib => 'authlogic', :source => 'http://gems.github.com'
+  config.gem "be9-acl9", :lib => "acl9", :source => "http://gems.github.com"
+
+  config.gem "sanitize", :source => "http://gems.github.com"
 end
 
 require 'configatron'
-
-
 
 configatron.site_url    = '8352.info'
 configatron.admin_email = 'admin@orionet.ru'

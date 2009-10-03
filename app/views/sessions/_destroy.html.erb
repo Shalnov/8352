@@ -1,6 +1,0 @@
-<div>Здравствуй <%= current_user.login %>!</div>
-
-<% if current_user.has_role?(:admin) %>
-<%= link_to 'Админка', '/admin/' %>,
-<% end %>
-<%= link_to 'Выйти', logout_path %>

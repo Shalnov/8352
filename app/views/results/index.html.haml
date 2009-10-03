@@ -1,0 +1,10 @@
+= render @company
+%hr
+- @results.each do |result|
+  = div_for result do
+    - result.attributes.each_pair do |name, value|
+      %b= name
+      \:
+      =h value
+      %br
+  %hr

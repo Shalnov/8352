@@ -1,66 +1,13 @@
 <%= breadcrumb @company.breadcrumb %>
 <h1><%=h @company.name %></h1>
 
+<% if current_user && current_user.has_role?(:moderator) %>
+  <%= link_to 'Исходные данные', company_results_path(@company) %>
+<% end %>
 <%#= link_to "Изменить", edit_category_company_url(@company.category, @company) %>
 
-<p>
-  <b>Название:</b>
-  <%=h @company.name %>
-</p>
-
-<p>
-  <b>ИНН:</b>
-  <%=h @company.inn %>
-</p>
-
-<p>
-  <b>Адрес:</b>
-  <%=h @company.address %>
-</p>
-
-<p>
-  <b>Сайт:</b>
-  <%=h @company.site %>
-</p>
-
-<p>
-  <b>Директор:</b>
-  <%=h @company.director %>
-</p>
-
-<p>
-  <b>Описание:</b>
-  <%=h @company.description %>
-</p>
-
-<p>
-  <b>Рабочее время:</b>
-  <%=h @company.working_time %>
-</p>
-
-<p>
-  <b>Источники:</b>
-  <%=h @company.sources.map(&:target_url).join(',') %>
-</p>
-
-<% if @company.phones.size > 0 %>
-<p>
-  <b>Телефоны:</b>
-	<% @company.phones.each do |phone| %>
-<%= h_phone phone %>
-	<% end %>
-</p>
-<% end %>
-
-
-
-<p>
-  <b>E-mail:</b>
-	<%= @company.emails %>
-</p>
-
+<%= render @company %>
 
 <h2>На карте</h2>
 <a href="#" onclick="showCompanyAddress('<%= @company.address %>');return false;">смотреть на карте</a>
 <div id="YMapsID" style="width:400px;height:300px"></div>
-

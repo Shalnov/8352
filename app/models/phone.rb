@@ -56,7 +56,5 @@ class Phone < ActiveRecord::Base
   def get_current_city
     City.find_by_name("Чебоксары")
   end
-
-
   
 end
