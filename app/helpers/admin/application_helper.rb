@@ -18,6 +18,6 @@ module Admin::ApplicationHelper
   end
     
   def icon(id, *args)
-    image_tag("admin/#{id.to_s}.png", *args)
+    image_tag "admin/#{id.to_s}.png", *args
   end
 end

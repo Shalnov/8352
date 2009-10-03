@@ -49,3 +49,6 @@
 [submodule "vendor/plugins/dump"]
 	path = vendor/plugins/dump
 	url = git://github.com/toy/dump.git
+[submodule "vendor/plugins/awesome_nested_set"]
+	path = vendor/plugins/awesome_nested_set
+	url = git://github.com/gzigzigzeo/awesome_nested_set.git

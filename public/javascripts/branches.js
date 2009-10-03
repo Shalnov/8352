@@ -1,151 +1,153 @@
-function get_visible() {
-  var visible = [];
-  $('#branches tr').each(function(i, tag) {
-    if ($(tag).css('display') != 'none') { 
-      visible.push(tag.id);
+Array.prototype.remove = function(from, to) {
+  var rest = this.slice((to || from) + 1 || this.length);
+  this.length = from < 0 ? this.length + from : from;
+  return this.push.apply(this, rest);
+};
+
+Array.prototype.delete = function(value) {
+  if (this.indexOf(value) == -1) return this;
+  return this.remove(this.indexOf(value));
+};
+
+Array.prototype.uniq = function(value) {
+  var sorter = {};
+  var out = [];
+  for(var i=0,j=this.length;i<j;i++){
+    if(!sorter[this[i]+typeof this[i]]){
+      out.push(this[i]);
+      sorter[this[i]+typeof this[i]]=true;
     }
-  });
-  return visible;  
-}
+  }
+  return out;
+};
 
-function get_open_icons_visible() {
-  var open_icons_visible = [];
-  $('#branches tr ._open').each(function(i, tag) {
-    if ($(tag).css('display') == 'none') {
-      open_icons_visible.push(tag.id);
-    }
-  });
-  return open_icons_visible;  
-}
+Branch = {
+  initialize: function() {
+    $('#loader').ajaxStart(function() { $(this).show(); });
+    $('#loader').ajaxStop(function() { $(this).hide(); });
 
-function branches() {
-  $('#branches tr ._branch').droppable('destroy');
-  $('#branches tr ._branch').draggable('destroy');
-  $('#branches tr ._group').draggable('destroy');  
-  $('#groups tr ._group').draggable('destroy');
+    $('#branches dt')
+     .live('mouseover', function(e) { $(this).find('._edit').show(); })
+     .live('mouseout', function(e) { $(this).find('._edit').hide(); });    
+    
+    $('a._delete').live('click', function(e) {
+      e.preventDefault();
+      $.ajax({
+        type: 'get',
+        dataType: 'script',
+        data: {
+          _method: '_delete',
+          authenticity_token: window._token,
+          "visibility[]": Branch.visibility
+        },
+        url: $(this).attr('href')
+      }); 
+    });
 
-  $('#branches tr._branch').droppable({
-    accept: 'tr._branch, tr._group',
-    hoverClass: 'hover',
-    drop: function(event, ui) {      
+    $('a._move_up, a._move_down').live('click', function(e) {
+      e.preventDefault();
       $.ajax({
         type: 'post',
         dataType: 'script',
         data: {
-          clone: $(ui.helper).hasClass('gclone'),
-          source: $(ui.draggable).attr('id'),
-          target: $(this).attr('id'),
           authenticity_token: window._token,
-          "visible[]": get_visible(),
-          "open_icons_visible[]": get_open_icons_visible()
+          "visibility[]": Branch.visibility
         },
-        url: '/admin/branches/move'
-      });
-    }
-  });
+        url: $(this).attr('href')
+      }); 
+    });
 
-  $('#branches tr._branch').draggable({
-    revert: 'invalid',
-    handle: '._move',
-    helper: function() {
-      return "<div class='helper'>"+$(this).attr('rel')+"</div>"
-    }
-  });
-  
-  $('#branches tr._group').draggable({
-    revert: 'invalid',
-    handle: '._move ._clone',
-    helper: function() {
-      return "<div class='helper'>"+$(this).attr('rel')+"</div>"
-    },
-    start: function(event, ui) {
-      if ($(event.originalEvent.originalTarget).hasClass('_clone')) {
-        $(ui.helper).addClass('gclone');
+    $('#branches ._close').live('click', function() {
+      Branch.close($(this).attr('rel'));
+    });
+    
+    $('#branches ._open').live('click', function() {
+      Branch.open($(this).attr('rel'));
+    });  
+
+    Branch.visibility = $.cookie('tree_visibility_8352').split(',');
+    Branch.reset();
+  },
+
+  reset: function() {
+    $('#branch_root, #branches ._branch').droppable({
+      accept: '._branch, ._group',
+      hoverClass: 'hover',
+      drop: function(event, ui) {      
+        var target = $(this).attr('id');
+        $.ajax({
+          type: 'post',
+          //dataType: 'script',
+          data: {
+            clone: $(ui.helper).hasClass('gclone'),
+            source: $(ui.draggable).attr('id'),
+            target: target,
+            authenticity_token: window._token,
+            "visibility[]": Branch.visibility
+          },
+          success: function(script,args) {
+            eval(script);
+            Branch.open(target.slice(7));
+          },
+          url: '/admin/branches/move'
+        });
       }
+    });
+
+    $('#branches ._branch').draggable({
+      revert: 'invalid',
+      handle: '._move',
+      helper: function() {
+        return "<div class='helper'>"+$(this).attr('rel')+"</div>"
+      }
+    });
+    
+    $('#branches ._group').draggable({
+      revert: 'invalid',
+      handle: '._move ._clone',
+      helper: function() {
+        return "<div class='helper'>"+$(this).attr('rel')+"</div>"
+      },
+      start: function(event, ui) {
+        if ($(event.originalEvent.originalTarget).hasClass('_clone')) {
+          $(ui.helper).addClass('gclone');
+        }
+      }
+    });
+    
+    $('#groups ._group').draggable({
+      revert: 'invalid',
+      handle: '._move',
+      helper: function() {
+        return "<div class='helper'>"+$(this).attr('rel')+"</div>"
+      },    
+    });
+  },
+  open: function(id) {
+    var dl_id = '#parent_' + id;
+    if ($(dl_id).length > 0) {
+      var b_id = "#open_" + id;
+      $(dl_id).show();
+      $(b_id).hide();
+      $(b_id).parent().find('._close').show();
+      Branch.visibility.push(id);
+    } else {
+      Branch.visibility.delete(id);
     }
-  });
-  
-  $('#groups tr._group').draggable({
-    revert: 'invalid',
-    handle: '._move',
-    helper: function() {
-      return "<div class='helper'>"+$(this).attr('rel')+"</div>"
-    },    
-  });
-  
-  $('#branches ._close').live('click', function() {
-    var cls = '.' + $(this).attr('rel');
-    $(cls).hide();
-    $(this).hide();
-    $(this).parent().find('._open').show();
-    $(cls).find('._close').click();
-    zebra();
-  });
-  
-  $('#branches ._open').live('click', function() {
-    var cls = $(this).attr('rel');
-    $('.'+cls).show();
-    $(this).hide();
-    $(this).parent().find('._close').show();
-    zebra();
-  });  
-}
-
-function zebra() {
-  var flg = 1;
-  $('#branches tr:visible').each(function(i, tr) {
-    $(tr).removeClass('odd').removeClass('even');
-    $(tr).addClass(flg ? 'odd' : 'even')
-    flg = !flg;
-  });
-}
-
-$(document).ready(function() {
-  zebra();
-  
-  $('#branches tr').live('mouseover', function(e) {
-    $(this).find('._edit').show();
-  });
-
-  $('#branches tr').live('mouseout', function(e) {
-    $(this).find('._edit').hide();
-  });
-  
-  $('#loader').ajaxStart(function() {
-    $(this).show();
-  });
-
-  $('#loader').ajaxStop(function() {
-    zebra();
-    $(this).hide();
-  });
-  
-  $('a._delete').live('click', function(e) {
-    e.preventDefault();
-    $.ajax({
-      type: 'get',
-      dataType: 'script',
-      data: {
-        _method: '_delete',
-        authenticity_token: window._token,
-        "visible[]": get_visible(),
-        "open_icons_visible[]": get_open_icons_visible()
-      },
-      url: $(this).attr('href')
-    }); 
-  });
-
-  $('a._move_up, a._move_down').live('click', function(e) {
-    e.preventDefault();
-    $.ajax({
-      type: 'post',
-      dataType: 'script',
-      data: {
-        authenticity_token: window._token,
-        "visible[]": get_visible(),
-        "open_icons_visible[]": get_open_icons_visible()
-      },
-      url: $(this).attr('href')
-    }); 
-  });
-});
+    Branch.saveVisibility();
+  },
+  close: function(id) {
+    var dl_id = '#parent_' + id;      
+    var b_id = "#close_" + id;
+    $(dl_id).hide();
+    $(b_id).hide();
+    $(b_id).parent().find('._open').show();
+    Branch.visibility.delete(id);
+    Branch.saveVisibility();
+  },
+  saveVisibility: function() {
+    Branch.visibility = Branch.visibility.uniq();
+    $.cookie("tree_visibility_8352", Branch.visibility.toString());    
+  },
+  visibility: []
+};
