@@ -3,7 +3,7 @@
   %head
     %title= yield :title if @content_for_title
     = stylesheet_link_tag "admin/reset", "admin/admin", "admin/custom"
-    = javascript_include_tag "jquery", "jquery-ui", "branches"
+    = javascript_include_tag "jquery", "jquery-ui", "jquery.cookie", "branches"
     = javascript_tag "window._token = '#{form_authenticity_token}'"
  
     <!--[if gte IE 7]><link href="/stylesheets/admin/ie.css" media="screen" rel="stylesheet" type="text/css" /><![endif]-->

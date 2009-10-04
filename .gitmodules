@@ -37,12 +37,12 @@
 [submodule "vendor/plugins/searchlogic"]
 	path = vendor/plugins/searchlogic
 	url = git://github.com/binarylogic/searchlogic.git
-[submodule "vendor/plugins/awesome_nested_set"]
-	path = vendor/plugins/awesome_nested_set
-	url = git://github.com/retoo/awesome_nested_set.git
 [submodule "vendor/plugins/jrails"]
 	path = vendor/plugins/jrails
 	url = git://github.com/aaronchi/jrails.git
 [submodule "vendor/plugins/dump"]
 	path = vendor/plugins/dump
 	url = git://github.com/toy/dump.git
+[submodule "vendor/plugins/awesome_nested_set"]
+	path = vendor/plugins/awesome_nested_set
+	url = git://github.com/gzigzigzeo/awesome_nested_set.git

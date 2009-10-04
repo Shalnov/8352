@@ -1,10 +1,8 @@
 %h1 Категории
 
-%table.list#branches_list
-  %thead
-    %th{:width => "%"} Наименование
-  %tbody#branches
-    = render "branches"
+#branch_root{:class => "_branch"}= icon(:root)
+%dl#branches{:class => "level_0"}
+  = render "branches"
 
 #groups_container
   %table.list
@@ -12,12 +10,11 @@
       %th{:width => 16}
       %th{:width => "%"} Наименование
       %th{:width => "30"}      
-      %th{:width => "30"}      
       %th{:width => "30"}            
     %tbody#groups
       = render "groups"
 
 :javascript
   $(document).ready(function() {
-    branches();
+    Branch.initialize();
   });

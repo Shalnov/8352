@@ -1,12 +1,11 @@
 class Admin::BranchesController < ApplicationController
-  # BASE CONTROLLER >
   layout 'admin/admin'
   helper :action_link
-  # BASE CONTROLLER >
-  
-  before_filter :export_visible, :only => [:detach_group, :move, :move_left, :move_right, :branch_left, :branch_right]
+
+  cache_sweeper :company_group_sweeper, :only => [:move, :detach_group]
     
   def index
+    params[:visibility] = cookies[:tree_visibility_8352].split(',')
     get_branches_and_groups
   end
   
@@ -74,9 +73,6 @@ class Admin::BranchesController < ApplicationController
 
       source.branches << target unless source.branches.include?(target)      
       source.save!
-      
-      # Сомнительно! Видимо, это нужно разруливать на уровне JS.
-      @visible << "group_#{source.id}_parent_#{target.id}"
     end
     
     get_branches_and_groups
@@ -130,14 +126,8 @@ class Admin::BranchesController < ApplicationController
   end
   
 protected
-  # Нужно перекидывать параметры в переменные, т.к. в методе move видимость может меняться при обработке.
-  def export_visible
-    @visible = params[:visible]
-    @open_icons_visible = params[:open_icons_visible]
-  end    
-
   def get_branches_and_groups
-    @branches = Branch.tree(Branch.with_groups.all)
+    @branches = Branch.tree(Branch.with_groups.all)      
     @groups = CompanyGroup.with_branches.ordered.find_all { |g| g.branches.size == 0 }
   end
 end

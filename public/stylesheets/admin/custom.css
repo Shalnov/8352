@@ -1,21 +1,11 @@
-table td.level_0 { padding-left: 2em; }
-table td.level_1 { padding-left: 4em; }
-table td.level_2 { padding-left: 6em; }
-table td.level_3 { padding-left: 8em; }
-table td.level_4 { padding-left: 10em; }
-table td.level_5 { padding-left: 12em; }
+dl#branches, #branches dl { margin-left: 7px; padding-left: 23px; border-left: 1px solid #AAAAAA; }
+dt { font-size: 75%; vertical-align: middle; }
+#branch_root { width: 55%; margin-right: 5%; }
 
-/*
-table.list tr._branch td { background-color: #E3E3E3; }
-table.list tr._group td { background-color: #E3E3E3; }*/
-
-table.list tr.odd td { background-color: #F3F3F3; }
-table.list tr.even td { background-color: #E3E3E3; }
-table.list tr.hover td { background-color: #CCCCFF; }
+dt.odd { background-color: #F3F3F3; }
+dt.even { background-color: #E3E3E3; }
+#branch_root.hover, dt.hover { background-color: #CCCCFF; }
 a._edit img { height: 12px; }
-
-#branch_root { background-color: #C3C3C3; }
-
 
 .helper {
     background-color: #AACCFF;
@@ -30,17 +20,8 @@ a._edit img { height: 12px; }
     background-position: 4px 6px;
 }
 
-table.list td._branch.hover {
-    border: 1px dashed black;
-    background-color: #DDDDAA;
-}
-
-table.list tbody#branches tr td {
-    padding-top: 1px;
-    padding-bottom: 1px;
-}
-
-#branches_list { width: 60%; }
+#branches dt { margin-bottom: 1px; padding-bottom: 1px; border-bottom: 1px solid #EEEEEE; }
+#branches { width: 55%; margin-right: 5%; }
 
 #groups_container {
     position: fixed;
@@ -50,17 +31,9 @@ table.list tbody#branches tr td {
     overflow: scroll-x;
 }
 
-._clone {
-  cursor: move;
-}
-
-._open { 
-  cursor: pointer;
-}
-
-._close { 
-  cursor: pointer;
-}
+img._move, img._empty_folder { padding-right: 10px; }
+img._open, img._close { cursor: pointer; padding-right: 10px; }
+img._clone { cursor: move; padding-right: 10px; }
 
 #loader {
   background-color: white;
