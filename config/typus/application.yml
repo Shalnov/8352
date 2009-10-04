@@ -136,6 +136,23 @@ CompanyGroup:
    application: Company catalog
    description: Группы компаний
 
+Branch:
+   fields:
+     list: name
+     form: name
+     show: id,  name
+   actions:
+     index:
+     edit: show
+   order_by: name
+   relationships: company_groups
+   options:
+     per_page: 30
+   filters:
+   search: name
+   application: Company catalog
+   description: Категории компаний
+
 
 Company:
   fields:
@@ -212,7 +229,7 @@ ResultsToCompanyGroup:
 
 Result:
   fields: #category_name, 
-    list: normalized_name, company, parsed_phones_str, state #address, state, importer_state, import_errors
+    list: name, normalized_name, company, parsed_phones_str, state #address, state, importer_state, import_errors
     form: name, normalized_name, short_name, address, phones, parsed_phones, parsed_phones_str, email, site_url, category_name, work_time, other_info, raw_html, company, is_checked, state, importer_state
 #, link
     show: id, name, address, phones, parsed_phones, email, site_url, category_name, work_time, other_info, raw_html, is_checked, state, importer_state, created_at, updated_at, link, company, source, import_errors, parsed_address, parsed_phones

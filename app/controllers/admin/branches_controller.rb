@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class Admin::BranchesController < ApplicationController
   layout 'admin/admin'
   helper :action_link
@@ -5,7 +6,7 @@ class Admin::BranchesController < ApplicationController
   cache_sweeper :company_group_sweeper, :only => [:move, :detach_group]
     
   def index
-    params[:visibility] = cookies[:tree_visibility_8352].split(',') || []
+    params[:visibility] = cookies[:tree_visibility_8352].andand.split(',') || []
     get_branches_and_groups
   end
   

@@ -4,5 +4,5 @@ class Link < ActiveRecord::Base
 
 #  named_scope :appeared, { :conditions => { :is_appeared => true } }
 
-  acts_as_tree :order => "name", :counter_cache => :links_count
+  #acts_as_tree :order => "name", :counter_cache => :links_count
 end
