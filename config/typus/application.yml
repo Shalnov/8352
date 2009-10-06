@@ -161,7 +161,7 @@ Company:
     show: id, results_count, emails, name, site, director, description, working_time, sources, created_at, updated_at, pending, dump, company_group
   actions:
     index:
-    edit:
+    edit: show
   order_by:
   relationships: addresses, phones, results #, tags
   filters: company_group, tag
