@@ -15,8 +15,10 @@ module PhoneHelper
       # TOFIX сделать нормально
       if str[1..4]=="8352"
         "#{str[5..6]}-#{str[7..8]}-#{str[9..10]}"
+      elsif str.size>10
+      "7 (#{str[0..3]}) #{str[4..5]}-#{str[6..7]}-#{str[8..10]}"
       else
-      "7 (#{str[1..4]}) #{str[5..6]}-#{str[7..8]}-#{str[9..10]}"
+        str
       end
     end
   end    
