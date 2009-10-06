@@ -1,6 +1,6 @@
 class CompanyGroup < ActiveRecord::Base
   has_many :companies, :dependent => :nullify, :include=>:company_group
-  has_many :branch_company_groups, :order => "position ASC"
+  has_many :branch_company_groups, :order => "position ASC", :dependent => :destroy
   has_many :branches, :through => :branch_company_groups
   
   has_many :results_to_company_groups

@@ -9,5 +9,5 @@
         )&nbsp;
       %td= link_to icon(:edit), edit_admin_company_group_path(source_group)
       %td
-        - unless source_group.companies_count.to_i == 0
-          = link_to icon(:delete), admin_company_group_path(source_group), :method => "delete", :confirm => "Вы уверены?"
+        /- unless source_group.companies_count.to_i == 0
+        = link_to icon(:delete), admin_company_group_path(source_group), :method => "delete", :confirm => "Вы уверены?"
