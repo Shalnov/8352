@@ -1,5 +1,5 @@
 class Street < ActiveRecord::Base
   has_many :premises
   has_many :addresses, :through=>:premises
-  has_many :companies, :throuth=>:addresses
+  has_many :companies, :through=>:addresses
 end
